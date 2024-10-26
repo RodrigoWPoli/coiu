@@ -1,6 +1,6 @@
-*.uvguix
+*.uvguix.*
 *.htm
-*.afx
+*.axf
 *.o
 *.dep
 *.scvd
