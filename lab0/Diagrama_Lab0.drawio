@@ -80,8 +80,10 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="GZTNOVOZV955t2aHJKfP-53" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-30" target="GZTNOVOZV955t2aHJKfP-52">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="GZTNOVOZV955t2aHJKfP-53" value="Não" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-30" target="GZTNOVOZV955t2aHJKfP-52">
+          <mxGeometry x="-0.0857" y="-10" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="GZTNOVOZV955t2aHJKfP-30" value="Ainda tem número&amp;nbsp;&lt;div&gt;para leitura?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
           <mxGeometry x="320" y="540" width="135" height="80" as="geometry" />
