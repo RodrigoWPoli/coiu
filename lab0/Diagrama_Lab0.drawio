@@ -1,0 +1,158 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" version="24.8.3">
+  <diagram name="Page-1" id="edf60f1a-56cd-e834-aa8a-f176f3a09ee4">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="60e70716793133e9-30" value="End" style="strokeWidth=1;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;rounded=0;shadow=1;labelBackgroundColor=none;fontFamily=Verdana;fontSize=8;align=center;" vertex="1" parent="1">
+          <mxGeometry x="250" y="800" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-2" target="GZTNOVOZV955t2aHJKfP-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-2" value="Início" style="strokeWidth=1;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;rounded=0;shadow=1;labelBackgroundColor=none;fontFamily=Verdana;fontSize=8;align=center;" vertex="1" parent="1">
+          <mxGeometry x="575" y="20" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-3" target="GZTNOVOZV955t2aHJKfP-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-3" value="Carregar os números na memória RAM a partir de&lt;div&gt;0x20000A00&lt;/div&gt;" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="545" y="115" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-14" value="Sim" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-8" target="GZTNOVOZV955t2aHJKfP-13">
+          <mxGeometry x="-0.0588" y="15" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-34" value="Não" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-8" target="GZTNOVOZV955t2aHJKfP-16">
+          <mxGeometry x="-0.1111" y="-15" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-8" value="É número primo?" style="rhombus;whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="540" y="390" width="130" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-28" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-13" target="GZTNOVOZV955t2aHJKfP-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-13" value="Carrega número na memória RAM a partir de&lt;div&gt;0x20000B00&lt;/div&gt;" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="330" y="397.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-16" target="GZTNOVOZV955t2aHJKfP-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-16" value="Ler os números na memória RAM a partir de&lt;div&gt;0x20000A00&lt;/div&gt;" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="545" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-21" value="Sim" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-19" target="GZTNOVOZV955t2aHJKfP-8">
+          <mxGeometry x="0.1595" y="15" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-24" value="Não" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="GZTNOVOZV955t2aHJKfP-23">
+          <mxGeometry x="-0.3684" y="20" relative="1" as="geometry">
+            <mxPoint x="900" y="272.4999999999999" as="sourcePoint" />
+            <mxPoint x="662.5" y="582.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="940" y="273" />
+              <mxPoint x="940" y="580" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-19" value="Ainda tem número&amp;nbsp;&lt;div&gt;para leitura?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="765" y="230" width="135" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-23" target="GZTNOVOZV955t2aHJKfP-30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-23" value="Ler os números na memória RAM a partir de&lt;div&gt;0x20000B00&lt;/div&gt;" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="542.5" y="550" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-27" target="GZTNOVOZV955t2aHJKfP-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-27" value="Tamanho= Tamanho + 1&lt;div&gt;Incrementa ponteiro de endereçamento&lt;/div&gt;" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="330" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-36" value="Sim" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-30" target="GZTNOVOZV955t2aHJKfP-35">
+          <mxGeometry x="-0.1111" y="20" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-53" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-30" target="GZTNOVOZV955t2aHJKfP-52">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-30" value="Ainda tem número&amp;nbsp;&lt;div&gt;para leitura?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="320" y="540" width="135" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-13" target="GZTNOVOZV955t2aHJKfP-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-35" target="GZTNOVOZV955t2aHJKfP-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-35" value="Compara o valor atual com o próximo valor" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="327.5" y="710" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-43" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-38" target="GZTNOVOZV955t2aHJKfP-42">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-44" value="Sim" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" connectable="0" vertex="1" parent="GZTNOVOZV955t2aHJKfP-43">
+          <mxGeometry x="-0.1733" y="3" relative="1" as="geometry">
+            <mxPoint x="1" y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-49" value="Não" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-38" target="GZTNOVOZV955t2aHJKfP-47">
+          <mxGeometry x="-0.778" y="-20" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="603" y="820" />
+              <mxPoint x="1080" y="820" />
+              <mxPoint x="1080" y="660" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-38" value="Valor atual é maior?" style="rhombus;whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="535" y="700" width="135" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-42" target="GZTNOVOZV955t2aHJKfP-47">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-42" value="Faz a troca de endereços de memória entre os dois valores" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="757.5" y="710" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-47" target="GZTNOVOZV955t2aHJKfP-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-47" value="Incrementa o ponteiro de endereçamento" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="900" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-59" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-52" target="GZTNOVOZV955t2aHJKfP-56">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-52" value="Tamanho = Tamanho-1" style="whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="112.5" y="550" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-58" value="Não" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-56" target="GZTNOVOZV955t2aHJKfP-23">
+          <mxGeometry x="-0.61" y="20" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="50" y="740" />
+              <mxPoint x="50" y="500" />
+              <mxPoint x="603" y="500" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-56" value="Tamanho é 1?" style="rhombus;whiteSpace=wrap;html=1;fontSize=8;fontFamily=Verdana;strokeWidth=1;rounded=0;shadow=1;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="105" y="700" width="135" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="GZTNOVOZV955t2aHJKfP-57" value="Sim" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="GZTNOVOZV955t2aHJKfP-56" target="60e70716793133e9-30">
+          <mxGeometry y="18" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
