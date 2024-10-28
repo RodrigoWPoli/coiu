@@ -121,7 +121,7 @@ is_prime
 check_divisibility
         MUL     R2, R1, R1
         CMP     R2, R7
-        BGT     end_prime       ; não achou divisor percorrendo até a N/2
+        BGT     end_prime       ; não achou divisor percorrendo até a raiz de N
 
         UDIV    R2, R7, R1
         MLS     R2, R2, R1, R7  ; encontra o resto
