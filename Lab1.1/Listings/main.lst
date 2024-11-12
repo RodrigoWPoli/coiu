@@ -11,8 +11,8 @@ ARM Macro Assembler    Page 1
     5 00000000         ; Ver 2 26/08/2018
     6 00000000         ; Este programa deve esperar o usu�rio pressionar uma 
                        chave.
-    7 00000000         ; Caso o usu�rio pressione uma chave, um LED deve pisc
-                       ar a cada 1 segundo.
+    7 00000000         ; Caso o usuário pressione uma chave, um LED deve pisca
+                       r a cada 1 segundo.
     8 00000000         
     9 00000000         ; ------------------------------------------------------
                        -------------------------
@@ -21,44 +21,44 @@ ARM Macro Assembler    Page 1
    11 00000000         ; ------------------------------------------------------
                        -------------------------
    12 00000000         
-   13 00000000         ; Declara��es EQU - Defines
+   13 00000000         ; Declarações EQU - Defines
    14 00000000         ;<NOME>         EQU <VALOR>
    15 00000000         ; ========================
-   16 00000000         ; Defini��es de Valores
+   16 00000000         ; Definições de Valores
    17 00000000         
    18 00000000         
    19 00000000         ; ------------------------------------------------------
                        -------------------------
-   20 00000000         ; �rea de Dados - Declara��es de vari�veis
+   20 00000000         ; �rea de Dados - Declarações de vari�veis
    21 00000000                 AREA             DATA, ALIGN=2
-   22 00000000         ; Se alguma vari�vel for chamada em outro arquivo
+   22 00000000         ; Se alguma variável for chamada em outro arquivo
    23 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
-                       ri�vel <var> a 
+                       riável <var> a 
    24 00000000         ; partir de outro arquivo
    25 00000000         ;<var> SPACE <tam>                        ; Declara uma 
-                       vari�vel de nome <var>
+                       variável de nome <var>
    26 00000000         ; de <tam> bytes a partir da primeira 
-   27 00000000         ; posi��o da RAM  
+   27 00000000         ; posição da RAM  
    28 00000000         
    29 00000000         ; ------------------------------------------------------
                        -------------------------
-   30 00000000         ; �rea de C�digo - Tudo abaixo da diretiva a seguir 
-                       ser� armazenado na mem�ria de 
-   31 00000000         ;                  c�digo
+   30 00000000         ; Área de Código - Tudo abaixo da diretiva a seguir se
+                       rá armazenado na memória de 
+   31 00000000         ;                  código
    32 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
 2
    33 00000000         
-   34 00000000         ; Se alguma fun��o do arquivo for chamada em outro a
-                       rquivo 
+   34 00000000         ; Se alguma função do arquivo for chamada em outro arq
+                       uivo 
    35 00000000                 EXPORT           Start       ; Permite chamar a 
-                                                            fun��o Start a 
-                                                            partir de 
+                                                            função Start a pa
+                                                            rtir de 
    36 00000000         ; outro arquivo. No caso startup.s
    37 00000000         
-   38 00000000         ; Se chamar alguma fun��o externa 
+   38 00000000         ; Se chamar alguma função externa 
    39 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
                        e arquivo uma 
-   40 00000000         ; fun��o <func>
+   40 00000000         ; função <func>
    41 00000000                 IMPORT           PLL_Init
    42 00000000                 IMPORT           SysTick_Init
    43 00000000                 IMPORT           SysTick_Wait1ms
@@ -72,10 +72,10 @@ ARM Macro Assembler    Page 2
    45 00000000                 IMPORT           PortABPQ_Output
    46 00000000         ; ------------------------------------------------------
                        -------------------------
-   47 00000000         ; Fun??o main()
+   47 00000000         ; Função main()
    48 00000000         Start
-   49 00000000         ; Comece o c?digo aqui <================================
-                       ======================
+   49 00000000         ; Comece o código aqui <===============================
+                       =======================
    50 00000000         
    51 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
                                                             para alterar o cloc
@@ -90,21 +90,21 @@ ARM Macro Assembler    Page 2
    54 0000000C         
    55 0000000C F7FF FFFE       BL               PortABPQ_Output
    56 00000010         MainLoop
-   57 00000010 BF00            NOP
-   58 00000012 E7FD            B                MainLoop
-   59 00000014         ; ------------------------------------------------------
+   57 00000010         
+   58 00000010 E7FE            B                MainLoop
+   59 00000012         ; ------------------------------------------------------
                        --------------------------------------------------------
                        -----------
-   60 00000014         ; Fim do Arquivo
-   61 00000014         ; ------------------------------------------------------
+   60 00000012         ; Fim do Arquivo
+   61 00000012         ; ------------------------------------------------------
                        --------------------------------------------------------
                        ----------- 
-   62 00000014                 ALIGN                        ;Garante que o fim 
+   62 00000012 00 00           ALIGN                        ;Garante que o fim 
                                                             da se��o est�
                                                              alinhada 
    63 00000014                 END                          ;Fim do arquivo
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\rodri\AppData
+interwork --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\Ricar\AppData
 \Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL
  SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C1294NCPDT SE
 TA 1" --list=.\listings\main.lst main.s

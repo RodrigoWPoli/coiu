@@ -1,10 +1,10 @@
 ; gpio.s
 ; Desenvolvido para a placa EK-TM4C1294XL
-; Jhony Minetto Ara�jo, Ricardo Marthus Gremmelmaier, Rodrigo Wolsky Poli
-; �ltima atualiza��o: 11/11/2024
+; Jhony Minetto Araújo, Ricardo Marthus Gremmelmaier, Rodrigo Wolsky Poli
+; Última atualização: 11/11/2024
 
 ; -------------------------------------------------------------------------------
-        THUMB                        ; Instru��es do tipo Thumb-2
+        THUMB                        ; Instruções do tipo Thumb-2
 ; -------------------------------------------------------------------------------
 ; Declarações EQU - Defines
 ; ========================
@@ -15,7 +15,7 @@ SYSCTL_RCGCGPIO_R	 EQU	0x400FE608
 SYSCTL_PRGPIO_R		 EQU    0x400FEA08
 ; ========================
 
-; ================== DEFINI��ES DOS PORTS ===================
+; ================== DEFINIÇÕES DOS PORTS ===================
 
 ; ~~~~~~~~~~~~~~~~ PORT A ~~~~~~~~~~~~~~~~~~
 GPIO_PORTA_AHB_LOCK_R 		EQU     0x40058520
@@ -199,8 +199,8 @@ GPIO_PORTQ               	EQU    2_100000000000000
 
 
 ; -------------------------------------------------------------------------------
-; �rea de C�digo - Tudo abaixo da diretiva a seguir ser� armazenado na mem�ria de 
-;                  c�digo
+; Área de Código - Tudo abaixo da diretiva a seguir será armazenado na memória de 
+;                  código
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
 		; Se alguma função do arquivo for chamada em outro arquivo	
@@ -208,19 +208,17 @@ GPIO_PORTQ               	EQU    2_100000000000000
         EXPORT PortABPQ_Output      ; Permite chamar PortABPQ_Output de outro arquivo
 		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
 									
-        IMPORT  SysTick_Init
-		IMPORT  SysTick_Wait1ms	
 ;--------------------------------------------------------------------------------
 ; Função GPIO_Init
-; Par�metro de entrada: N�o tem
-; Par�metro de sa�da: N�o tem
+; Parâmetro de entrada: Não tem
+; Parâmetro de sa�da: Não tem
 GPIO_Init
 ;=====================
 ; ****************************************
-; Escrever função de inicializa��o dos GPIO
+; Escrever função de inicialização dos GPIO
 ; Inicializar as portas J e N
 ; ****************************************
-; Ativar os clocks e verificar se est�o ativos - RCGCPIO e PRGPIO
+; Ativar os clocks e verificar se estão ativos - RCGCPIO e PRGPIO
 
 			LDR			R0, =SYSCTL_RCGCGPIO_R            ; Carrega endereço do registrador RCGCPIO
 			MOV 		R1, #GPIO_PORTA                   ; Seta bits da porta A
@@ -228,10 +226,10 @@ GPIO_Init
 			ORR 		R1, #GPIO_PORTJ					  ; Seta bits da porta J  
 			ORR 		R1, #GPIO_PORTP					  ; Seta bits da porta P
 			ORR 		R1, #GPIO_PORTQ					  ; Seta bits da porta Q 
-			STR 		R1, [R0]						  ; Seta na mem�ria do RCGCPIO os bits das portas
+			STR 		R1, [R0]						  ; Seta na memória do RCGCPIO os bits das portas
 			
 			LDR 		R0, =SYSCTL_PRGPIO_R              ; Carrega endereço do registrador PRGPIO
-EsperaGPIO 	LDR 		R1, [R0]						  ; L� da mem�ria o conte�do do endereço do registrador
+EsperaGPIO 	LDR 		R1, [R0]						  ; Lê da memória o conteúdo do endereço do registrador
 			MOV 		R2, #GPIO_PORTA 				  ; Seta bits da porta A
             ORR 		R2, #GPIO_PORTB					  ; Seta bits da porta B
             ORR 		R2, #GPIO_PORTJ					  ; Seta bits da porta J
@@ -241,10 +239,10 @@ EsperaGPIO 	LDR 		R1, [R0]						  ; L� da mem�ria o conte�do do endereço 
 			BEQ 		EsperaGPIO                        ; Quando for diferente de zero, os bits do PRGPIO foram setados
 			
 ; Limpar o AMSEL
-			MOV 		R1, #0x00						  ; Coloca 0 no registrador para desabilitar função anal�gica
+			MOV 		R1, #0x00						  ; Coloca 0 no registrador para desabilitar função analógica
             LDR         R0, =GPIO_PORTA_AHB_AMSEL_R       ; Coloca o endereço do AMSEL da porta A
             STR         R1, [R0]                          ; Zera os bits do AMSEL da porta A
-            LDR         R0, =GPIO_PORTB_AHB_AMSEL_R           ; Coloca o endereço do AMSEL da porta B
+            LDR         R0, =GPIO_PORTB_AHB_AMSEL_R       ; Coloca o endereço do AMSEL da porta B
             STR         R1, [R0]                          ; Zera os bits do AMSEL da porta B  
 			LDR 		R0, =GPIO_PORTJ_AHB_AMSEL_R		  ; Coloca o endereço do AMSEL para o port J
 			STR 		R1, [R0]						  ; Zera os bits do AMSEL da porta J
@@ -270,28 +268,28 @@ EsperaGPIO 	LDR 		R1, [R0]						  ; L� da mem�ria o conte�do do endereço 
 
 ; -========== Switch ==============-
 			LDR 		R0, =GPIO_PORTJ_AHB_DIR_R		  ; Coloca o endereço do DIR para o port J (push button)
-			MOV 		R1, #0x00						  ; Todos os bits s�o entrada, s� usaremos o PJ0 e PJ1
+			MOV 		R1, #0x00						  ; Todos os bits são entrada, só usaremos o PJ0 e PJ1
 			STR 		R1, [R0]						  ; Coloca todos os bits como entrada
 
 ; -============ Led e Display ================-
             LDR         R0, =GPIO_PORTA_AHB_DIR_R		  ; Coloca o endereço do DIR para o port A (Leds e Displays)
-            MOV         R1, #2_11110000					  ; PA7-PA4 s�o sa�da
-            STR         R1, [R0]						  ; Seta o valor na mem�ria
+            MOV         R1, #2_11110000					  ; PA7-PA4 são saída
+            STR         R1, [R0]						  ; Seta o valor na memória
             LDR         R0, =GPIO_PORTQ_DIR_R		      ; Coloca o endereço do DIR para o port Q (Leds e Displays)
-			MOV         R1, #2_00001111					  ; PQ3-PQ0 s�o sa�da
-            STR         R1, [R0]						  ; Seta o valor na mem�ria
+			MOV         R1, #2_00001111					  ; PQ3-PQ0 são saída
+            STR         R1, [R0]						  ; Seta o valor na memória
 
 ; -========== Transistores ==============-
 			
 			LDR         R0, =GPIO_PORTB_AHB_DIR_R		  ; Coloca o endereço do DIR para o port B (Transistores display)
-            MOV         R1, #2_00110000					  ; PB5-PB4 s�o sa�da
-            STR         R1, [R0]						  ; Seta o valor na mem�ria
+            MOV         R1, #2_00110000					  ; PB5-PB4 são saída
+            STR         R1, [R0]						  ; Seta o valor na memória
             LDR         R0, =GPIO_PORTP_DIR_R		      ; Coloca o endereço do DIR para o port P (Transistor led)
-			MOV         R1, #2_00100000					  ; PP5 � sa�da
-            STR         R1, [R0]						  ; Seta o valor na mem�ria
+			MOV         R1, #2_00100000					  ; PP5 é saída
+            STR         R1, [R0]						  ; Seta o valor na memória
 
 ; Limpar o AFSEl para n�o ter função alternativa
-			MOV     R1, #0x00							  ; Colocar o valor 0 para n�o setar função alternativa
+			MOV     R1, #0x00							  ; Colocar o valor 0 para não setar função alternativa
             LDR     R0, =GPIO_PORTA_AHB_AFSEL_R           ; Carrega o endereço do AFSEL da porta A
             STR     R1, [R0]                              ; Limpa os bits
             LDR     R0, =GPIO_PORTB_AHB_AFSEL_R           ; Carrega o endereço do AFSEL da porta B
@@ -331,28 +329,23 @@ EsperaGPIO 	LDR 		R1, [R0]						  ; L� da mem�ria o conte�do do endereço 
 ; -------------------------------------------------------------------------------
 
 ; Função PortABPQ_Output
-; Par�metro de entrada: R0 -> Se o BIT0 da
-; Par�metro de sa�da: N�o tem
+; Parâmetro de entrada: R0 -> Se o BIT0 da
+; Parâmetro de sa�da: Não tem
 PortABPQ_Output
 ; ****************************************
 ; Escrever função que acende ou apaga o LED
 ; ****************************************
     LDR R1, =GPIO_PORTP_DATA_R 			; Le o endereço do data
-	MOV R2, #2_00100000					; Mete um valor no R2 com for�a
-	LDR R2, [R1]						; Escreve na porta o novo valor
-
-    PUSH {R0}
-    MOV 	R0, #3					    ; Seta quantidade de 1ms para esperar
-	BL SysTick_Wait1ms					; Espera 1s
-    POP {R0}
-
-
-
-	LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereço do data
-	MOV R2, #2_10100000					; Mete um valor no R2 com for�a
-	LDR R2, [R1]						; Escreve na porta o novo valor
+	MOV R2, #2_00100000					; Mete um valor no R2 com força
+	STR R2, [R1]						; Escreve na porta o novo valor
 	
-
+	LDR R1, =GPIO_PORTA_AHB_DATA_R 			; Le o endereço do data
+	MOV R2, #2_11110000					; Mete um valor no R2 com força
+	STR R2, [R1]						; Escreve na porta o novo valor
+	
+	LDR R1, =GPIO_PORTQ_DATA_R 			; Le o endereço do data
+	MOV R2, #2_00001111					; Mete um valor no R2 com força
+	STR R2, [R1]						; Escreve na porta o novo valor
 	
 	BX LR
 ; -------------------------------------------------------------------------------
