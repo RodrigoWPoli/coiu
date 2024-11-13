@@ -58,9 +58,7 @@ Start
 ; R7 -> Contador para Taxa de atualização
 ; R8 -> Valor da Switch anterior
 ; R9 -> Passo a ser incrementado no contador
-; R2 -> Quantidade de ticks de ms
 	MOV R0, #0 						; Contador iniciando em 0
-	MOV R2, #500                    ; Tempo para trocar o contador
 	MOV R9, #1						; Passo iniciando em 0
 	MOV R8, #2_11					; Inicia com as duas switches inativas
 
