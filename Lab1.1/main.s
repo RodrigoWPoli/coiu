@@ -62,65 +62,76 @@ Start
 ; R3 -> Leitura da Switch
 ; R9 -> Passo a ser incrementado no contador
 ; R2 -> Quantidade de ticks de ms
-	MOV R0, #96
+	MOV R0, #0
 	MOV R9, #1
 	MOV R2, #500
 MainLoop
-	BL PrintValue
-	BL Switch_Input
-Loop
-	CMP R3, #2_11
+	BL PrintValue					; Chamada pra mostrar os displays e leds
+	BL Switch_Input					; Chamada pra ler o switch
+CounterLoop
+	CMP R3, #2_11					; Se nenhum switch for ativo, apenas incrementa ou decrementa o contador
 	BNE Step_handler
-	ADD R0, R9
-	CMP R0, #0
+	ADD R0, R9						; Incrementa o contador
+	CMP R0, #0						; Compara para ver se nao ficou abaixo de zero
 	BLT CheckUnderflow
-	CMP R0, #99
+	CMP R0, #99						; Compara para ver se nao ficou acima de 100
 	BGT CheckOverflow
 	
 	B MainLoop
 
 Step_handler
-	CMP R3, #2_10
+	CMP R3, #2_10					; Se tiver SW1 ativa, incrementa o passo ou decrementa
 	BNE Neg_handler
-	CMP R9, #9
-	ITE LO
-	ADDLO R9, #1
-	MOVHS R9, #0
-	
-	B MainLoop
+	CMP R9, #0 						; Verifica se é negativo e se for, decrementa o passo
+	BMI DecrementStep
+	B	IncrementStep				; Se nao for, incrementa o passo
 
 Neg_handler
-	CMP R3, #2_01
+	CMP R3, #2_01					; Se tiver SW2 ativa, inverte o contador negativando o passo
 	BNE Both_handler
-	NEG R9, R9
+	NEG R9, R9						; Negativa o passo
 	B MainLoop
 
 Both_handler
-	CMP R3, #2_00
+	CMP R3, #2_00					; Se as duas SW forem ativas, realiza as duas ações
 	BNE MainLoop
-	CMP R9, #9
-	ITE LO
-	ADDLO R9, #1
-	MOVHS R9, #0
-	NEG R9, R9
-	B MainLoop
+	NEG R9, R9						; Negativa o valor
+	CMP R9, #0 						; Verifica se é negativo e se for, decrementa o passo
+	BMI DecrementStep
+	B	IncrementStep				; Se nao for, incrementa o passo
 
 CheckUnderflow
-	CMP R0, #0
+	CMP R0, #0						; Não fica redundante aqui?
 	BGE MainLoop
 	MOV R0, #99
 	B MainLoop
 
 CheckOverflow
-	CMP R0, #99
+	CMP R0, #99						; Checar com o tibas
 	BLE MainLoop
 	MOV R0, #0
 	B MainLoop
 	
+IncrementStep
+	CMP R9, #9						; Compara se o passo está no limite superior (9)					
+	ITE LT
+	ADDLT R9, #1					; Caso não esteja e seja menor que 9, adiciona 1
+	MOVGE R9, #1					; Caso seja 9 ou maior, seta para 1
+	B MainLoop
+
+DecrementStep
+	NEG R9, R9						; Torna o valor positivo
+	CMP R9, #1						; Compara se o passo está no limite inferior (1)
+	ITE GT
+	SUBGT R9, #1					; Caso seja maior que 1, reduz 1
+	MOVLE R9, #9					; Caso seja igual ou menor a 1, seta para 9
+	NEG R9, R9						; Torna o valor negativo novamente
+	B MainLoop
+	
 PrintValue
-	PUSH {LR}
-	BL Led_Output
-	POP {LR}
+	PUSH {LR}						; Salva o Link Register
+	BL Led_Output					; Grava na placa os Leds
+	POP {LR}						; Volta o Link Register
 	BX  LR
 ; -------------------------------------------------------------------------------------------------------------------------
 ; Fim do Arquivo
