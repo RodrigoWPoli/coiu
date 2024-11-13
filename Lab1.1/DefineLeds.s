@@ -103,7 +103,7 @@ DefineLedA
 
 SetaLedA
     IT EQ
-    ORREQ R5, R5, #2_1                  ; Se for igual, seta o bit para ligar o led (a)
+    ANDEQ R5, R5, #2_11111110                  ; Se for igual, seta o bit para ligar o led (a)
     
     POP {R0}
     BX LR
@@ -182,7 +182,7 @@ DefineLedB
 
 SetaLedB
     IT EQ
-    ORREQ R5, R5, #2_10                 ; Se for igual, seta o bit para ligar o led (b)
+    ANDEQ R5, R5, #2_11111101                 ; Se for igual, seta o bit para ligar o led (b)
 
     POP {R0}
     BX LR
@@ -245,7 +245,7 @@ DefineLedC
 
 SetaLedC
     IT EQ
-    ORREQ R5, R5, #2_100                ; Se for igual, seta o bit para ligar o led (c)
+    ANDEQ R5, R5, #2_11111011                ; Se for igual, seta o bit para ligar o led (c)
 
     POP {R0}
     BX LR
@@ -332,7 +332,7 @@ DefineLedD
 
 SetaLedD
     IT EQ
-    ORREQ R5, R5, #2_1000               ; Se for igual, seta o bit para ligar o led (d)
+    ANDEQ R5, R5, #2_11110111               ; Se for igual, seta o bit para ligar o led (d)
 
     POP {R0}
     BX LR
@@ -387,7 +387,7 @@ DefineLedE
 
 SetaLedE
     IT EQ
-    ORREQ R5, R5, #2_10000              ; Se for igual, seta o bit para ligar o led (e)
+    ANDEQ R5, R5, #2_11101111              ; Se for igual, seta o bit para ligar o led (e)
 
     POP {R0}
     BX LR
@@ -466,7 +466,7 @@ DefineLedF
 
 SetaLedF
     IT EQ
-    ORREQ R5, R5, #2_100000             ; Se for igual, seta o bit para ligar o led (f)
+    ANDEQ R5, R5, #2_11011111             ; Se for igual, seta o bit para ligar o led (f)
 
     POP {R0}
     BX LR
@@ -533,7 +533,7 @@ DefineLedG
 
 SetaLedG
     IT EQ
-    ORREQ R5, R5, #2_1000000            ; Se for igual, seta o bit para ligar o led (a)
+    ANDEQ R5, R5, #2_10111111            ; Se for igual, seta o bit para ligar o led (a)
 
     POP {R0}
     BX LR
