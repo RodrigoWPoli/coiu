@@ -358,7 +358,7 @@ Led_Output
 	STR R0, [R1]						; Escreve na porta o novo valor
     POP {R0}                            ; Recupera o valor de R0
 
-    MOV R2, #500                        ; 0,5 s para esperar
+    MOV R2, #30                      ; 0,5 s para esperar
 
     LDR R1, =GPIO_PORTP_DATA_R 			; Le o endereÃ§o do data
 	MOV R3, #2_00100000					; Ativa o DS2
@@ -372,7 +372,7 @@ Led_Output
 	STR R3, [R1]						; Escreve na porta o novo valor
     
     MOV R2, #5
-    BL SysTick_Wait1ms                  ; Espera 1ms
+    BL SysTick_Wait1ms                  ; Espera 5ms
 
     POP {LR}                            ; Recupera LR
 	BX LR
@@ -383,13 +383,13 @@ Led_Output
 ;   - R0 -> Recebe o valor em binário para mostrar nos displays
 ; Parâmetro de saída: N/A
 Display_Output	
-    PUSH {R0}                        ; Salva o valor R0
-    PUSH {R1}                        ; Salva o valor R0
-    PUSH {R2}                        ; Salva o valor R0
-    PUSH {R3}                        ; Salva o valor R0
-    PUSH {R4}                        ; Salva o valor R0
-    PUSH {R5}                        ; Salva o valor R0
-    MOV R5, #0                          ; Zera o valor de R5
+    PUSH {R0}                           ; Salva o valor R0
+    PUSH {R1}                           ; Salva o valor R1
+    PUSH {R2}                           ; Salva o valor R2
+    PUSH {R3}                           ; Salva o valor R3
+    PUSH {R4}                           ; Salva o valor R4
+    PUSH {R5}                           ; Salva o valor R5
+    PUSH {R6}                           ; Salva o valor R6
 	
     ; R0 - Guarda o valor binário
     ; R1 - Guarda o valor do bit a ser comparado
@@ -397,7 +397,11 @@ Display_Output
     ; R3 - Guarda o valor da comparação do bit com o valor dos mapas de karnaugh
     ; R4 - Guarda o valor do OR dos valores de R2 
     ; R5 - Guarda o valor a ser setado no display
+    ; R6 - Usado para selecionar o display no qual mostrar o valor hexa
 
+    ; =========================== Display Esq ===================================
+    MOV R5, #2_01111111                 ; Seta os LEDs para HIGH pois a lógica do mapa de karnaugh é invertida
+    MOV R6, #0xF0                       ; Seleciona os bits da esquerda para mostrar
     PUSH {LR}                           ; Salva o Link Register
     BL DefineLedA
     BL DefineLedB
@@ -408,30 +412,89 @@ Display_Output
     BL DefineLedG
     POP {LR}                            ; Recupera o Link Register
 
-    ; Liga os leds do display
-    LDR R1, =GPIO_PORTB_AHB_DATA_R 		; Le o endereÃ§o do data
-	MOV R2, #2_00010000					; Insere um valor no R2
-	STR R2, [R1]						; Escreve na porta o novo valor
-
-    LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereÃ§o do data
-	MOV R2, #2_11110000					; Seta todos os valores possíveis de led
     PUSH {R5}                           ; Salva o valor R5
+    LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereÃ§o do data
+	MOV R2, #2_11110000					; Seleciona os LEDs da Porta A
     AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
 	STR R5, [R1]						; Escreve na porta o novo valor
 
     POP {R5}                            ; Recupera o valor de R5
 	LDR R1, =GPIO_PORTQ_DATA_R 		    ; Le o endereÃ§o do data
-	MOV R2, #2_00001111					; Seta todos os valores possíveis de led
-    PUSH {R5}                           ; Salva o valor R5
+	MOV R2, #2_00001111					; Seleciona os LEDs da Porta Q
+;    PUSH {R5}                           ; Salva o valor R5 - a principio não precisa
     AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
 	STR R5, [R1]						; Escreve na porta o novo valor
-    
+
+ 
+    ; Liga os leds do display
+    LDR R1, =GPIO_PORTB_AHB_DATA_R 		; Le o endereÃ§o do data
+	MOV R2, #2_00010000					; Insere um valor no R2
+	STR R2, [R1]						; Escreve na porta o novo valor
+
+    PUSH {LR}
+    MOV R2, #30
+    BL   SysTick_Wait1ms                ; Espera 0,5s
+
+    ;Desativa os Leds do display
+    LDR R1, =GPIO_PORTB_AHB_DATA_R 		; Le o endereÃ§o do data
+	MOV R2, #2_00000000					; Insere um valor no R2
+	STR R2, [R1]
+
+    MOV R2, #5                           ; Espera 5ms
+    BL SysTick_Wait1ms
+
+    POP {LR}
+
+    ; =========================== Display Dir ===================================
+    MOV R5, #2_01111111                 ; Seta os LEDs para HIGH pois a lógica do mapa de karnaugh é invertida
+    MOV R6, #0x0F                       ; Seleciona os bits da direita para mostrar
+    PUSH {LR}                           ; Salva o Link Register
+    BL DefineLedA
+    BL DefineLedB
+    BL DefineLedC
+    BL DefineLedD
+    BL DefineLedE
+    BL DefineLedF
+    BL DefineLedG
+    POP {LR}                            ; Recupera o Link Register
+
+    PUSH {R5}                           ; Salva o valor R5
+    LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereÃ§o do data
+	MOV R2, #2_11110000					; Seleciona os LEDs da Porta A
+    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
+	STR R5, [R1]						; Escreve na porta o novo valor
+
+    POP {R5}                            ; Recupera o valor de R5
+	LDR R1, =GPIO_PORTQ_DATA_R 		    ; Le o endereÃ§o do data
+	MOV R2, #2_00001111					; Seleciona os LEDs da Porta Q
+;    PUSH {R5}                           ; Salva o valor R5 - a principio não precisa
+    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
+	STR R5, [R1]						; Escreve na porta o novo valor
+
+    ; Liga os leds do display
+    LDR R1, =GPIO_PORTB_AHB_DATA_R 		; Le o endereÃ§o do data
+	MOV R2, #2_00100000					; Insere um valor no R2
+	STR R2, [R1]						; Escreve na porta o novo valor
+
+    PUSH {LR}
+    MOV R2, #30
+    BL   SysTick_Wait1ms                ; Espera 0,5s
+
+    ;Desativa os Leds do display
+    LDR R1, =GPIO_PORTB_AHB_DATA_R 		; Le o endereÃ§o do data
+	MOV R2, #2_00000000					; Insere um valor no R2
+	STR R2, [R1]
+
+    MOV R2, #5                           ; Espera 5ms
+    BL SysTick_Wait1ms
+
+    POP {LR}
     POP {R0}                            ; Recupera o valor de R0
-    POP {R1}                            ; Recupera o valor de R0
-    POP {R2}                            ; Recupera o valor de R0
-    POP {R3}                            ; Recupera o valor de R0
-    POP {R4}                            ; Recupera o valor de R0
-    POP {R5}                            ; Recupera o valor de R0
+    POP {R1}                            ; Recupera o valor de R1
+    POP {R2}                            ; Recupera o valor de R2
+    POP {R3}                            ; Recupera o valor de R3
+    POP {R4}                            ; Recupera o valor de R4
+    POP {R5}                            ; Recupera o valor de R5
     BX LR
 ; -------------------------------------------------------------------------------
 
@@ -447,8 +510,6 @@ Switch_Input
 	LDR R3, [R1]                            ;Lï¿½ no barramento de dados o pino [J0, J1]
 	
 	BX LR
-
-
 
     ALIGN                           ; garante que o fim da seï¿½ï¿½o estï¿½ alinhada 
     END                             ; fim do arquivo

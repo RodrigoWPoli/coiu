@@ -51,25 +51,31 @@ Start
     
     BL PLL_Init                     ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
 	BL SysTick_Init                 ;Chama a subrotina para inicializar o SysTick
-	BL GPIO_Init                    ;Chama a subrotina que inicializa os GPIO
-
-	MOV R0, #2_00000110 
+	BL GPIO_Init   	;Chama a subrotina que inicializa os GPIO
+	
+	MOV R1, #2_1
+	MOV R0, #2_00000000
+TestaDisplay	 
 	BL Display_Output
-
-	MOV R0, #2_00000101 
-	BL Display_Output
+	ADD R0, R1
+	CMP R0, #99
+	BEQ Acabou
+	B TestaDisplay
 ; R0 -> Contador
 ; R3 -> Leitura da Switch
 ; R8 -> Valor da Switch anterior
 ; R9 -> Passo a ser incrementado no contador
 ; R2 -> Quantidade de ticks de ms
+Acabou
 	MOV R0, #0 						; Contador iniciando em 0
 	MOV R2, #500                    ; Tempo para trocar o contador
 	MOV R9, #1						; Passo iniciando em 0
 	MOV R8, #2_11					; Inicia com as duas switches inativas
 
 MainLoop
-	BL PrintValue					; Chamada pra mostrar os displays e leds
+	BL Led_Output					; Grava na placa os Leds
+;	BL Display_Output				; Grava na placa os displays
+;	BL PrintValue					; Chamada pra mostrar os displays e leds
 	BL Switch_Input					; Chamada pra ler o switch
 	PUSH {R3}						; Salvar o valor da switch
 CounterLoop
@@ -80,15 +86,15 @@ CounterLoop
 	BLT CheckUnderflow
 	CMP R0, #99						; Compara para ver se nao ficou acima de 100
 	BGT CheckOverflow
-	
+
 	B MainLoop
 
 Step_handler
 	CMP R3, #2_10					; Se tiver SW1 ativa, incrementa o passo ou decrementa
 	BNE Neg_handler
 	
-	TST R8, #2_0					; Se o ultimo bit era 0, volta para o loop
-	BNE MainLoop					; Se nao, pode continuar
+	TST R8, #1						; Se o ultimo bit era 0, volta para o loop
+	BEQ MainLoop					; Se nao, pode continuar
 	
 	CMP R9, #0 						; Verifica se é negativo e se for, decrementa o passo
 	BMI DecrementStep
@@ -97,6 +103,11 @@ Step_handler
 Neg_handler
 	CMP R3, #2_01					; Se tiver SW2 ativa, inverte o contador negativando o passo
 	BNE Both_handler
+
+	TST R8, #2						; Se o penúltimo bit era 0, volta para o loop
+	BEQ MainLoop					; Se nao, pode continuar
+
+	TST R8, #2_00					; Se o penultimo bit era 0, volta para o loop
 	NEG R9, R9						; Negativa o passo
 	POP {R8}						; Atualizo valor salvo da switch
 	B MainLoop
@@ -104,27 +115,27 @@ Neg_handler
 Both_handler
 	CMP R3, #2_00					; Se as duas SW forem ativas, realiza as duas ações
 	BNE MainLoop
+
+	TST R8, #3						; Se os ultimos 2 bits eram 0, volta para o loop
+	BEQ MainLoop					; Se nao, pode continuar
+
 	NEG R9, R9						; Negativa o valor
 	CMP R9, #0 						; Verifica se é negativo e se for, decrementa o passo
 	BMI DecrementStep
 	B	IncrementStep				; Se nao for, incrementa o passo
 
 CheckUnderflow
-	CMP R0, #0						; Não fica redundante aqui?
-	BGE MainLoop
 	MOV R0, #99
 	B MainLoop
 
 CheckOverflow
-	CMP R0, #99						; Checar com o tibas
-	BLE MainLoop
 	MOV R0, #0
 	B MainLoop
 	
 IncrementStep
 	CMP R9, #9						; Compara se o passo está no limite superior (9)					
 	ITE LT
-	ADDLT R9, #1					; Caso não esteja e seja menor que 9, adiciona 1
+	ADDLT R9, #1					; Caso seja menor que 9, adiciona 1
 	MOVGE R9, #1					; Caso seja 9 ou maior, seta para 1
 	POP {R8}						; Atualizo valor salvo da switch
 	B MainLoop
@@ -142,6 +153,7 @@ DecrementStep
 PrintValue
 	PUSH {LR}						; Salva o Link Register
 	BL Led_Output					; Grava na placa os Leds
+	BL Display_Output				; Grava na placa os displays
 	POP {LR}						; Volta o Link Register
 	BX  LR
 ; -------------------------------------------------------------------------------------------------------------------------

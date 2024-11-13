@@ -20,7 +20,7 @@
 DefineLedA
 ; Define o led (a) do display       ; MNOP
     PUSH {R0}
-    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    AND R0, R0, R6                    ; Filtra os LSB de R0
 	
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0x8                      ; Comparação para saber se o bit 4 é 0 (lógica negada)
@@ -111,7 +111,7 @@ SetaLedA
 DefineLedB
 ; Define o led (b) do display       ; MNOP
     PUSH {R0}
-    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    AND R0, R0, R6                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
@@ -190,7 +190,7 @@ SetaLedB
 DefineLedC
 ; Define o led (c) do display       ; MNOP
     PUSH {R0}
-    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    AND R0, R0, R6                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
@@ -253,7 +253,7 @@ SetaLedC
 DefineLedD
 ; Define o led (d) do display       ; MNOP
     PUSH {R0}
-    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    AND R0, R0, R6                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0x8                      ; Comparação para saber se o bit 4 é 0 (lógica negada)
@@ -340,7 +340,7 @@ SetaLedD
 DefineLedE
 ; Define o led (e) do display       ; MNOP
     PUSH {R0}
-    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    AND R0, R0, R6                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x4                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0x4                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
@@ -395,7 +395,7 @@ SetaLedE
 DefineLedF
 ; Define o led (f) do display       ; MNOP
     PUSH {R0}
-    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    AND R0, R0, R6                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
@@ -474,7 +474,7 @@ SetaLedF
 DefineLedG
 ; Define o led (g) do display       ; MNOP
     PUSH {R0}
-    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    AND R0, R0, R6                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)

@@ -33,8 +33,8 @@ ARM Macro Assembler    Page 1
    20 00000000         DefineLedA
    21 00000000         ; Define o led (a) do display       ; MNOP
    22 00000000 B401            PUSH             {R0}
-   23 00000002 F000 000F       AND              R0, R0, #0xF ; Filtra os LSB de
-                                                             R0
+   23 00000002 EA00 0006       AND              R0, R0, R6  ; Filtra os LSB de 
+                                                            R0
    24 00000006         
    25 00000006 F000 0108       AND              R1, R0, #0x8 ; Filtra o bit 4 d
                                                             e R0
@@ -209,8 +209,8 @@ ARM Macro Assembler    Page 4
   111 000000E0         DefineLedB
   112 000000E0         ; Define o led (b) do display       ; MNOP
   113 000000E0 B401            PUSH             {R0}
-  114 000000E2 F000 000F       AND              R0, R0, #0xF ; Filtra os LSB de
-                                                             R0
+  114 000000E2 EA00 0006       AND              R0, R0, R6  ; Filtra os LSB de 
+                                                            R0
   115 000000E6         
   116 000000E6 F000 0108       AND              R1, R0, #0x8 ; Filtra o bit 4 d
                                                             e R0
@@ -355,8 +355,8 @@ ARM Macro Assembler    Page 6
   190 0000019C         DefineLedC
   191 0000019C         ; Define o led (c) do display       ; MNOP
   192 0000019C B401            PUSH             {R0}
-  193 0000019E F000 000F       AND              R0, R0, #0xF ; Filtra os LSB de
-                                                             R0
+  193 0000019E EA00 0006       AND              R0, R0, R6  ; Filtra os LSB de 
+                                                            R0
   194 000001A2         
   195 000001A2 F000 0108       AND              R1, R0, #0x8 ; Filtra o bit 4 d
                                                             e R0
@@ -473,8 +473,8 @@ ARM Macro Assembler    Page 8
   253 00000230         DefineLedD
   254 00000230         ; Define o led (d) do display       ; MNOP
   255 00000230 B401            PUSH             {R0}
-  256 00000232 F000 000F       AND              R0, R0, #0xF ; Filtra os LSB de
-                                                             R0
+  256 00000232 EA00 0006       AND              R0, R0, R6  ; Filtra os LSB de 
+                                                            R0
   257 00000236         
   258 00000236 F000 0108       AND              R1, R0, #0x8 ; Filtra o bit 4 d
                                                             e R0
@@ -635,8 +635,8 @@ ARM Macro Assembler    Page 10
   340 00000304         DefineLedE
   341 00000304         ; Define o led (e) do display       ; MNOP
   342 00000304 B401            PUSH             {R0}
-  343 00000306 F000 000F       AND              R0, R0, #0xF ; Filtra os LSB de
-                                                             R0
+  343 00000306 EA00 0006       AND              R0, R0, R6  ; Filtra os LSB de 
+                                                            R0
   344 0000030A         
   345 0000030A F000 0104       AND              R1, R0, #0x4 ; Filtra o bit 4 d
                                                             e R0
@@ -737,8 +737,8 @@ ARM Macro Assembler    Page 12
   395 00000380         DefineLedF
   396 00000380         ; Define o led (f) do display       ; MNOP
   397 00000380 B401            PUSH             {R0}
-  398 00000382 F000 000F       AND              R0, R0, #0xF ; Filtra os LSB de
-                                                             R0
+  398 00000382 EA00 0006       AND              R0, R0, R6  ; Filtra os LSB de 
+                                                            R0
   399 00000386         
   400 00000386 F000 0108       AND              R1, R0, #0x8 ; Filtra o bit 4 d
                                                             e R0
@@ -883,8 +883,8 @@ ARM Macro Assembler    Page 14
   474 0000043C         DefineLedG
   475 0000043C         ; Define o led (g) do display       ; MNOP
   476 0000043C B401            PUSH             {R0}
-  477 0000043E F000 000F       AND              R0, R0, #0xF ; Filtra os LSB de
-                                                             R0
+  477 0000043E EA00 0006       AND              R0, R0, R6  ; Filtra os LSB de 
+                                                            R0
   478 00000442         
   479 00000442 F000 0108       AND              R1, R0, #0x8 ; Filtra o bit 4 d
                                                             e R0
