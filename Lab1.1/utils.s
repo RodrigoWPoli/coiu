@@ -260,14 +260,14 @@ SysTick_Init
 	
 ;------------SysTick_Wait------------
 ; Atraso de tempo utilizando processador ocupado
-; Entrada: R0 -> par�metro de delay em unidades do clock do core (12.5ns)
+; Entrada: R2 -> par�metro de delay em unidades do clock do core (12.5ns)
 ; Sa�da: Nenhum
-; Modifica: R0
+; Modifica: R2
 SysTick_Wait
 	PUSH {R1, R3}						; Salva os valores de R1 e R3 externos
 	LDR R1, =NVIC_ST_RELOAD_R 			; R1 = &NVIC_ST_RELOAD_RSUB R0 (ponteiro)
-	SUB R0, #1                          
-	STR R0, [R1] 						; delay-1, n�mero de contagens para esperar
+	SUB R2, #1                          
+	STR R2, [R1] 						; delay-1, n�mero de contagens para esperar
 	LDR R1, =NVIC_ST_CTRL_R 			; R1 = &NVIC_ST_CTRL_R
 SysTick_Wait_loop
 	LDR R3, [R1] 						; R3 = &NVIC_ST_CTRL_R (ponteiro)
@@ -278,18 +278,18 @@ SysTick_Wait_loop
 
 ;------------SysTick_Wait1ms------------
 ; tempo de atraso usando processador ocupado. Assume um clock de 80 MHz
-; Entrada: R0 --> N�mero de vezes para contar 1ms.
+; Entrada: R2 --> N�mero de vezes para contar 1ms.
 ; Sa�da: N�o tem
-; Modifica: R0
+; Modifica: R2
 DELAY1MS EQU 80000 ; n�mero de ciclos de clock para contar 1ms (assumindo 80 MHz)
 	               ; 80000 x 12,5 ns = 1 ms
 
 SysTick_Wait1ms
 	PUSH {R4, LR} 						; salva o valor atual de R4 e Link Register
-	MOVS R4, R0 						; R4 = R0  numEsperasRestantes com atualiza��o dos flags
+	MOVS R4, R2 						; R4 = R2  numEsperasRestantes com atualiza��o dos flags
 	BEQ SysTick_Wait1ms_done 			; Se o numEsperasRestantes == 0, vai para o fim
 SysTick_Wait1ms_loop					
-	LDR R0, =DELAY1MS 					; R0 = DELAY1MS (n�mero de ticks para contar 1ms)
+	LDR R2, =DELAY1MS 					; R2 = DELAY1MS (n�mero de ticks para contar 1ms)
 	BL SysTick_Wait 					; chama a rotina para esperar por 1ms
 	SUBS R4, R4, #1 					; R4 = R4 - 1; numEsperasRestantes--
 	BHI SysTick_Wait1ms_loop 			; se (numEsperasRestantes > 0), espera mais 1ms

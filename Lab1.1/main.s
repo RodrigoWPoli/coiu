@@ -53,16 +53,18 @@ Start
 	BL SysTick_Init                 ;Chama a subrotina para inicializar o SysTick
 	BL GPIO_Init                    ;Chama a subrotina que inicializa os GPIO
 
+	MOV R0, #0x00000110 
+	BL Display_Output
 
-	MOV R0, #2_11110000
-	BL PrintValue
+	MOV R0, #0x00000101 
+	BL Display_Output
 ; R0 -> Contador
 ; R1 -> Passo a ser incrementado no contador
 ; R2 -> Quantidade de ticks de ms
 ; R3 -> Direção do contador
-	MOV R0, #0
+	MOV R0, #1
 	MOV R1, #1
-	MOV R2, #1000
+	MOV R2, #500
 MainLoop
 	BL PrintValue
 
@@ -72,7 +74,7 @@ Loop
 	ADD R0, R1
 	CMP R1, #0
 	BLT CheckUnderflow
-	CMP R1, #0
+	CMP R1, #99
 	BGT CheckOverflow
 	
 	B MainLoop
@@ -116,8 +118,12 @@ CheckOverflow
 	B MainLoop
 	
 PrintValue
+	PUSH {LR}
 	BL Led_Output
 	BL Switch_Input
+	MOV R2, #1000
+	BL SysTick_Wait1ms
+	POP {LR}
 	BX  LR
 ; -------------------------------------------------------------------------------------------------------------------------
 ; Fim do Arquivo
