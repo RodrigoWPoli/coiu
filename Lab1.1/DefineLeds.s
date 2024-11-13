@@ -19,6 +19,7 @@
 
 DefineLedA
 ; Define o led (a) do display       ; MNOP
+    PUSH {R0}
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
@@ -94,12 +95,14 @@ DefineLedA
 
     CMP R4, #1                          ; Compara o valor de R4 com 1
     IT EQ
-    ORREQ R5, R5, #0x1                  ; Se for igual, seta o bit para ligar o led (a)
-
+    ORREQ R5, R5, #2_1                  ; Se for igual, seta o bit para ligar o led (a)
+    
+    POP {R0}
     BX LR
 
 DefineLedB
 ; Define o led (b) do display       ; MNOP
+    PUSH {R0}
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
@@ -163,12 +166,14 @@ DefineLedB
 
     CMP R4, #1                          ; Compara o valor de R4 com 1
     IT EQ
-    ORREQ R5, R5, #0x10                 ; Se for igual, seta o bit para ligar o led (b)
+    ORREQ R5, R5, #2_10                 ; Se for igual, seta o bit para ligar o led (b)
 
+    POP {R0}
     BX LR
 
 DefineLedC
 ; Define o led (c) do display       ; MNOP
+    PUSH {R0}
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
@@ -218,12 +223,14 @@ DefineLedC
 
     CMP R4, #1                          ; Compara o valor de R4 com 1
     IT EQ
-    ORREQ R5, R5, #0x100                ; Se for igual, seta o bit para ligar o led (c)
+    ORREQ R5, R5, #2_100                ; Se for igual, seta o bit para ligar o led (c)
 
+    POP {R0}
     BX LR
 
 DefineLedD
 ; Define o led (d) do display       ; MNOP
+    PUSH {R0}
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
@@ -295,13 +302,14 @@ DefineLedD
 
     CMP R4, #1                          ; Compara o valor de R4 com 1
     IT EQ
-    ORREQ R5, R5, #0x100                ; Se for igual, seta o bit para ligar o led (d)
+    ORREQ R5, R5, #2_1000               ; Se for igual, seta o bit para ligar o led (d)
 
-
+    POP {R0}
     BX LR
 
 DefineLedE
 ; Define o led (e) do display       ; MNOP
+    PUSH {R0}
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x4                    ; Filtra o bit 4 de R0
@@ -343,13 +351,14 @@ DefineLedE
 
     CMP R4, #1                          ; Compara o valor de R4 com 1
     IT EQ
-    ORREQ R5, R5, #0x100                ; Se for igual, seta o bit para ligar o led (e)
+    ORREQ R5, R5, #2_10000              ; Se for igual, seta o bit para ligar o led (e)
 
-
+    POP {R0}
     BX LR
 
 DefineLedF
 ; Define o led (f) do display       ; MNOP
+    PUSH {R0}
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
@@ -413,13 +422,14 @@ DefineLedF
 
     CMP R4, #1                          ; Compara o valor de R4 com 1
     IT EQ
-    ORREQ R5, R5, #0x1                  ; Se for igual, seta o bit para ligar o led (f)
+    ORREQ R5, R5, #2_100000             ; Se for igual, seta o bit para ligar o led (f)
 
-
+    POP {R0}
     BX LR
 
 DefineLedG
 ; Define o led (g) do display       ; MNOP
+    PUSH {R0}
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
@@ -473,8 +483,9 @@ DefineLedG
 
     CMP R4, #1                          ; Compara o valor de R4 com 1
     IT EQ
-    ORREQ R5, R5, #0x1                  ; Se for igual, seta o bit para ligar o led (a)
+    ORREQ R5, R5, #2_1000000            ; Se for igual, seta o bit para ligar o led (a)
 
+    POP {R0}
     BX LR
 
 ;

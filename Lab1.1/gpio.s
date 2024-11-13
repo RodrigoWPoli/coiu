@@ -358,7 +358,7 @@ Led_Output
 	STR R0, [R1]						; Escreve na porta o novo valor
     POP {R0}                            ; Recupera o valor de R0
 
-    MOV R2, #1                          ; 1 ms para esperar
+    MOV R2, #500                        ; 1 ms para esperar
 
     LDR R1, =GPIO_PORTP_DATA_R 			; Le o endereÃ§o do data
 	MOV R3, #2_00100000					; Ativa o DS2
@@ -383,7 +383,12 @@ Led_Output
 ;   - R0 -> Recebe o valor em binário para mostrar nos displays
 ; Parâmetro de saída: N/A
 Display_Output	
-    PUSH {R0-R5}                        ; Salva o valor R0
+    PUSH {R0}                        ; Salva o valor R0
+    PUSH {R1}                        ; Salva o valor R0
+    PUSH {R2}                        ; Salva o valor R0
+    PUSH {R3}                        ; Salva o valor R0
+    PUSH {R4}                        ; Salva o valor R0
+    PUSH {R5}                        ; Salva o valor R0
     MOV R5, #0                          ; Zera o valor de R5
 	
     ; R0 - Guarda o valor binário
@@ -408,21 +413,25 @@ Display_Output
 	MOV R2, #2_00010000					; Insere um valor no R2
 	STR R2, [R1]						; Escreve na porta o novo valor
 
-    POP {R0}                            ; Recupera o valor de R0
     LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereÃ§o do data
 	MOV R2, #2_11110000					; Seta todos os valores possíveis de led
-    PUSH {R0}                           ; Salva o valor R0
-    AND R0, R2, R0						; Faz o AND para verificar todos os valores que irão acender
-	STR R0, [R1]						; Escreve na porta o novo valor
+    PUSH {R5}                           ; Salva o valor R5
+    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
+	STR R5, [R1]						; Escreve na porta o novo valor
 
-    POP {R0}                            ; Recupera o valor de R0
+    POP {R5}                            ; Recupera o valor de R5
 	LDR R1, =GPIO_PORTQ_DATA_R 		    ; Le o endereÃ§o do data
 	MOV R2, #2_00001111					; Seta todos os valores possíveis de led
-    PUSH {R0}                           ; Salva o valor R0
-    AND R0, R2, R0						; Faz o AND para verificar todos os valores que irão acender
-	STR R0, [R1]						; Escreve na porta o novo valor
+    PUSH {R5}                           ; Salva o valor R5
+    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
+	STR R5, [R1]						; Escreve na porta o novo valor
     
     POP {R0}                            ; Recupera o valor de R0
+    POP {R1}                            ; Recupera o valor de R0
+    POP {R2}                            ; Recupera o valor de R0
+    POP {R3}                            ; Recupera o valor de R0
+    POP {R4}                            ; Recupera o valor de R0
+    POP {R5}                            ; Recupera o valor de R0
     BX LR
 ; -------------------------------------------------------------------------------
 
@@ -435,7 +444,7 @@ Switch_Input
 ; um registrador se estï¿½ ativada ou nï¿½o
 ; ****************************************
 	LDR	R1, =GPIO_PORTJ_AHB_DATA_R		    ;Carrega o valor do offset do data register
-	LDR R0, [R1]                            ;Lï¿½ no barramento de dados o pino [J0]
+	LDR R3, [R1]                            ;Lï¿½ no barramento de dados o pino [J0, J1]
 	
 	BX LR
 
