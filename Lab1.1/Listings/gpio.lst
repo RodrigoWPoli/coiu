@@ -925,8 +925,8 @@ ARM Macro Assembler    Page 15
   359 000000F4 BC01            POP              {R0}        ; Recupera o valor 
                                                             de R0
   360 000000F6         
-  361 000000F6 F44F 72FA       MOV              R2, #500    ; 1 ms para esperar
-                                                            
+  361 000000F6 F44F 72FA       MOV              R2, #500    ; 0,5 s para espera
+                                                            r
   362 000000FA         
   363 000000FA 4942            LDR              R1, =GPIO_PORTP_DATA_R ; Le o e
                                                             ndereço do data
@@ -945,7 +945,7 @@ ARM Macro Assembler    Page 15
   372 0000010E 600B            STR              R3, [R1]    ; Escreve na porta 
                                                             o novo valor
   373 00000110         
-  374 00000110 F04F 0201       MOV              R2, #1
+  374 00000110 F04F 0205       MOV              R2, #5
   375 00000114 F7FF FFFE       BL               SysTick_Wait1ms ; Espera 1ms
   376 00000118         
   377 00000118 F85D EB04       POP              {LR}        ; Recupera LR

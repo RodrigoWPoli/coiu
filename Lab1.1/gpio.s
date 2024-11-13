@@ -358,7 +358,7 @@ Led_Output
 	STR R0, [R1]						; Escreve na porta o novo valor
     POP {R0}                            ; Recupera o valor de R0
 
-    MOV R2, #500                        ; 1 ms para esperar
+    MOV R2, #500                        ; 0,5 s para esperar
 
     LDR R1, =GPIO_PORTP_DATA_R 			; Le o endereço do data
 	MOV R3, #2_00100000					; Ativa o DS2
@@ -371,7 +371,7 @@ Led_Output
 	MOV R3, #2_00000000					; Desativa o DS2
 	STR R3, [R1]						; Escreve na porta o novo valor
     
-    MOV R2, #1
+    MOV R2, #5
     BL SysTick_Wait1ms                  ; Espera 1ms
 
     POP {LR}                            ; Recupera LR

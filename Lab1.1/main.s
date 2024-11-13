@@ -62,7 +62,7 @@ Start
 ; R3 -> Leitura da Switch
 ; R9 -> Passo a ser incrementado no contador
 ; R2 -> Quantidade de ticks de ms
-	MOV R0, #98
+	MOV R0, #96
 	MOV R9, #1
 	MOV R2, #500
 MainLoop
@@ -72,9 +72,9 @@ Loop
 	CMP R3, #2_11
 	BNE Step_handler
 	ADD R0, R9
-	CMP R9, #0
+	CMP R0, #0
 	BLT CheckUnderflow
-	CMP R9, #99
+	CMP R0, #99
 	BGT CheckOverflow
 	
 	B MainLoop
@@ -106,22 +106,20 @@ Both_handler
 	B MainLoop
 
 CheckUnderflow
-	CMP R9, #0
+	CMP R0, #0
 	BGE MainLoop
-	MOV R9, #99
+	MOV R0, #99
 	B MainLoop
 
 CheckOverflow
-	CMP R9, #99
+	CMP R0, #99
 	BLE MainLoop
-	MOV R9, #0
+	MOV R0, #0
 	B MainLoop
 	
 PrintValue
 	PUSH {LR}
 	BL Led_Output
-	MOV R2, #1000
-	BL SysTick_Wait1ms
 	POP {LR}
 	BX  LR
 ; -------------------------------------------------------------------------------------------------------------------------
