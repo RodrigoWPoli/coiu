@@ -51,31 +51,38 @@ Start
     
     BL PLL_Init                     ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
 	BL SysTick_Init                 ;Chama a subrotina para inicializar o SysTick
-	BL GPIO_Init   	;Chama a subrotina que inicializa os GPIO
-	
-	MOV R1, #2_1
-	MOV R0, #2_00000000
-TestaDisplay	 
+	BL GPIO_Init   					;Chama a subrotina que inicializa os GPIO
+
+	MOV R0, #2_11111111 ; 0xFF
 	BL Display_Output
-	ADD R0, R1
-	CMP R0, #99
-	BEQ Acabou
-	B TestaDisplay
+
+	MOV R0, #2_00000000 ; 0x00
+	BL Display_Output
+
+	MOV R0, #2_11110000 ; 0xF0
+	BL Display_Output
+
+	MOV R0, #2_00001111 ; 0x0F
+	BL Display_Output
+
+	MOV R0, #2_01100110 ; 0x66
+	BL Display_Output
+
+	MOV R0, #2_01000010 ; 0x42
+	BL Display_Output
+	
 ; R0 -> Contador
 ; R3 -> Leitura da Switch
 ; R8 -> Valor da Switch anterior
 ; R9 -> Passo a ser incrementado no contador
 ; R2 -> Quantidade de ticks de ms
-Acabou
 	MOV R0, #0 						; Contador iniciando em 0
 	MOV R2, #500                    ; Tempo para trocar o contador
 	MOV R9, #1						; Passo iniciando em 0
 	MOV R8, #2_11					; Inicia com as duas switches inativas
 
 MainLoop
-	BL Led_Output					; Grava na placa os Leds
-;	BL Display_Output				; Grava na placa os displays
-;	BL PrintValue					; Chamada pra mostrar os displays e leds
+	BL PrintValue					; Chamada pra mostrar os displays e leds
 	BL Switch_Input					; Chamada pra ler o switch
 	PUSH {R3}						; Salvar o valor da switch
 CounterLoop
@@ -87,6 +94,7 @@ CounterLoop
 	CMP R0, #99						; Compara para ver se nao ficou acima de 100
 	BGT CheckOverflow
 
+	POP {R8}						; Salvar o valor da switch
 	B MainLoop
 
 Step_handler
@@ -153,7 +161,7 @@ DecrementStep
 PrintValue
 	PUSH {LR}						; Salva o Link Register
 	BL Led_Output					; Grava na placa os Leds
-	BL Display_Output				; Grava na placa os displays
+;	BL Display_Output				; Grava na placa os displays
 	POP {LR}						; Volta o Link Register
 	BX  LR
 ; -------------------------------------------------------------------------------------------------------------------------

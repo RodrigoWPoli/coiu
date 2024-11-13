@@ -358,7 +358,7 @@ Led_Output
 	STR R0, [R1]						; Escreve na porta o novo valor
     POP {R0}                            ; Recupera o valor de R0
 
-    MOV R2, #30                      ; 0,5 s para esperar
+    MOV R2, #300                        ; 0,3 s para esperar
 
     LDR R1, =GPIO_PORTP_DATA_R 			; Le o endere√ßo do data
 	MOV R3, #2_00100000					; Ativa o DS2
@@ -371,8 +371,8 @@ Led_Output
 	MOV R3, #2_00000000					; Desativa o DS2
 	STR R3, [R1]						; Escreve na porta o novo valor
     
-    MOV R2, #5
-    BL SysTick_Wait1ms                  ; Espera 5ms
+    MOV R2, #1
+    BL SysTick_Wait1ms                  ; Espera 1ms
 
     POP {LR}                            ; Recupera LR
 	BX LR
@@ -400,8 +400,10 @@ Display_Output
     ; R6 - Usado para selecionar o display no qual mostrar o valor hexa
 
     ; =========================== Display Esq ===================================
+    MOV R6, R0                          ; Guarda o valor de R0
     MOV R5, #2_01111111                 ; Seta os LEDs para HIGH pois a lÛgica do mapa de karnaugh È invertida
-    MOV R6, #0xF0                       ; Seleciona os bits da esquerda para mostrar
+    LSR R0, R0, #4                      ; Shifta 4 bits para a direita para pegar o valor da esquerda
+
     PUSH {LR}                           ; Salva o Link Register
     BL DefineLedA
     BL DefineLedB
@@ -421,7 +423,7 @@ Display_Output
     POP {R5}                            ; Recupera o valor de R5
 	LDR R1, =GPIO_PORTQ_DATA_R 		    ; Le o endere√ßo do data
 	MOV R2, #2_00001111					; Seleciona os LEDs da Porta Q
-;    PUSH {R5}                           ; Salva o valor R5 - a principio n„o precisa
+;    PUSH {R5}                          ; Salva o valor R5 - a principio n„o precisa
     AND R5, R2, R5						; Faz o AND para verificar todos os valores que ir„o acender
 	STR R5, [R1]						; Escreve na porta o novo valor
 
@@ -432,22 +434,22 @@ Display_Output
 	STR R2, [R1]						; Escreve na porta o novo valor
 
     PUSH {LR}
-    MOV R2, #30
-    BL   SysTick_Wait1ms                ; Espera 0,5s
+    MOV R2, #300
+    BL   SysTick_Wait1ms                ; Espera 0,3s
 
     ;Desativa os Leds do display
     LDR R1, =GPIO_PORTB_AHB_DATA_R 		; Le o endere√ßo do data
 	MOV R2, #2_00000000					; Insere um valor no R2
 	STR R2, [R1]
 
-    MOV R2, #5                           ; Espera 5ms
+    MOV R2, #1                           ; Espera 1ms
     BL SysTick_Wait1ms
 
     POP {LR}
 
     ; =========================== Display Dir ===================================
+    MOV R0, R6                          ; Guarda o valor de R0
     MOV R5, #2_01111111                 ; Seta os LEDs para HIGH pois a lÛgica do mapa de karnaugh È invertida
-    MOV R6, #0x0F                       ; Seleciona os bits da direita para mostrar
     PUSH {LR}                           ; Salva o Link Register
     BL DefineLedA
     BL DefineLedB
@@ -477,15 +479,15 @@ Display_Output
 	STR R2, [R1]						; Escreve na porta o novo valor
 
     PUSH {LR}
-    MOV R2, #30
-    BL   SysTick_Wait1ms                ; Espera 0,5s
+    MOV R2, #300
+    BL   SysTick_Wait1ms                ; Espera 0,3s
 
     ;Desativa os Leds do display
     LDR R1, =GPIO_PORTB_AHB_DATA_R 		; Le o endere√ßo do data
 	MOV R2, #2_00000000					; Insere um valor no R2
 	STR R2, [R1]
 
-    MOV R2, #5                           ; Espera 5ms
+    MOV R2, #1                           ; Espera 1ms
     BL SysTick_Wait1ms
 
     POP {LR}
@@ -495,6 +497,7 @@ Display_Output
     POP {R3}                            ; Recupera o valor de R3
     POP {R4}                            ; Recupera o valor de R4
     POP {R5}                            ; Recupera o valor de R5
+    POP {R6}                            ; Recupera o valor de R5
     BX LR
 ; -------------------------------------------------------------------------------
 
