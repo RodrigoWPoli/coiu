@@ -49,9 +49,9 @@
 Start  
 ; Comece o código aqui <======================================================
     
-    BL PLL_Init                     ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
-	BL SysTick_Init                 ;Chama a subrotina para inicializar o SysTick
-	BL GPIO_Init                    ;Chama a subrotina que inicializa os GPIO
+    ;BL PLL_Init                     ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
+	;BL SysTick_Init                 ;Chama a subrotina para inicializar o SysTick
+	;BL GPIO_Init                    ;Chama a subrotina que inicializa os GPIO
 
 	MOV R0, #2_00000110 
 	BL Display_Output

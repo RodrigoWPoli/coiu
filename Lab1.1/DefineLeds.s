@@ -21,79 +21,87 @@ DefineLedA
 ; Define o led (a) do display       ; MNOP
     PUSH {R0}
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
-    
+	
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 4 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x4                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    MOV R4, R2                          ; Salva o valor de R2 em R4
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedA
 
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R3, R1, #0x1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedA
     
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedA
     
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x4                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedA
 
-    CMP R4, #1                          ; Compara o valor de R4 com 1
+SetaLedA
     IT EQ
     ORREQ R5, R5, #2_1                  ; Se for igual, seta o bit para ligar o led (a)
     
@@ -106,65 +114,73 @@ DefineLedB
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    MOV R4, R2                          ; Salva o valor de R2 em R4
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedB
 
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1011
+    BEQ SetaLedB
     
 
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R3, R1, #0x1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_0111
+    BEQ SetaLedB
     
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R3, R1, #0x1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1101
+    BEQ SetaLedB
 
-    CMP R4, #1                          ; Compara o valor de R4 com 1
+SetaLedB
     IT EQ
     ORREQ R5, R5, #2_10                 ; Se for igual, seta o bit para ligar o led (b)
 
@@ -178,50 +194,56 @@ DefineLedC
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
-    MOV R4, R2                          ; Salva o valor de R2 em R4
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1110
+    BEQ SetaLedC
 
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R3, R1, #0x1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1101
+    BEQ SetaLedC
     
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #0 
 
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x4                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R3, R1, #0x1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedC
 
-    CMP R4, #1                          ; Compara o valor de R4 com 1
+SetaLedC
     IT EQ
     ORREQ R5, R5, #2_100                ; Se for igual, seta o bit para ligar o led (c)
 
@@ -234,73 +256,81 @@ DefineLedD
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 4 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x4                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
-    MOV R4, R2                          ; Salva o valor de R2 em R4
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedD
 
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R3, R1, #0x1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedD
     
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1 
+    EOR R2, R3, #0                      ; 
 
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x4                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R3, R1, #0x1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedD
 
 
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_0111
+    BEQ SetaLedD
 
-    CMP R4, #1                          ; Compara o valor de R4 com 1
+SetaLedD
     IT EQ
     ORREQ R5, R5, #2_1000               ; Se for igual, seta o bit para ligar o led (d)
 
@@ -313,43 +343,49 @@ DefineLedE
     AND R0, R0, #0xF                    ; Filtra os LSB de R0
     
     AND R1, R0, #0x4                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x4                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 3 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
-    MOV R4, R2                          ; Salva o valor de R2 em R4
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_0111
+    BEQ SetaLedE
 
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 1 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1110
+    BEQ SetaLedE
     
 
     AND R1, R0, #0x8                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1001
+    BEQ SetaLedE
 
-    CMP R4, #1                          ; Compara o valor de R4 com 1
+SetaLedE
     IT EQ
     ORREQ R5, R5, #2_10000              ; Se for igual, seta o bit para ligar o led (e)
 
@@ -363,64 +399,72 @@ DefineLedF
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    MOV R4, R2                          ; Salva o valor de R2 em R4
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedF
 
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x4                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1101
+    BEQ SetaLedF
     
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1011
+    BEQ SetaLedF
     
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x4                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1110
+    BEQ SetaLedF
 
-    CMP R4, #1                          ; Compara o valor de R4 com 1
+SetaLedF
     IT EQ
     ORREQ R5, R5, #2_100000             ; Se for igual, seta o bit para ligar o led (f)
 
@@ -434,54 +478,60 @@ DefineLedG
     
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    MOV R4, R2                          ; Salva o valor de R2 em R4
+    EOR R3, R1, #0x1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedG
 
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
     EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1111
+    BEQ SetaLedG
     
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x8                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    EOR R2, R3, #0                      ; 
     
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
+    EOR R3, R1, #0x4                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
     
     AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
-    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
-    AND R2, R3, #1                      ; 
-    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    EOR R3, R1, #0x2                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    EOR R2, R3, R2                      ; 
+    
+    CMP R2, #2_1110
+    BEQ SetaLedG
 
-    CMP R4, #1                          ; Compara o valor de R4 com 1
+SetaLedG
     IT EQ
     ORREQ R5, R5, #2_1000000            ; Se for igual, seta o bit para ligar o led (a)
 

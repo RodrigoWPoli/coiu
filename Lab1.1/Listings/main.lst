@@ -79,166 +79,162 @@ ARM Macro Assembler    Page 2
    50 00000000         ; Comece o código aqui <===============================
                        =======================
    51 00000000         
-   52 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
-                                                            para alterar o cloc
-                                                            k do microcontrolad
-                                                            or para 80MHz
-   53 00000004 F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
-                                                             para inicializar o
-                                                             SysTick
-   54 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
-                                                            que inicializa os G
-                                                            PIO
-   55 0000000C         
-   56 0000000C F04F 0006       MOV              R0, #2_00000110
-   57 00000010 F7FF FFFE       BL               Display_Output
-   58 00000014         
-   59 00000014 F04F 0005       MOV              R0, #2_00000101
-   60 00000018 F7FF FFFE       BL               Display_Output
-   61 0000001C         ; R0 -> Contador
-   62 0000001C         ; R3 -> Leitura da Switch
-   63 0000001C         ; R9 -> Passo a ser incrementado no contador
-   64 0000001C         ; R2 -> Quantidade de ticks de ms
-   65 0000001C F04F 0000       MOV              R0, #0
-   66 00000020 F04F 0901       MOV              R9, #1
-   67 00000024 F44F 72FA       MOV              R2, #500
-   68 00000028         MainLoop
-   69 00000028 F000 F83B       BL               PrintValue  ; Chamada pra mostr
+   52 00000000         ;BL PLL_Init                     ;Chama a subrotina para
+                        alterar o clock do microcontrolador para 80MHz
+   53 00000000         ;BL SysTick_Init                 ;Chama a subrotina para
+                        inicializar o SysTick
+   54 00000000         ;BL GPIO_Init                    ;Chama a subrotina que 
+                       inicializa os GPIO
+   55 00000000         
+   56 00000000 F04F 0006       MOV              R0, #2_00000110
+   57 00000004 F7FF FFFE       BL               Display_Output
+   58 00000008         
+   59 00000008 F04F 0005       MOV              R0, #2_00000101
+   60 0000000C F7FF FFFE       BL               Display_Output
+   61 00000010         ; R0 -> Contador
+   62 00000010         ; R3 -> Leitura da Switch
+   63 00000010         ; R9 -> Passo a ser incrementado no contador
+   64 00000010         ; R2 -> Quantidade de ticks de ms
+   65 00000010 F04F 0000       MOV              R0, #0
+   66 00000014 F04F 0901       MOV              R9, #1
+   67 00000018 F44F 72FA       MOV              R2, #500
+   68 0000001C         MainLoop
+   69 0000001C F000 F83B       BL               PrintValue  ; Chamada pra mostr
                                                             ar os displays e le
                                                             ds
-   70 0000002C F7FF FFFE       BL               Switch_Input ; Chamada pra ler 
+   70 00000020 F7FF FFFE       BL               Switch_Input ; Chamada pra ler 
                                                             o switch
-   71 00000030         CounterLoop
-   72 00000030 2B03            CMP              R3, #2_11   ; Se nenhum switch 
+   71 00000024         CounterLoop
+   72 00000024 2B03            CMP              R3, #2_11   ; Se nenhum switch 
                                                             for ativo, apenas i
                                                             ncrementa ou decrem
                                                             enta o contador
-   73 00000032 D105            BNE              Step_handler
-   74 00000034 4448            ADD              R0, R9      ; Incrementa o cont
+   73 00000026 D105            BNE              Step_handler
+   74 00000028 4448            ADD              R0, R9      ; Incrementa o cont
                                                             ador
-   75 00000036 2800            CMP              R0, #0      ; Compara para ver 
+   75 0000002A 2800            CMP              R0, #0      ; Compara para ver 
                                                             se nao ficou abaixo
                                                              de zero
-   76 00000038 DB15            BLT              CheckUnderflow
-   77 0000003A 2863            CMP              R0, #99     ; Compara para ver 
+   76 0000002C DB15            BLT              CheckUnderflow
+   77 0000002E 2863            CMP              R0, #99     ; Compara para ver 
                                                             se nao ficou acima 
                                                             de 100
-   78 0000003C DC18            BGT              CheckOverflow
-   79 0000003E         
-   80 0000003E E7F3            B                MainLoop
-   81 00000040         
-   82 00000040         Step_handler
+   78 00000030 DC18            BGT              CheckOverflow
+   79 00000032         
+   80 00000032 E7F3            B                MainLoop
+   81 00000034         
+   82 00000034         Step_handler
+   83 00000034 2B02            CMP              R3, #2_10   ; Se tiver SW1 ativ
+                                                            a, incrementa o pas
+                                                            so ou decrementa
+   84 00000036 D103            BNE              Neg_handler
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-   83 00000040 2B02            CMP              R3, #2_10   ; Se tiver SW1 ativ
-                                                            a, incrementa o pas
-                                                            so ou decrementa
-   84 00000042 D103            BNE              Neg_handler
-   85 00000044 F1B9 0F00       CMP              R9, #0      ; Verifica se é ne
+   85 00000038 F1B9 0F00       CMP              R9, #0      ; Verifica se é ne
                                                             gativo e se for, de
                                                             crementa o passo
-   86 00000048 D41F            BMI              DecrementStep
-   87 0000004A E016            B                IncrementStep ; Se nao for, inc
+   86 0000003C D41F            BMI              DecrementStep
+   87 0000003E E016            B                IncrementStep ; Se nao for, inc
                                                             rementa o passo
-   88 0000004C         
-   89 0000004C         Neg_handler
-   90 0000004C 2B01            CMP              R3, #2_01   ; Se tiver SW2 ativ
+   88 00000040         
+   89 00000040         Neg_handler
+   90 00000040 2B01            CMP              R3, #2_01   ; Se tiver SW2 ativ
                                                             a, inverte o contad
                                                             or negativando o pa
                                                             sso
-   91 0000004E D102            BNE              Both_handler
-   92 00000050 F1C9 0900       NEG              R9, R9      ; Negativa o passo
-   93 00000054 E7E8            B                MainLoop
-   94 00000056         
-   95 00000056         Both_handler
-   96 00000056 2B00            CMP              R3, #2_00   ; Se as duas SW for
+   91 00000042 D102            BNE              Both_handler
+   92 00000044 F1C9 0900       NEG              R9, R9      ; Negativa o passo
+   93 00000048 E7E8            B                MainLoop
+   94 0000004A         
+   95 0000004A         Both_handler
+   96 0000004A 2B00            CMP              R3, #2_00   ; Se as duas SW for
                                                             em ativas, realiza 
                                                             as duas ações
-   97 00000058 D1E6            BNE              MainLoop
-   98 0000005A F1C9 0900       NEG              R9, R9      ; Negativa o valor
-   99 0000005E F1B9 0F00       CMP              R9, #0      ; Verifica se é ne
+   97 0000004C D1E6            BNE              MainLoop
+   98 0000004E F1C9 0900       NEG              R9, R9      ; Negativa o valor
+   99 00000052 F1B9 0F00       CMP              R9, #0      ; Verifica se é ne
                                                             gativo e se for, de
                                                             crementa o passo
-  100 00000062 D412            BMI              DecrementStep
-  101 00000064 E009            B                IncrementStep ; Se nao for, inc
+  100 00000056 D412            BMI              DecrementStep
+  101 00000058 E009            B                IncrementStep ; Se nao for, inc
                                                             rementa o passo
-  102 00000066         
-  103 00000066         CheckUnderflow
-  104 00000066 2800            CMP              R0, #0      ; Não fica redunda
+  102 0000005A         
+  103 0000005A         CheckUnderflow
+  104 0000005A 2800            CMP              R0, #0      ; Não fica redunda
                                                             nte aqui?
-  105 00000068 DADE            BGE              MainLoop
-  106 0000006A F04F 0063       MOV              R0, #99
-  107 0000006E E7DB            B                MainLoop
-  108 00000070         
-  109 00000070         CheckOverflow
-  110 00000070 2863            CMP              R0, #99     ; Checar com o tiba
+  105 0000005C DADE            BGE              MainLoop
+  106 0000005E F04F 0063       MOV              R0, #99
+  107 00000062 E7DB            B                MainLoop
+  108 00000064         
+  109 00000064         CheckOverflow
+  110 00000064 2863            CMP              R0, #99     ; Checar com o tiba
                                                             s
-  111 00000072 DDD9            BLE              MainLoop
-  112 00000074 F04F 0000       MOV              R0, #0
-  113 00000078 E7D6            B                MainLoop
-  114 0000007A         
-  115 0000007A         IncrementStep
-  116 0000007A F1B9 0F09       CMP              R9, #9      ; Compara se o pass
+  111 00000066 DDD9            BLE              MainLoop
+  112 00000068 F04F 0000       MOV              R0, #0
+  113 0000006C E7D6            B                MainLoop
+  114 0000006E         
+  115 0000006E         IncrementStep
+  116 0000006E F1B9 0F09       CMP              R9, #9      ; Compara se o pass
                                                             o está no limite s
                                                             uperior (9)     
-  117 0000007E BFB4            ITE              LT
-  118 00000080 F109 0901       ADDLT            R9, #1      ; Caso não esteja 
+  117 00000072 BFB4            ITE              LT
+  118 00000074 F109 0901       ADDLT            R9, #1      ; Caso não esteja 
                                                             e seja menor que 9,
                                                              adiciona 1
-  119 00000084 F04F 0901       MOVGE            R9, #1      ; Caso seja 9 ou ma
+  119 00000078 F04F 0901       MOVGE            R9, #1      ; Caso seja 9 ou ma
                                                             ior, seta para 1
-  120 00000088 E7CE            B                MainLoop
-  121 0000008A         
+  120 0000007C E7CE            B                MainLoop
+  121 0000007E         
+  122 0000007E         DecrementStep
+  123 0000007E F1C9 0900       NEG              R9, R9      ; Torna o valor pos
+                                                            itivo
+  124 00000082 F1B9 0F01       CMP              R9, #1      ; Compara se o pass
 
 
 
 ARM Macro Assembler    Page 4 
 
 
-  122 0000008A         DecrementStep
-  123 0000008A F1C9 0900       NEG              R9, R9      ; Torna o valor pos
-                                                            itivo
-  124 0000008E F1B9 0F01       CMP              R9, #1      ; Compara se o pass
                                                             o está no limite i
                                                             nferior (1)
-  125 00000092 BFCC            ITE              GT
-  126 00000094 F1A9 0901       SUBGT            R9, #1      ; Caso seja maior q
+  125 00000086 BFCC            ITE              GT
+  126 00000088 F1A9 0901       SUBGT            R9, #1      ; Caso seja maior q
                                                             ue 1, reduz 1
-  127 00000098 F04F 0909       MOVLE            R9, #9      ; Caso seja igual o
+  127 0000008C F04F 0909       MOVLE            R9, #9      ; Caso seja igual o
                                                             u menor a 1, seta p
                                                             ara 9
-  128 0000009C F1C9 0900       NEG              R9, R9      ; Torna o valor neg
+  128 00000090 F1C9 0900       NEG              R9, R9      ; Torna o valor neg
                                                             ativo novamente
-  129 000000A0 E7C2            B                MainLoop
-  130 000000A2         
-  131 000000A2         PrintValue
-  132 000000A2 B500            PUSH             {LR}        ; Salva o Link Regi
+  129 00000094 E7C2            B                MainLoop
+  130 00000096         
+  131 00000096         PrintValue
+  132 00000096 B500            PUSH             {LR}        ; Salva o Link Regi
                                                             ster
-  133 000000A4 F7FF FFFE       BL               Led_Output  ; Grava na placa os
+  133 00000098 F7FF FFFE       BL               Led_Output  ; Grava na placa os
                                                              Leds
-  134 000000A8 F85D EB04       POP              {LR}        ; Volta o Link Regi
+  134 0000009C F85D EB04       POP              {LR}        ; Volta o Link Regi
                                                             ster
-  135 000000AC 4770            BX               LR
-  136 000000AE         ; ------------------------------------------------------
+  135 000000A0 4770            BX               LR
+  136 000000A2         ; ------------------------------------------------------
                        --------------------------------------------------------
                        -----------
-  137 000000AE         ; Fim do Arquivo
-  138 000000AE         ; ------------------------------------------------------
+  137 000000A2         ; Fim do Arquivo
+  138 000000A2         ; ------------------------------------------------------
                        --------------------------------------------------------
                        ----------- 
-  139 000000AE 00 00           ALIGN                        ;Garante que o fim 
+  139 000000A2 00 00           ALIGN                        ;Garante que o fim 
                                                             da se��o est�
                                                              alinhada 
-  140 000000B0                 END                          ;Fim do arquivo
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\Ricar\AppData
-\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL
- SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C1294NCPDT SE
-TA 1" --list=.\listings\main.lst main.s
+  140 000000A4                 END                          ;Fim do arquivo
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
+--depend=.\objects\main.d -o.\objects\main.o -I"F:\Program Files\Arm\Packs\Keil
+\TM4C_DFP\1.1.0\Device\Include\TM4C129" --predefine="__EVAL SETA 1" --predefine
+="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1" --list=.\listi
+ngs\main.lst main.s
 
 
 
@@ -268,7 +264,7 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-Both_handler 00000056
+Both_handler 0000004A
 
 Symbol: Both_handler
    Definitions
@@ -276,7 +272,7 @@ Symbol: Both_handler
    Uses
       At line 91 in file main.s
 Comment: Both_handler used once
-CheckOverflow 00000070
+CheckOverflow 00000064
 
 Symbol: CheckOverflow
    Definitions
@@ -284,7 +280,7 @@ Symbol: CheckOverflow
    Uses
       At line 78 in file main.s
 Comment: CheckOverflow used once
-CheckUnderflow 00000066
+CheckUnderflow 0000005A
 
 Symbol: CheckUnderflow
    Definitions
@@ -292,7 +288,7 @@ Symbol: CheckUnderflow
    Uses
       At line 76 in file main.s
 Comment: CheckUnderflow used once
-CounterLoop 00000030
+CounterLoop 00000024
 
 Symbol: CounterLoop
    Definitions
@@ -300,7 +296,7 @@ Symbol: CounterLoop
    Uses
       None
 Comment: CounterLoop unused
-DecrementStep 0000008A
+DecrementStep 0000007E
 
 Symbol: DecrementStep
    Definitions
@@ -309,7 +305,7 @@ Symbol: DecrementStep
       At line 86 in file main.s
       At line 100 in file main.s
 
-IncrementStep 0000007A
+IncrementStep 0000006E
 
 Symbol: IncrementStep
    Definitions
@@ -318,7 +314,7 @@ Symbol: IncrementStep
       At line 87 in file main.s
       At line 101 in file main.s
 
-MainLoop 00000028
+MainLoop 0000001C
 
 
 
@@ -340,7 +336,7 @@ Symbol: MainLoop
       At line 120 in file main.s
       At line 129 in file main.s
 
-Neg_handler 0000004C
+Neg_handler 00000040
 
 Symbol: Neg_handler
    Definitions
@@ -348,7 +344,7 @@ Symbol: Neg_handler
    Uses
       At line 84 in file main.s
 Comment: Neg_handler used once
-PrintValue 000000A2
+PrintValue 00000096
 
 Symbol: PrintValue
    Definitions
@@ -364,7 +360,7 @@ Symbol: Start
    Uses
       At line 34 in file main.s
 Comment: Start used once
-Step_handler 00000040
+Step_handler 00000034
 
 Symbol: Step_handler
    Definitions
@@ -394,8 +390,8 @@ Symbol: GPIO_Init
    Definitions
       At line 43 in file main.s
    Uses
-      At line 54 in file main.s
-Comment: GPIO_Init used once
+      None
+Comment: GPIO_Init unused
 Led_Output 00000000
 
 Symbol: Led_Output
@@ -410,8 +406,8 @@ Symbol: PLL_Init
    Definitions
       At line 40 in file main.s
    Uses
-      At line 52 in file main.s
-Comment: PLL_Init used once
+      None
+Comment: PLL_Init unused
 Switch_Input 00000000
 
 Symbol: Switch_Input
@@ -426,8 +422,8 @@ Symbol: SysTick_Init
    Definitions
       At line 41 in file main.s
    Uses
-      At line 53 in file main.s
-Comment: SysTick_Init used once
+      None
+Comment: SysTick_Init unused
 SysTick_Wait1ms 00000000
 
 Symbol: SysTick_Wait1ms
