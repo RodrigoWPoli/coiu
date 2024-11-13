@@ -204,9 +204,12 @@ GPIO_PORTQ               	EQU    2_100000000000000
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
 		; Se alguma funÃ§Ã£o do arquivo for chamada em outro arquivo	
-        EXPORT GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
-        EXPORT PortABPQ_Output      ; Permite chamar PortABPQ_Output de outro arquivo
-		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
+        EXPORT GPIO_Init             ; Permite chamar GPIO_Init de outro arquivo
+        EXPORT Led_Output            ; Permite chamar Led_Output de outro arquivo
+        EXPORT Display_Output        ; Permite chamar Display_Output de outro arquivo
+		EXPORT Switch_Input          ; Permite chamar Switch_Input de outro arquivo
+
+        IMPORT SysTick_Wait1ms 
 									
 ;--------------------------------------------------------------------------------
 ; FunÃ§Ã£o GPIO_Init
@@ -288,7 +291,7 @@ EsperaGPIO 	LDR 		R1, [R0]						  ; LÃª da memÃ³ria o conteÃºdo do endereÃ§o do 
 			MOV         R1, #2_00100000					  ; PP5 Ã© saÃ­da
             STR         R1, [R0]						  ; Seta o valor na memÃ³ria
 
-; Limpar o AFSEl para nï¿½o ter funÃ§Ã£o alternativa
+; Limpar o AFSEl para não ter funÃ§Ã£o alternativa
 			MOV     R1, #0x00							  ; Colocar o valor 0 para nÃ£o setar funÃ§Ã£o alternativa
             LDR     R0, =GPIO_PORTA_AHB_AFSEL_R           ; Carrega o endereÃ§o do AFSEL da porta A
             STR     R1, [R0]                              ; Limpa os bits
@@ -309,7 +312,7 @@ EsperaGPIO 	LDR 		R1, [R0]						  ; LÃª da memÃ³ria o conteÃºdo do endereÃ§o do 
             MOV 	R1, #2_00110000						  ; Ativa os bits digitais para PB7-PB4
             STR		R1, [R0]							  ; Seta o bit digital para PB7-PB4
 			LDR 	R0, =GPIO_PORTJ_AHB_DEN_R			  ; Carrega o endereÃ§o do DEN para a porta J
-			MOV 	R1, #00000001						  ; Ativa a PJ0 para ser digital
+			MOV 	R1, #00000011						  ; Ativa a PJ0 e PJ1 para ser digital
 			STR		R1, [R0]							  ; Seta o bit digital para PJ0
             LDR 	R0, =GPIO_PORTP_DEN_R			      ; Carrega o endereÃ§o do DEN para a porta P
             MOV 	R1, #2_00100000						  ; Ativa os bits digitais para PP5
@@ -328,31 +331,527 @@ EsperaGPIO 	LDR 		R1, [R0]						  ; LÃª da memÃ³ria o conteÃºdo do endereÃ§o do 
 
 ; -------------------------------------------------------------------------------
 
-; FunÃ§Ã£o PortABPQ_Output
-; ParÃ¢metro de entrada: R0 -> Se o BIT0 da
-; ParÃ¢metro de saï¿½da: NÃ£o tem
-PortABPQ_Output
-; ****************************************
-; Escrever funÃ§Ã£o que acende ou apaga o LED
-; ****************************************
+; FunÃ§Ã£o Led_Output
+; R2 -> Ticks a serem utilizados
+; ParÃ¢metro de entrada: R0 -> Recebe os valores de leds a serem setados
+; Parâmetro de saída: N/A
+Led_Output
+	LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereÃ§o do data
+	MOV R2, #2_11110000					; Seta todos os valores possíveis de led
+    PUSH {R0}                           ; Salva o valor R0
+    AND R0, R2, R0						; Faz o AND para verificar todos os valores que irão acender
+	STR R0, [R1]						; Escreve na porta o novo valor
+	
+    POP {R0}                            ; Recupera o valor de R0
+	LDR R1, =GPIO_PORTQ_DATA_R 		    ; Le o endereÃ§o do data
+	MOV R2, #2_00001111					; Seta todos os valores possíveis de led
+    PUSH {R0}                           ; Salva o valor R0
+    AND R0, R2, R0						; Faz o AND para verificar todos os valores que irão acender
+	STR R0, [R1]						; Escreve na porta o novo valor
+    POP {R0}                            ; Recupera o valor de R0
+
+    MOV R2, #10000                      ; 1 ms para esperar
+
     LDR R1, =GPIO_PORTP_DATA_R 			; Le o endereÃ§o do data
-	MOV R2, #2_00100000					; Mete um valor no R2 com forÃ§a
-	STR R2, [R1]						; Escreve na porta o novo valor
-	
-	LDR R1, =GPIO_PORTA_AHB_DATA_R 			; Le o endereÃ§o do data
-	MOV R2, #2_11110000					; Mete um valor no R2 com forÃ§a
-	STR R2, [R1]						; Escreve na porta o novo valor
-	
-	LDR R1, =GPIO_PORTQ_DATA_R 			; Le o endereÃ§o do data
-	MOV R2, #2_00001111					; Mete um valor no R2 com forÃ§a
-	STR R2, [R1]						; Escreve na porta o novo valor
-	
+	MOV R3, #2_00100000					; Ativa o DS2
+	STR R3, [R1]						; Escreve na porta o novo valor
+
+    PUSH {LR}                           ; Salva o Link Register
+    BL SysTick_Wait1ms                  ; Espera 1ms
+
+    LDR R1, =GPIO_PORTP_DATA_R 			; Le o endereÃ§o do data
+	MOV R3, #2_00000000					; Desativa o DS2
+	STR R3, [R1]						; Escreve na porta o novo valor
+    
+    BL SysTick_Wait1ms                  ; Espera 1ms
+
+    POP {LR}                            ; Recupera LR
 	BX LR
 ; -------------------------------------------------------------------------------
-; FunÃ§Ã£o PortJ_Input
+
+; Função Display_Output
+; Parâmetro de entrada:
+;   - R0 -> Recebe o valor em binário para mostrar nos displays
+; Parâmetro de saída: N/A
+Display_Output	
+    PUSH {R0-R5}                           ; Salva o valor R0
+    MOV R5, #0                          ; Zera o valor de R5
+	
+    ; R0 - Guarda o valor binário
+    ; R1 - Guarda o valor do bit a ser comparado
+    ; R2 - Guarda o valor dos ANDs para testar se a expressão é verdadeira
+    ; R3 - Guarda o valor da comparação do bit com o valor dos mapas de karnaugh
+    ; R4 - Guarda o valor do OR dos valores de R2 
+    ; R5 - Guarda o valor a ser setado no display
+
+; Define o led (a) do display       ; MNOP
+    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    MOV R4, R2                          ; Salva o valor de R2 em R4
+
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+
+    CMP R4, #1                          ; Compara o valor de R4 com 1
+    IT EQ
+    ORREQ R5, R5, #0x1                  ; Se for igual, seta o bit para ligar o led (a)
+
+; Define o led (b) do display       ; MNOP
+    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    MOV R4, R2                          ; Salva o valor de R2 em R4
+
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+
+    CMP R4, #1                          ; Compara o valor de R4 com 1
+    IT EQ
+    ORREQ R5, R5, #0x10                 ; Se for igual, seta o bit para ligar o led (b)
+
+; Define o led (c) do display       ; MNOP
+    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    MOV R4, R2                          ; Salva o valor de R2 em R4
+
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1 
+
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+
+    CMP R4, #1                          ; Compara o valor de R4 com 1
+    IT EQ
+    ORREQ R5, R5, #0x100                ; Se for igual, seta o bit para ligar o led (c)
+
+; Define o led (d) do display       ; MNOP
+    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    MOV R4, R2                          ; Salva o valor de R2 em R4
+
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1 
+
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+
+
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+
+    CMP R4, #1                          ; Compara o valor de R4 com 1
+    IT EQ
+    ORREQ R5, R5, #0x100                ; Se for igual, seta o bit para ligar o led (d)
+
+
+; Define o led (e) do display       ; MNOP
+    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    MOV R4, R2                          ; Salva o valor de R2 em R4
+
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x8                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+
+    CMP R4, #1                          ; Compara o valor de R4 com 1
+    IT EQ
+    ORREQ R5, R5, #0x100                ; Se for igual, seta o bit para ligar o led (e)
+
+
+; Define o led (f) do display       ; MNOP
+    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    MOV R4, R2                          ; Salva o valor de R2 em R4
+
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+
+    CMP R4, #1                          ; Compara o valor de R4 com 1
+    IT EQ
+    ORREQ R5, R5, #0x1                  ; Se for igual, seta o bit para ligar o led (f)
+
+
+; Define o led (g) do display       ; MNOP
+    AND R0, R0, #0xF                    ; Filtra os LSB de R0
+    
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    MOV R4, R2                          ; Salva o valor de R2 em R4
+
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x1                    ; Filtra o bit 1 de R0
+    EOR R3, R1, #0                      ; Comparação para saber se o bit 4 é 1 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+    
+
+    AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 1 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    
+    AND R1, R0, #0x2                    ; Filtra o bit 2 de R0
+    EOR R3, R1, #1                      ; Comparação para saber se o bit 3 é 0 (lógica negada)
+    AND R2, R3, #1                      ; 
+    ORR R4, R4, R2                      ; Faz o OR de R4 com R2
+
+    CMP R4, #1                          ; Compara o valor de R4 com 1
+    IT EQ
+    ORREQ R5, R5, #0x1                  ; Se for igual, seta o bit para ligar o led (a)
+
+;
+
+    ; Liga os leds do display
+    LDR R1, =GPIO_PORTB_AHB_DATA_R 		; Le o endereÃ§o do data
+	MOV R2, #2_00010000					; Insere um valor no R2
+	STR R2, [R1]						; Escreve na porta o novo valor
+
+    POP {R0}                            ; Recupera o valor de R0
+    LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereÃ§o do data
+	MOV R2, #2_11110000					; Seta todos os valores possíveis de led
+    PUSH {R0}                           ; Salva o valor R0
+    AND R0, R2, R0						; Faz o AND para verificar todos os valores que irão acender
+	STR R0, [R1]						; Escreve na porta o novo valor
+
+    POP {R0}                            ; Recupera o valor de R0
+	LDR R1, =GPIO_PORTQ_DATA_R 		    ; Le o endereÃ§o do data
+	MOV R2, #2_00001111					; Seta todos os valores possíveis de led
+    PUSH {R0}                           ; Salva o valor R0
+    AND R0, R2, R0						; Faz o AND para verificar todos os valores que irão acender
+	STR R0, [R1]						; Escreve na porta o novo valor
+    
+    POP {R0}                            ; Recupera o valor de R0
+    BX LR
+; -------------------------------------------------------------------------------
+
+; FunÃ§Ã£o Switch_Input
 ; Parï¿½metro de entrada: Nï¿½o tem
 ; Parï¿½metro de saï¿½da: R0 --> o valor da leitura
-PortJ_Input
+Switch_Input
 ; ****************************************
 ; Escrever funÃ§Ã£o que lï¿½ a chave e retorna 
 ; um registrador se estï¿½ ativada ou nï¿½o

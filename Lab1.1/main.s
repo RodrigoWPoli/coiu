@@ -1,8 +1,7 @@
 ; main.s
 ; Desenvolvido para a placa EK-TM4C1294XL
-; Prof. Guilherme Peron
-; Ver 1 19/03/2018
-; Ver 2 26/08/2018
+; Jhony Minetto Araújo, Ricardo Marthus Gremmelmaier, Rodrigo Wolsky Poli
+; Última atualização: 11/11/2024
 ; Este programa deve esperar o usu�rio pressionar uma chave.
 ; Caso o usuário pressione uma chave, um LED deve piscar a cada 1 segundo.
 
@@ -42,7 +41,9 @@
 		IMPORT  SysTick_Init
 		IMPORT  SysTick_Wait1ms			
 		IMPORT  GPIO_Init
-        IMPORT  PortABPQ_Output
+        IMPORT  Led_Output
+		IMPORT  Switch_Input
+		IMPORT  Display_Output
 ; -------------------------------------------------------------------------------
 ; Função main()
 Start  
@@ -52,10 +53,72 @@ Start
 	BL SysTick_Init                 ;Chama a subrotina para inicializar o SysTick
 	BL GPIO_Init                    ;Chama a subrotina que inicializa os GPIO
 
-    BL 	PortABPQ_Output
+
+	MOV R0, #2_11110000
+	BL PrintValue
+; R0 -> Contador
+; R1 -> Passo a ser incrementado no contador
+; R2 -> Quantidade de ticks de ms
+; R3 -> Direção do contador
+	MOV R0, #0
+	MOV R1, #1
+	MOV R2, #1000
 MainLoop
+	BL PrintValue
+
+Loop
+	CMP R0, #2_11
+	BNE Step_handler
+	ADD R0, R1
+	CMP R1, #0
+	BLT CheckUnderflow
+	CMP R1, #0
+	BGT CheckOverflow
 	
 	B MainLoop
+
+Step_handler
+	CMP R0, #2_10
+	BNE Neg_handler
+	CMP R1, #9
+	ITE LO
+	ADDLO R1, #1
+	MOVHS R1, #0
+	
+	B MainLoop
+
+Neg_handler
+	CMP R0, #2_01
+	BNE Both_handler
+	NEG R1, R1
+	B MainLoop
+
+Both_handler
+	CMP R0, #2_00
+	BNE MainLoop
+	CMP R1, #9
+	ITE LO
+	ADDLO R1, #1
+	MOVHS R1, #0
+	NEG R1, R1
+	B MainLoop
+
+CheckUnderflow
+	CMP R1, #0
+	BGE MainLoop
+	MOV R1, #99
+	B MainLoop
+
+CheckOverflow
+	CMP R1, #99
+	BLE MainLoop
+	MOV R1, #0
+	B MainLoop
+	
+PrintValue
+	BL Led_Output
+	BL Switch_Input
+	BX  LR
 ; -------------------------------------------------------------------------------------------------------------------------
 ; Fim do Arquivo
 ; -------------------------------------------------------------------------------------------------------------------------	
