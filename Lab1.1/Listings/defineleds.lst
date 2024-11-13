@@ -199,9 +199,9 @@ ARM Macro Assembler    Page 3
 ARM Macro Assembler    Page 4 
 
 
-  106 000000D8 F045 0501       ORREQ            R5, R5, #2_1 ; Se for igual, se
-                                                            ta o bit para ligar
-                                                             o led (a)
+  106 000000D8 F005 05FE       ANDEQ            R5, R5, #2_11111110 ; Se for ig
+                                                            ual, seta o bit par
+                                                            a ligar o led (a)
   107 000000DC         
   108 000000DC BC01            POP              {R0}
   109 000000DE 4770            BX               LR
@@ -345,9 +345,9 @@ ARM Macro Assembler    Page 6
   182 00000192         
   183 00000192         SetaLedB
   184 00000192 BF08            IT               EQ
-  185 00000194 F045 0502       ORREQ            R5, R5, #2_10 ; Se for igual, s
-                                                            eta o bit para liga
-                                                            r o led (b)
+  185 00000194 F005 05FD       ANDEQ            R5, R5, #2_11111101 ; Se for ig
+                                                            ual, seta o bit par
+                                                            a ligar o led (b)
   186 00000198         
   187 00000198 BC01            POP              {R0}
   188 0000019A 4770            BX               LR
@@ -463,9 +463,9 @@ ARM Macro Assembler    Page 8
   245 00000226         
   246 00000226         SetaLedC
   247 00000226 BF08            IT               EQ
-  248 00000228 F045 0504       ORREQ            R5, R5, #2_100 ; Se for igual, 
-                                                            seta o bit para lig
-                                                            ar o led (c)
+  248 00000228 F005 05FB       ANDEQ            R5, R5, #2_11111011 ; Se for ig
+                                                            ual, seta o bit par
+                                                            a ligar o led (c)
   249 0000022C         
   250 0000022C BC01            POP              {R0}
   251 0000022E 4770            BX               LR
@@ -625,9 +625,9 @@ ARM Macro Assembler    Page 10
   332 000002FA         
   333 000002FA         SetaLedD
   334 000002FA BF08            IT               EQ
-  335 000002FC F045 0508       ORREQ            R5, R5, #2_1000 ; Se for igual,
-                                                             seta o bit para li
-                                                            gar o led (d)
+  335 000002FC F005 05F7       ANDEQ            R5, R5, #2_11110111 ; Se for ig
+                                                            ual, seta o bit par
+                                                            a ligar o led (d)
   336 00000300         
   337 00000300 BC01            POP              {R0}
   338 00000302 4770            BX               LR
@@ -727,9 +727,9 @@ ARM Macro Assembler    Page 12
   387 00000376         
   388 00000376         SetaLedE
   389 00000376 BF08            IT               EQ
-  390 00000378 F045 0510       ORREQ            R5, R5, #2_10000 ; Se for igual
-                                                            , seta o bit para l
-                                                            igar o led (e)
+  390 00000378 F005 05EF       ANDEQ            R5, R5, #2_11101111 ; Se for ig
+                                                            ual, seta o bit par
+                                                            a ligar o led (e)
   391 0000037C         
   392 0000037C BC01            POP              {R0}
   393 0000037E 4770            BX               LR
@@ -873,9 +873,9 @@ ARM Macro Assembler    Page 14
   466 00000432         
   467 00000432         SetaLedF
   468 00000432 BF08            IT               EQ
-  469 00000434 F045 0520       ORREQ            R5, R5, #2_100000 ; Se for igua
-                                                            l, seta o bit para 
-                                                            ligar o led (f)
+  469 00000434 F005 05DF       ANDEQ            R5, R5, #2_11011111 ; Se for ig
+                                                            ual, seta o bit par
+                                                            a ligar o led (f)
   470 00000438         
   471 00000438 BC01            POP              {R0}
   472 0000043A 4770            BX               LR
@@ -999,9 +999,9 @@ ARM Macro Assembler    Page 16
   533 000004D2         
   534 000004D2         SetaLedG
   535 000004D2 BF08            IT               EQ
-  536 000004D4 F045 0540       ORREQ            R5, R5, #2_1000000 ; Se for igu
-                                                            al, seta o bit para
-                                                             ligar o led (a)
+  536 000004D4 F005 05BF       ANDEQ            R5, R5, #2_10111111 ; Se for ig
+                                                            ual, seta o bit par
+                                                            a ligar o led (a)
   537 000004D8         
   538 000004D8 BC01            POP              {R0}
   539 000004DA 4770            BX               LR
@@ -1012,11 +1012,11 @@ ARM Macro Assembler    Page 16
                                                              estï¿½ alinhada
                                                              
   543 000004DC                 END
-Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
---depend=.\objects\defineleds.d -o.\objects\defineleds.o -I"F:\Program Files\Ar
-m\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129" --predefine="__EVAL SETA 1"
- --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1" --
-list=.\listings\defineleds.lst DefineLeds.s
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
+interwork --depend=.\objects\defineleds.d -o.\objects\defineleds.o -IC:\Users\R
+icar\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --prede
+fine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C
+1294NCPDT SETA 1" --list=.\listings\defineleds.lst DefineLeds.s
 
 
 
