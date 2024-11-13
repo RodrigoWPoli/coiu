@@ -421,7 +421,7 @@ ARM Macro Assembler    Page 7
                                                             a saber se o bit 2 
                                                             é 0 (lógica negad
                                                             a)
-  224 000001F0 F003 0200       AND              R2, R3, #0
+  224 000001F0 F083 0200       EOR              R2, R3, #0
   225 000001F4         
   226 000001F4 F000 0104       AND              R1, R0, #0x4 ; Filtra o bit 3 d
                                                             e R0

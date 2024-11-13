@@ -198,6 +198,9 @@ GPIO_PORTQ_PCTL_R           EQU     0x4006652C
 GPIO_PORTQ               	EQU    2_100000000000000
 
 
+; ~~~~~~~~~~~~~~~~ Constantes ~~~~~~~~~~~~~~~~~~
+DELAY_MS                    EQU		2
+
 ; -------------------------------------------------------------------------------
 ; Área de Código - Tudo abaixo da diretiva a seguir será armazenado na memória de 
 ;                  código
@@ -358,7 +361,7 @@ Led_Output
 	STR R0, [R1]						; Escreve na porta o novo valor
     POP {R0}                            ; Recupera o valor de R0
 
-    MOV R2, #300                        ; 0,3 s para esperar
+    MOV R2, #DELAY_MS
 
     LDR R1, =GPIO_PORTP_DATA_R 			; Le o endereço do data
 	MOV R3, #2_00100000					; Ativa o DS2
@@ -434,8 +437,8 @@ Display_Output
 	STR R2, [R1]						; Escreve na porta o novo valor
 
     PUSH {LR}
-    MOV R2, #300
-    BL   SysTick_Wait1ms                ; Espera 0,3s
+    MOV R2, #DELAY_MS
+    BL   SysTick_Wait1ms                ; Espera 0,1s
 
     ;Desativa os Leds do display
     LDR R1, =GPIO_PORTB_AHB_DATA_R 		; Le o endereço do data
@@ -479,7 +482,7 @@ Display_Output
 	STR R2, [R1]						; Escreve na porta o novo valor
 
     PUSH {LR}
-    MOV R2, #300
+    MOV R2, #DELAY_MS
     BL   SysTick_Wait1ms                ; Espera 0,3s
 
     ;Desativa os Leds do display
@@ -491,13 +494,14 @@ Display_Output
     BL SysTick_Wait1ms
 
     POP {LR}
-    POP {R0}                            ; Recupera o valor de R0
-    POP {R1}                            ; Recupera o valor de R1
-    POP {R2}                            ; Recupera o valor de R2
-    POP {R3}                            ; Recupera o valor de R3
-    POP {R4}                            ; Recupera o valor de R4
-    POP {R5}                            ; Recupera o valor de R5
+
     POP {R6}                            ; Recupera o valor de R5
+    POP {R5}                            ; Recupera o valor de R5
+    POP {R4}                            ; Recupera o valor de R4
+    POP {R3}                            ; Recupera o valor de R3
+    POP {R2}                            ; Recupera o valor de R2
+    POP {R1}                            ; Recupera o valor de R1
+    POP {R0}                            ; Recupera o valor de R0
     BX LR
 ; -------------------------------------------------------------------------------
 

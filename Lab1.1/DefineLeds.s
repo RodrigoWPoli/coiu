@@ -221,7 +221,7 @@ DefineLedC
 
     AND R1, R0, #0x8                    ; Filtra o bit 4 de R0
     EOR R3, R1, #0x8                      ; Comparação para saber se o bit 2 é 0 (lógica negada)
-    AND R2, R3, #0 
+    EOR R2, R3, #0 
 
     AND R1, R0, #0x4                    ; Filtra o bit 3 de R0
     EOR R3, R1, #0x4                      ; Comparação para saber se o bit 2 é 0 (lógica negada)

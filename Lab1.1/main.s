@@ -52,27 +52,10 @@ Start
     BL PLL_Init                     ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
 	BL SysTick_Init                 ;Chama a subrotina para inicializar o SysTick
 	BL GPIO_Init   					;Chama a subrotina que inicializa os GPIO
-
-	MOV R0, #2_11111111 ; 0xFF
-	BL Display_Output
-
-	MOV R0, #2_00000000 ; 0x00
-	BL Display_Output
-
-	MOV R0, #2_11110000 ; 0xF0
-	BL Display_Output
-
-	MOV R0, #2_00001111 ; 0x0F
-	BL Display_Output
-
-	MOV R0, #2_01100110 ; 0x66
-	BL Display_Output
-
-	MOV R0, #2_01000010 ; 0x42
-	BL Display_Output
 	
 ; R0 -> Contador
 ; R3 -> Leitura da Switch
+; R7 -> Contador para Taxa de atualização
 ; R8 -> Valor da Switch anterior
 ; R9 -> Passo a ser incrementado no contador
 ; R2 -> Quantidade de ticks de ms
@@ -91,7 +74,7 @@ CounterLoop
 	ADD R0, R9						; Incrementa o contador
 	CMP R0, #0						; Compara para ver se nao ficou abaixo de zero
 	BLT CheckUnderflow
-	CMP R0, #99						; Compara para ver se nao ficou acima de 100
+	CMP R0, #0x99						; Compara para ver se nao ficou acima de 100
 	BGT CheckOverflow
 
 	POP {R8}						; Salvar o valor da switch
@@ -133,7 +116,7 @@ Both_handler
 	B	IncrementStep				; Se nao for, incrementa o passo
 
 CheckUnderflow
-	MOV R0, #99
+	MOV R0, #0x99
 	B MainLoop
 
 CheckOverflow
@@ -159,9 +142,19 @@ DecrementStep
 	B MainLoop
 	
 PrintValue
+	MOV R7, #0
 	PUSH {LR}						; Salva o Link Register
+AtualizaFrames
+	
+	PUSH {R0}						; Salva o R0
 	BL Led_Output					; Grava na placa os Leds
-;	BL Display_Output				; Grava na placa os displays
+	POP {R0}						; Retorna o R0
+	BL Display_Output				; Grava na placa os displays
+
+	ADD R7, #1						; Adiciona um no contador
+	CMP R7, #60						; Verifica se deu 60 frames
+	BNE AtualizaFrames				; Enquanto nao chegar a 60, repete
+
 	POP {LR}						; Volta o Link Register
 	BX  LR
 ; -------------------------------------------------------------------------------------------------------------------------
