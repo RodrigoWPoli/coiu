@@ -121,6 +121,11 @@ GPIO_PORTJ_AHB_PCTL_R    	EQU    0x4006052C
 GPIO_PORTJ_AHB_DIR_R     	EQU    0x40060400
 GPIO_PORTJ_AHB_AFSEL_R   	EQU    0x40060420
 GPIO_PORTJ_AHB_DEN_R        EQU    0x4006051C
+GPIO_PORTJ_AHB_IM_R         EQU    0x40060410
+GPIO_PORTJ_AHB_IS_R         EQU    0x40060404
+GPIO_PORTJ_AHB_IBE_R        EQU    0x40060408
+GPIO_PORTJ_AHB_IEV_R        EQU    0x4006040C
+GPIO_PORTJ_AHB_ICR_R        EQU    0x4006041C
 GPIO_PORTJ_AHB_PUR_R     	EQU    0x40060510	
 GPIO_PORTJ_AHB_DATA_R    	EQU    0x400603FC
 GPIO_PORTJ               	EQU   2_000000100000000
@@ -301,7 +306,7 @@ EsperaGPIO 	LDR 		R1, [R0]						  ; LÃª da memÃ³ria o conteÃºdo do endereÃ§o do 
 			MOV         R1, #2_00100000					  ; PP5 Ã© saÃ­da
             STR         R1, [R0]						  ; Seta o valor na memÃ³ria
 
-; Limpar o AFSEl para não ter funÃ§Ã£o alternativa
+; Limpar o AFSEl para nï¿½o ter funÃ§Ã£o alternativa
 			MOV     R1, #0x00							  ; Colocar o valor 0 para nÃ£o setar funÃ§Ã£o alternativa
             LDR     R0, =GPIO_PORTA_AHB_AFSEL_R           ; Carrega o endereÃ§o do AFSEL da porta A
             STR     R1, [R0]                              ; Limpa os bits
@@ -345,19 +350,19 @@ EsperaGPIO 	LDR 		R1, [R0]						  ; LÃª da memÃ³ria o conteÃºdo do endereÃ§o do 
 ; R2 -> Ticks a serem utilizados
 ; R3 -> valores de bits auxiliares
 ; ParÃ¢metro de entrada: R0 -> Recebe os valores de leds a serem setados
-; Parâmetro de saída: N/A
+; Parï¿½metro de saï¿½da: N/A
 Led_Output
 	LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereÃ§o do data
-	MOV R3, #2_11110000					; Seta todos os valores possíveis de led
+	MOV R3, #2_11110000					; Seta todos os valores possï¿½veis de led
     PUSH {R0}                           ; Salva o valor R0
-    AND R0, R3, R0						; Faz o AND para verificar todos os valores que irão acender
+    AND R0, R3, R0						; Faz o AND para verificar todos os valores que irï¿½o acender
 	STR R0, [R1]						; Escreve na porta o novo valor
 	
     POP {R0}                            ; Recupera o valor de R0
 	LDR R1, =GPIO_PORTQ_DATA_R 		    ; Le o endereÃ§o do data
-	MOV R3, #2_00001111					; Seta todos os valores possíveis de led
+	MOV R3, #2_00001111					; Seta todos os valores possï¿½veis de led
     PUSH {R0}                           ; Salva o valor R0
-    AND R0, R3, R0						; Faz o AND para verificar todos os valores que irão acender
+    AND R0, R3, R0						; Faz o AND para verificar todos os valores que irï¿½o acender
 	STR R0, [R1]						; Escreve na porta o novo valor
     POP {R0}                            ; Recupera o valor de R0
 
@@ -381,10 +386,10 @@ Led_Output
 	BX LR
 ; -------------------------------------------------------------------------------
 
-; Função Display_Output
-; Parâmetro de entrada:
-;   - R0 -> Recebe o valor em binário para mostrar nos displays
-; Parâmetro de saída: N/A
+; Funï¿½ï¿½o Display_Output
+; Parï¿½metro de entrada:
+;   - R0 -> Recebe o valor em binï¿½rio para mostrar nos displays
+; Parï¿½metro de saï¿½da: N/A
 Display_Output	
     PUSH {R0}                           ; Salva o valor R0
     PUSH {R1}                           ; Salva o valor R1
@@ -394,17 +399,17 @@ Display_Output
     PUSH {R5}                           ; Salva o valor R5
     PUSH {R6}                           ; Salva o valor R6
 	
-    ; R0 - Guarda o valor binário
+    ; R0 - Guarda o valor binï¿½rio
     ; R1 - Guarda o valor do bit a ser comparado
-    ; R2 - Guarda o valor dos ANDs para testar se a expressão é verdadeira
-    ; R3 - Guarda o valor da comparação do bit com o valor dos mapas de karnaugh
+    ; R2 - Guarda o valor dos ANDs para testar se a expressï¿½o ï¿½ verdadeira
+    ; R3 - Guarda o valor da comparaï¿½ï¿½o do bit com o valor dos mapas de karnaugh
     ; R4 - Guarda o valor do OR dos valores de R2 
     ; R5 - Guarda o valor a ser setado no display
     ; R6 - Usado para selecionar o display no qual mostrar o valor hexa
 
     ; =========================== Display Esq ===================================
     MOV R6, R0                          ; Guarda o valor de R0
-    MOV R5, #2_01111111                 ; Seta os LEDs para HIGH pois a lógica do mapa de karnaugh é invertida
+    MOV R5, #2_01111111                 ; Seta os LEDs para HIGH pois a lï¿½gica do mapa de karnaugh ï¿½ invertida
     LSR R0, R0, #4                      ; Shifta 4 bits para a direita para pegar o valor da esquerda
 
     PUSH {LR}                           ; Salva o Link Register
@@ -420,14 +425,14 @@ Display_Output
     PUSH {R5}                           ; Salva o valor R5
     LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereÃ§o do data
 	MOV R2, #2_11110000					; Seleciona os LEDs da Porta A
-    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
+    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irï¿½o acender
 	STR R5, [R1]						; Escreve na porta o novo valor
 
     POP {R5}                            ; Recupera o valor de R5
 	LDR R1, =GPIO_PORTQ_DATA_R 		    ; Le o endereÃ§o do data
 	MOV R2, #2_00001111					; Seleciona os LEDs da Porta Q
-;    PUSH {R5}                          ; Salva o valor R5 - a principio não precisa
-    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
+;    PUSH {R5}                          ; Salva o valor R5 - a principio nï¿½o precisa
+    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irï¿½o acender
 	STR R5, [R1]						; Escreve na porta o novo valor
 
  
@@ -452,7 +457,7 @@ Display_Output
 
     ; =========================== Display Dir ===================================
     MOV R0, R6                          ; Guarda o valor de R0
-    MOV R5, #2_01111111                 ; Seta os LEDs para HIGH pois a lógica do mapa de karnaugh é invertida
+    MOV R5, #2_01111111                 ; Seta os LEDs para HIGH pois a lï¿½gica do mapa de karnaugh ï¿½ invertida
     PUSH {LR}                           ; Salva o Link Register
     BL DefineLedA
     BL DefineLedB
@@ -466,14 +471,14 @@ Display_Output
     PUSH {R5}                           ; Salva o valor R5
     LDR R1, =GPIO_PORTA_AHB_DATA_R 		; Le o endereÃ§o do data
 	MOV R2, #2_11110000					; Seleciona os LEDs da Porta A
-    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
+    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irï¿½o acender
 	STR R5, [R1]						; Escreve na porta o novo valor
 
     POP {R5}                            ; Recupera o valor de R5
 	LDR R1, =GPIO_PORTQ_DATA_R 		    ; Le o endereÃ§o do data
 	MOV R2, #2_00001111					; Seleciona os LEDs da Porta Q
-;    PUSH {R5}                           ; Salva o valor R5 - a principio não precisa
-    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irão acender
+;    PUSH {R5}                           ; Salva o valor R5 - a principio nï¿½o precisa
+    AND R5, R2, R5						; Faz o AND para verificar todos os valores que irï¿½o acender
 	STR R5, [R1]						; Escreve na porta o novo valor
 
     ; Liga os leds do display
