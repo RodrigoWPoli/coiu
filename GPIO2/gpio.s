@@ -1,20 +1,19 @@
 ; gpio.s
 ; Desenvolvido para a placa EK-TM4C1294XL
-; Prof. Guilherme Peron
-; Ver 1 19/03/2018
-; Ver 2 26/08/2018
+; Jhony Minetto Araújo, Ricardo Marthus Gremmelmaier, Rodrigo Wolsky Poli
+; Ver 1 30/11/2024
 
 ; -------------------------------------------------------------------------------
-        THUMB                        ; Instru��es do tipo Thumb-2
+        THUMB                        ; Instrucoes do tipo Thumb-2
 ; -------------------------------------------------------------------------------
-; Declara��es EQU - Defines
+; Declaracoes EQU - Defines
 ; ========================
 ; ========================
-; Defini��es dos Registradores Gerais
+; Definicoes dos Registradores Gerais
 SYSCTL_RCGCGPIO_R	 EQU	0x400FE608
 SYSCTL_PRGPIO_R		 EQU    0x400FEA08
 ; ========================
-; Defini��es dos Ports
+; Definicoes dos Ports
 ; PORT J
 GPIO_PORTA_AHB_LOCK_R 		EQU     0x40058520
 GPIO_PORTA_AHB_CR_R     	EQU     0x40058524
