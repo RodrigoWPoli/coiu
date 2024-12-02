@@ -40,6 +40,7 @@
         IMPORT	SysTick_Wait1us
 		IMPORT	GPIO_Init
 		IMPORT	LCD_Init
+		IMPORT	TecladoM_Poll
 
 		IMPORT	LCD_Display_Character
 
@@ -53,6 +54,7 @@ Start
 
 MainLoop
 	BL LCD_Display_Character
+	BL TecladoM_Poll
 	B MainLoop                   ;Volta para o laco principal	
 
 

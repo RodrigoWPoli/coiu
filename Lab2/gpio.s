@@ -139,6 +139,7 @@ GPIO_PORTL_DATA_R           EQU     0x400623FC
 GPIO_PORTL_DIR_R            EQU     0x40062400
 GPIO_PORTL_AFSEL_R          EQU     0x40062420
 GPIO_PORTL_PUR_R            EQU     0x40062510
+GPIO_PORTL_PDR_R            EQU     0x40062514
 GPIO_PORTL_DEN_R            EQU     0x4006251C
 GPIO_PORTL_LOCK_R           EQU     0x40062520
 GPIO_PORTL_CR_R             EQU     0x40062524
@@ -204,6 +205,7 @@ GPIO_PORTQ               	EQU    2_100000000000000
         EXPORT GPIO_Init           
 		EXPORT LCD_Init
         EXPORT LCD_Display_Character
+        EXPORT TecladoM_Poll
 
         
         IMPORT SysTick_Wait1us
@@ -211,11 +213,18 @@ GPIO_PORTQ               	EQU    2_100000000000000
 
 ;--------------------------------------------------------------------------------
 ; Funcao GPIO_Init
-; Parametro de entrada: Nao tem
-; Parametro de saida: Nao tem
+; Ports e Pinos utilizados:
+;   Port A: PA4-PA7 -> LEDs
+;   Port J: PJ0     -> Botão RST Global
+;   Port K: PK0-PK7 -> Dados do LCD
+;   Port L: PL0-PL3 -> Teclado Matricial
+;   Port M: PM0-PM2 -> Controle do LCD -> PM4-PM7 -> Teclado Matricial
+;   Port P: P5      -> Transistor LEDs
+;   Port Q: PQ0-PQ3 -> LEDs
+; 
 GPIO_Init
 ;=====================
-1. Ativar o clock para a porta setando o bit correspondente no registrador RCGCGPIO,
+; 1. Ativar o clock para a porta setando o bit correspondente no registrador RCGCGPIO,
 ; apos isso verificar no PRGPIO se a porta esta pronta para uso.
 ; enable clock to GPIOF at clock gating register
             LDR     R0, =SYSCTL_RCGCGPIO_R  		                ;Carrega o endereco do registrador RCGCGPIO
@@ -246,9 +255,9 @@ EsperaGPIO  LDR     R1, [R0]						;Le da memoria o conteudo do endereco do regis
             STR     R1, [R0]						;Guarda no registrador AMSEL da porta generica da memoria
             LDR     R0, =GPIO_PORTK_AMSEL_R    		;Carrega o R0 com o endereco do AMSEL para a porta generica
             STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta generica da memoria
-            LDR     R0, =GPIO_PORTJ_AMSEL_R    		;Carrega o R0 com o endereco do AMSEL para a porta generica
+            LDR     R0, =GPIO_PORTJ_AHB_AMSEL_R    		;Carrega o R0 com o endereco do AMSEL para a porta generica
             STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta generica da memoria
-            LDR     R0, =GPIO_PORTA_AMSEL_R    		;Carrega o R0 com o endereco do AMSEL para a porta generica
+            LDR     R0, =GPIO_PORTA_AHB_AMSEL_R    		;Carrega o R0 com o endereco do AMSEL para a porta generica
             STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta generica da memoria
             LDR     R0, =GPIO_PORTQ_AMSEL_R    		;Carrega o R0 com o endereco do AMSEL para a porta generica
             STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta generica da memoria
@@ -263,9 +272,9 @@ EsperaGPIO  LDR     R1, [R0]						;Le da memoria o conteudo do endereco do regis
             STR     R1, [R0]                        ;Guarda no registrador PCTL da porta generica da memoria
             LDR     R0, =GPIO_PORTK_PCTL_R          ;Carrega o R0 com o endereco do PCTL para a porta generica
             STR     R1, [R0]                        ;Guarda no registrador PCTL da porta generica da memoria
-            LDR     R0, =GPIO_PORTJ_PCTL_R		    ;Carrega o R0 com o endereco do PCTL para a porta generica
+            LDR     R0, =GPIO_PORTJ_AHB_PCTL_R		    ;Carrega o R0 com o endereco do PCTL para a porta generica
             STR     R1, [R0]                        ;Guarda no registrador PCTL da porta generica da memoria
-            LDR     R0, =GPIO_PORTA_PCTL_R		    ;Carrega o R0 com o endereco do PCTL para a porta generica
+            LDR     R0, =GPIO_PORTA_AHB_PCTL_R		    ;Carrega o R0 com o endereco do PCTL para a porta generica
             STR     R1, [R0]                        ;Guarda no registrador PCTL da porta generica da memoria
             LDR     R0, =GPIO_PORTQ_PCTL_R		    ;Carrega o R0 com o endereco do PCTL para a porta generica
             STR     R1, [R0]                        ;Guarda no registrador PCTL da porta generica da memoria
@@ -280,8 +289,12 @@ EsperaGPIO  LDR     R1, [R0]						;Le da memoria o conteudo do endereco do regis
             STR     R1, [R0]						;Guarda no registrador
             
             LDR     R0, =GPIO_PORTM_DIR_R		    ;Carrega o R0 com o endereco do DIR para a porta generica
-            MOV     R1, #2_0000111             		;PM0-PM2 para saida de controle do LCD
+            MOV     R1, #2_11110111            		;PM0-PM2 para saida de controle do LCD e PM4-PM7 para entrada do teclado
             STR     R1, [R0]						;Guarda no registrador PCTL da porta generica da memoria
+
+            LDR     R0, =GPIO_PORTL_DIR_R
+            MOV     R1, #2_00000000
+            STR     R1, [R0]
 
 ; 5. Limpar os bits AFSEL para 0 para selecionar GPIO 
 ;    Sem funcao alternativa
@@ -290,9 +303,9 @@ EsperaGPIO  LDR     R1, [R0]						;Le da memoria o conteudo do endereco do regis
             STR     R1, [R0]						;Escreve na porta
             LDR     R0, =GPIO_PORTM_AFSEL_R         ;Carrega o endereco do AFSEL da porta generica
             STR     R1, [R0]                        ;Escreve na porta
-            LDR     R0, =GPIO_PORTJ_AFSEL_R         ;Carrega o endereco do AFSEL da porta generica
+            LDR     R0, =GPIO_PORTJ_AHB_AFSEL_R         ;Carrega o endereco do AFSEL da porta generica
             STR     R1, [R0]                        ;Escreve na porta
-            LDR     R0, =GPIO_PORTA_AFSEL_R         ;Carrega o endereco do AFSEL da porta generica
+            LDR     R0, =GPIO_PORTA_AHB_AFSEL_R         ;Carrega o endereco do AFSEL da porta generica
             STR     R1, [R0]                        ;Escreve na porta
             LDR     R0, =GPIO_PORTQ_AFSEL_R         ;Carrega o endereco do AFSEL da porta generica
             STR     R1, [R0]                        ;Escreve na porta
@@ -307,20 +320,23 @@ EsperaGPIO  LDR     R1, [R0]						;Le da memoria o conteudo do endereco do regis
             STR     R1, [R0]					    ;Escreve no registrador da memoria funcionalidade digital 
  
             LDR     R0, =GPIO_PORTM_DEN_R			;Carrega o endereco do DEN
-			MOV     R1, #2_00000111                 ;Ativa os pinos PM0-PM2 como I/O Digital      
+			MOV     R1, #2_11110111                 ;Ativa os pinos PM0-PM2 como I/O Digital e PM4-PM7 como I/O Digital  
             STR     R1, [R0]                        ;Escreve no registrador da memoria funcionalidade digital
-			
-; 7. Para habilitar resistor de pull-up interno, setar PUR para 1
-;			LDR     R0, =GPIO_PORT_PUR_R			;Carrega o endereco do PUR para a porta generica
-;			MOV     R1, #2_00000011					;Habilitar funcionalidade digital de resistor de pull-up 
-                                                    ;nos bits 0 e 1
-;            STR     R1, [R0]						;Escreve no registrador da memoria do resistor de pull-up
+
+            LDR     R0, =GPIO_PORTL_DEN_R
+            MOV     R1, #2_00001111
+            STR     R1, [R0]
+
+; 7. Para habilitar resistor de pull-down interno, setar PDR para 1
+			LDR     R0, =GPIO_PORTL_PDR_R			;Carrega o endereco do PDR para a porta generica
+			MOV     R1, #2_00001111					;Habilitar funcionalidade digital de resistor de pull-down nos bits 0 e 1
+            STR     R1, [R0]						;Escreve no registrador da memoria do resistor de pull-down
             
 ;retorno            
 			BX      LR
 
 ; -------------------------------------------------------------------------------
-; Funcaoo LCD_Init
+; Função LCD_Init
 LCD_Init
     ; 
     PUSH {LR}
@@ -429,5 +445,137 @@ LCD_Display_Character
     POP {LR}
     BX LR
 
+; -------------------------------------------------------------------------------
+; Função TecladoM_Poll
+; Retorna o dígito da 1a tecla pressionada. Pinos L0-L3 são entrada e M4-M7 são saída.
+; Saída: R1 -> Valor da tecla pressionada (0xF se nenhuma for pressionada)
+TecladoM_Poll
+    PUSH {LR}
+    MOV     R2, #2_10000000
+    ;
+loop_columns
+    MOV     R1, #0x10                                ; Seta a saída para 10 pois a tecla 10 não existe
+    CMP     R2, #2_00001000
+    BLS     teclado_retorno
+    ;
+    LDR     R0, =GPIO_PORTM_DATA_R                  ; Habilita o Pino de R2
+    STR     R2, [R0]
+
+    LDR     R0, =GPIO_PORTL_DATA_R                  ; Leitura dos dados
+    LDR     R1, [R0]
+
+    ; Verifica se alguma tecla foi apertada e retorna
+    CMP     R1, #2_1000                             ; Verifica se o pino L3 está ativo (teclas *, 0, # e D)
+    BEQ     teclado_decode
+
+    CMP     R1, #2_0100                             ; Verifica se o pino L2 está ativo (teclas 7, 8, 9 e C)
+    BEQ     teclado_decode
+
+    CMP     R1, #2_0010                             ; Verifica se o pino L1 está ativo (teclas 4, 5, 6 e B)
+    BEQ     teclado_decode
+
+    CMP     R1, #2_0001                             ; Verifica se o pino L0 está ativo (teclas 1, 2, 3 e A)
+    BEQ     teclado_decode
+
+    LSR R2, R2, #1
+    B loop_columns
+
+teclado_decode
+    ; Decodifica a relação coluna-linha para determinar qual tecla foi pressionada
+    CMP     R2, #2_00010000
+    BEQ     decode_coluna_1
+
+    CMP     R2, #2_00100000
+    BEQ     decode_coluna_2
+
+    CMP     R2, #2_01000000
+    BEQ     decode_coluna_3
+
+    CMP     R2, #2_10000000
+    BEQ     decode_coluna_4
+
+decode_coluna_1
+    CMP R1, #2_1000                                 ; Tecla * -> E
+    IT EQ
+    MOVEQ R1, #0xE
+
+    CMP R1, #2_0100                                 ; Tecla 7
+    IT EQ
+    MOVEQ R1, #0x7
+
+    CMP R1, #2_0010                                 ; Tecla 4
+    IT EQ
+    MOVEQ R1, #0x4
+
+    CMP R1, #2_0001                                 ; Tecla 1
+    IT EQ
+    MOVEQ R1, #0x1
+
+    B teclado_retorno
+
+decode_coluna_2
+    CMP R1, #2_1000                                 ; Tecla 0
+    IT EQ
+    MOVEQ R1, #0
+
+    CMP R1, #2_0100                                 ; Tecla 8
+    IT EQ
+    MOVEQ R1, #0x8
+
+    CMP R1, #2_0010                                 ; Tecla 5
+    IT EQ
+    MOVEQ R1, #0x5
+
+    CMP R1, #2_0001                                 ; Tecla 2
+    IT EQ
+    MOVEQ R1, #0x2
+
+    B teclado_retorno
+
+decode_coluna_3
+    CMP R1, #2_1000                                 ; Tecla # -> F
+    IT EQ
+    MOVEQ R1, #0xF
+
+    CMP R1, #2_0100                                 ; Tecla 9
+    IT EQ
+    MOVEQ R1, #0x9
+
+    CMP R1, #2_0010                                 ; Tecla 6
+    IT EQ
+    MOVEQ R1, #0x6
+
+    CMP R1, #2_0001                                 ; Tecla 3
+    IT EQ
+    MOVEQ R1, #0x3
+
+    B teclado_retorno
+
+decode_coluna_4
+    CMP R1, #2_1000                                 ; Tecla D
+    IT EQ
+    MOVEQ R1, #0xD
+
+    CMP R1, #2_0100                                 ; Tecla C
+    IT EQ
+    MOVEQ R1, #0xC
+
+    CMP R1, #2_0010                                 ; Tecla B
+    IT EQ
+    MOVEQ R1, #0xB
+
+    CMP R1, #2_0001                                 ; Tecla A
+    IT EQ
+    MOVEQ R1, #0xA
+
+    B teclado_retorno
+
+teclado_retorno
+
+    POP {LR}
+    BX LR       ; Retorno
+
+
+;
     ALIGN                           ; garante que o fim da secaoo esta alinhada 
     END                             ; fim do arquivo

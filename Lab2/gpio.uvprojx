@@ -405,6 +405,16 @@
               <FileType>2</FileType>
               <FilePath>.\utils.s</FilePath>
             </File>
+            <File>
+              <FileName>interrupt.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\interrupt.s</FilePath>
+            </File>
+            <File>
+              <FileName>multi_table.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\multi_table.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

@@ -12,7 +12,7 @@
 
 ; ================== DEFINICAO DA TABELA ===================
 
-        MULTI_HEAD	EQU 0x20000A00
+MULTI_HEAD	EQU 0x20000A00
 
 ; -------------------------------------------------------------------------------
 ; Area de Codigo
@@ -21,11 +21,11 @@
         EXPORT  create_table
         EXPORT  multi_table
 
-create_table:
+create_table
     LDR     R3, =MULTI_HEAD
     MOV     R1, #9
     MOV     R2, #0
-    store_loop
+    ;store_loop
 
 store_loop
     STRB    R2, [R3], #1
@@ -38,9 +38,9 @@ store_loop
 ; R1: Retorna o fator multiplicativo atualizado do numero
 
 
-multi_table:
+multi_table
     LDR     R3, =MULTI_HEAD
-    MULS    R0, R0, #4
+    ;MULS    R0, R0, #4
     LDRB    R1, [R3, R0]
     CMP     R1, #9
     BEQ     overflowHandler
@@ -53,4 +53,5 @@ multi_table:
 overflowHandler
     MOV     R1, #0
 
-        END
+    ALIGN
+    END
