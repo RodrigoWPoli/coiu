@@ -1,80 +1,60 @@
 ; main.s
 ; Desenvolvido para a placa EK-TM4C1294XL
-; Prof. Guilherme Peron
-; Rev1: 10/03/2018
-; Rev2: 10/04/2019
-; Este programa espera o usuário apertar a chave USR_SW1 e/ou a chave USR_SW2.
-; Caso o usuário pressione a chave USR_SW1, acenderá o LED3 (PF4). Caso o usuário pressione 
-; a chave USR_SW2, acenderá o LED4 (PF0). Caso as duas chaves sejam pressionadas, os dois 
+; Este programa espera o usuï¿½rio apertar a chave USR_SW1 e/ou a chave USR_SW2.
+; Caso o usuï¿½rio pressione a chave USR_SW1, acenderï¿½ o LED3 (PF4). Caso o usuï¿½rio pressione 
+; a chave USR_SW2, acenderï¿½ o LED4 (PF0). Caso as duas chaves sejam pressionadas, os dois 
 ; LEDs acendem.
 
 ; -------------------------------------------------------------------------------
-        THUMB                        ; Instruções do tipo Thumb-2
+        THUMB                        ; Instruï¿½ï¿½es do tipo Thumb-2
 ; -------------------------------------------------------------------------------
-; Declarações EQU - Defines
+; Declaraï¿½ï¿½es EQU - Defines
 ;<NOME>         EQU <VALOR>
 ; ========================
 
 
 ; -------------------------------------------------------------------------------
-; Área de Dados - Declarações de variáveis
+; ï¿½rea de Dados - Declaraï¿½ï¿½es de variï¿½veis
 		AREA  DATA, ALIGN=2
-		; Se alguma variável for chamada em outro arquivo
-		;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a variável <var> a 
+		; Se alguma variï¿½vel for chamada em outro arquivo
+		;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a variï¿½vel <var> a 
 		                                   ; partir de outro arquivo
-;<var>	SPACE <tam>                        ; Declara uma variável de nome <var>
+;<var>	SPACE <tam>                        ; Declara uma variï¿½vel de nome <var>
                                            ; de <tam> bytes a partir da primeira 
-                                           ; posição da RAM		
+                                           ; posiï¿½ï¿½o da RAM		
 
 ; -------------------------------------------------------------------------------
-; Área de Código - Tudo abaixo da diretiva a seguir será armazenado na memória de 
-;                  código
+; ï¿½rea de Cï¿½digo - Tudo abaixo da diretiva a seguir serï¿½ armazenado na memï¿½ria de 
+;                  cï¿½digo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
-		; Se alguma função do arquivo for chamada em outro arquivo	
-        EXPORT Start                ; Permite chamar a função Start a partir de 
+		; Se alguma funï¿½ï¿½o do arquivo for chamada em outro arquivo	
+        EXPORT Start                ; Permite chamar a funï¿½ï¿½o Start a partir de 
 			                        ; outro arquivo. No caso startup.s
 									
-		; Se chamar alguma função externa	
+		; Se chamar alguma funï¿½ï¿½o externa	
         ;IMPORT <func>              ; Permite chamar dentro deste arquivo uma 
-									; função <func>
-		IMPORT  GPIO_Init
-        IMPORT  PortF_Output
-        IMPORT  PortJ_Input
+									; funï¿½ï¿½o <func>
+		IMPORT	PLL_Init
+		IMPORT	SysTick_Init
+        IMPORT	SysTick_Wait1us
+		IMPORT	GPIO_Init
+		IMPORT	LCD_Init
+
+		IMPORT	LCD_Display_Character
 
 ; -------------------------------------------------------------------------------
-; Função main()
+; Funï¿½ï¿½o main()
 Start  			
+	BL PLL_Init					 ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
+	BL SysTick_Init				 ;
 	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
+	BL LCD_Init                  ;Chama a subrotina que inicializa o LCD
 
 MainLoop
-	BL PortJ_Input				 ;Chama a subrotina que lê o estado das chaves e coloca o resultado em R0
-Verifica_Nenhuma
-	CMP	R0, #2_00000011			 ;Verifica se nenhuma chave está pressionada
-	BNE Verifica_SW1			 ;Se o teste viu que tem pelo menos alguma chave pressionada pula
-	MOV R0, #0                   ;Não acender nenhum LED
-	BL PortF_Output			 	 ;Chamar a função para não acender nenhum LED
-	B MainLoop					 ;Se o teste viu que nenhuma chave está pressionada, volta para o laço principal
-Verifica_SW1	
-	CMP R0, #2_00000010			 ;Verifica se somente a chave SW1 está pressionada
-	BNE Verifica_SW2             ;Se o teste falhou, pula
-	MOV R0, #2_00010000			 ;Setar o parâmetro de entrada da função como o BIT4
-	BL PortF_Output				 ;Chamar a função para setar o LED3
-	B MainLoop                   ;Volta para o laço principal
-Verifica_SW2	
-	CMP R0, #2_00000001			 ;Verifica se somente a chave SW2 está pressionada
-	BNE Verifica_Ambas           ;Se o teste falhou, pula
-	MOV R0, #2_00000001			 ;Setar o parâmetro de entrada da função como o BIT0
-	BL PortF_Output				 ;Chamar a função para setar o LED4
-	B MainLoop                   ;Volta para o laço principal	
-Verifica_Ambas
-	CMP R0, #2_00000000			 ;Verifica se ambas as chaves estão pressionadas
-	BNE MainLoop          		 ;Se o teste falhou, pula
-	MOV R0, #2_00010001			 ;Setar o parâmetro de entrada da função como o BIT0
-                                 ;e o BIT4
-	BL PortF_Output		  	 	 ;Chamar a função para acender os dois LEDs
-	B MainLoop                   ;Volta para o laço principal	
+	BL LCD_Display_Character
+	B MainLoop                   ;Volta para o laï¿½o principal	
 
 
-    ALIGN                        ;Garante que o fim da seção está alinhada 
+    ALIGN                        ;Garante que o fim da seï¿½ï¿½o estï¿½ alinhada 
     END                          ;Fim do arquivo
