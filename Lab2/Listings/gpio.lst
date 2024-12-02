@@ -605,7 +605,7 @@ ARM Macro Assembler    Page 10
   228 00000000         ; apos isso verificar no PRGPIO se a porta esta pronta p
                        ara uso.
   229 00000000         ; enable clock to GPIOF at clock gating register
-  230 00000000 4897            LDR              R0, =SYSCTL_RCGCGPIO_R ;Carrega
+  230 00000000 4896            LDR              R0, =SYSCTL_RCGCGPIO_R ;Carrega
                                                              o endereco do regi
                                                             strador RCGCGPIO
   231 00000002 F44F 6100       MOV              R1, #GPIO_PORTM ;Seta o bit da 
@@ -633,7 +633,7 @@ ARM Macro Assembler    Page 10
                                                             s no endereco do RC
                                                             GCGPIO
   239 00000020         
-  240 00000020 4890            LDR              R0, =SYSCTL_PRGPIO_R ;Carrega o
+  240 00000020 488F            LDR              R0, =SYSCTL_PRGPIO_R ;Carrega o
                                                              endereco do PRGPIO
                                                              para esperar os GP
                                                             IO ficarem prontos
@@ -680,7 +680,7 @@ ARM Macro Assembler    Page 11
                                                             trador para desabil
                                                             itar a funcao analo
                                                             gica
-  254 00000048 4887            LDR              R0, =GPIO_PORTM_AMSEL_R ;Carreg
+  254 00000048 4886            LDR              R0, =GPIO_PORTM_AMSEL_R ;Carreg
                                                             a o R0 com o endere
                                                             co do AMSEL para a 
                                                             porta generica
@@ -688,7 +688,7 @@ ARM Macro Assembler    Page 11
                                                             dor AMSEL da porta 
                                                             generica da memoria
                                                             
-  256 0000004C 4887            LDR              R0, =GPIO_PORTK_AMSEL_R ;Carreg
+  256 0000004C 4886            LDR              R0, =GPIO_PORTK_AMSEL_R ;Carreg
                                                             a o R0 com o endere
                                                             co do AMSEL para a 
                                                             porta generica
@@ -696,7 +696,7 @@ ARM Macro Assembler    Page 11
                                                             dor AMSEL da porta 
                                                             generica da memoria
                                                             
-  258 00000050 4887            LDR              R0, =GPIO_PORTJ_AHB_AMSEL_R ;Ca
+  258 00000050 4886            LDR              R0, =GPIO_PORTJ_AHB_AMSEL_R ;Ca
                                                             rrega o R0 com o en
                                                             dereco do AMSEL par
                                                             a a porta generica
@@ -704,7 +704,7 @@ ARM Macro Assembler    Page 11
                                                             dor AMSEL da porta 
                                                             generica da memoria
                                                             
-  260 00000054 4887            LDR              R0, =GPIO_PORTA_AHB_AMSEL_R ;Ca
+  260 00000054 4886            LDR              R0, =GPIO_PORTA_AHB_AMSEL_R ;Ca
                                                             rrega o R0 com o en
                                                             dereco do AMSEL par
                                                             a a porta generica
@@ -712,7 +712,7 @@ ARM Macro Assembler    Page 11
                                                             dor AMSEL da porta 
                                                             generica da memoria
                                                             
-  262 00000058 4887            LDR              R0, =GPIO_PORTQ_AMSEL_R ;Carreg
+  262 00000058 4886            LDR              R0, =GPIO_PORTQ_AMSEL_R ;Carreg
 
 
 
@@ -726,7 +726,7 @@ ARM Macro Assembler    Page 12
                                                             dor AMSEL da porta 
                                                             generica da memoria
                                                             
-  264 0000005C 4887            LDR              R0, =GPIO_PORTP_AMSEL_R ;Carreg
+  264 0000005C 4886            LDR              R0, =GPIO_PORTP_AMSEL_R ;Carreg
                                                             a o R0 com o endere
                                                             co do AMSEL para a 
                                                             porta generica
@@ -734,7 +734,7 @@ ARM Macro Assembler    Page 12
                                                             dor AMSEL da porta 
                                                             generica da memoria
                                                             
-  266 00000060 4887            LDR              R0, =GPIO_PORTL_AMSEL_R ;Carreg
+  266 00000060 4886            LDR              R0, =GPIO_PORTL_AMSEL_R ;Carreg
                                                             a o R0 com o endere
                                                             co do AMSEL para a 
                                                             porta generica
@@ -747,35 +747,35 @@ ARM Macro Assembler    Page 12
   270 00000064 F04F 0100       MOV              R1, #0x00   ;Colocar 0 no regis
                                                             trador para selecio
                                                             nar o modo GPIO
-  271 00000068 4886            LDR              R0, =GPIO_PORTM_PCTL_R ;Carrega
+  271 00000068 4885            LDR              R0, =GPIO_PORTM_PCTL_R ;Carrega
                                                              o R0 com o enderec
                                                             o do PCTL para a po
                                                             rta generica
   272 0000006A 6001            STR              R1, [R0]    ;Guarda no registra
                                                             dor PCTL da porta g
                                                             enerica da memoria
-  273 0000006C 4886            LDR              R0, =GPIO_PORTK_PCTL_R ;Carrega
+  273 0000006C 4885            LDR              R0, =GPIO_PORTK_PCTL_R ;Carrega
                                                              o R0 com o enderec
                                                             o do PCTL para a po
                                                             rta generica
   274 0000006E 6001            STR              R1, [R0]    ;Guarda no registra
                                                             dor PCTL da porta g
                                                             enerica da memoria
-  275 00000070 4886            LDR              R0, =GPIO_PORTJ_AHB_PCTL_R ;Car
+  275 00000070 4885            LDR              R0, =GPIO_PORTJ_AHB_PCTL_R ;Car
                                                             rega o R0 com o end
                                                             ereco do PCTL para 
                                                             a porta generica
   276 00000072 6001            STR              R1, [R0]    ;Guarda no registra
                                                             dor PCTL da porta g
                                                             enerica da memoria
-  277 00000074 4886            LDR              R0, =GPIO_PORTA_AHB_PCTL_R ;Car
+  277 00000074 4885            LDR              R0, =GPIO_PORTA_AHB_PCTL_R ;Car
                                                             rega o R0 com o end
                                                             ereco do PCTL para 
                                                             a porta generica
   278 00000076 6001            STR              R1, [R0]    ;Guarda no registra
                                                             dor PCTL da porta g
                                                             enerica da memoria
-  279 00000078 4886            LDR              R0, =GPIO_PORTQ_PCTL_R ;Carrega
+  279 00000078 4885            LDR              R0, =GPIO_PORTQ_PCTL_R ;Carrega
                                                              o R0 com o enderec
                                                             o do PCTL para a po
 
@@ -788,14 +788,14 @@ ARM Macro Assembler    Page 13
   280 0000007A 6001            STR              R1, [R0]    ;Guarda no registra
                                                             dor PCTL da porta g
                                                             enerica da memoria
-  281 0000007C 4886            LDR              R0, =GPIO_PORTP_PCTL_R ;Carrega
+  281 0000007C 4885            LDR              R0, =GPIO_PORTP_PCTL_R ;Carrega
                                                              o R0 com o enderec
                                                             o do PCTL para a po
                                                             rta generica
   282 0000007E 6001            STR              R1, [R0]    ;Guarda no registra
                                                             dor PCTL da porta g
                                                             enerica da memoria
-  283 00000080 4886            LDR              R0, =GPIO_PORTL_PCTL_R ;Carrega
+  283 00000080 4885            LDR              R0, =GPIO_PORTL_PCTL_R ;Carrega
                                                              o R0 com o enderec
                                                             o do PCTL para a po
                                                             rta generica
@@ -804,7 +804,7 @@ ARM Macro Assembler    Page 13
                                                             enerica da memoria
   285 00000084         
   286 00000084         ; 4. DIR para 0 se for entrada, 1 se for saida
-  287 00000084 4886            LDR              R0, =GPIO_PORTK_DIR_R ;Carrega 
+  287 00000084 4885            LDR              R0, =GPIO_PORTK_DIR_R ;Carrega 
                                                             o R0 com o endereco
                                                              do DIR para a port
                                                             a generica
@@ -813,7 +813,7 @@ ARM Macro Assembler    Page 13
   289 0000008A 6001            STR              R1, [R0]    ;Guarda no registra
                                                             dor
   290 0000008C         
-  291 0000008C 4885            LDR              R0, =GPIO_PORTM_DIR_R ;Carrega 
+  291 0000008C 4884            LDR              R0, =GPIO_PORTM_DIR_R ;Carrega 
                                                             o R0 com o endereco
                                                              do DIR para a port
                                                             a generica
@@ -826,7 +826,7 @@ ARM Macro Assembler    Page 13
                                                             dor PCTL da porta g
                                                             enerica da memoria
   294 00000094         
-  295 00000094 4884            LDR              R0, =GPIO_PORTL_DIR_R
+  295 00000094 4883            LDR              R0, =GPIO_PORTL_DIR_R
   296 00000096 F04F 0100       MOV              R1, #2_00000000
   297 0000009A 6001            STR              R1, [R0]
   298 0000009C         
@@ -835,12 +835,12 @@ ARM Macro Assembler    Page 13
   301 0000009C F04F 0100       MOV              R1, #0x00   ;Colocar o valor 0 
                                                             para nao setar func
                                                             ao alternativa
-  302 000000A0 4882            LDR              R0, =GPIO_PORTK_AFSEL_R ;Carreg
+  302 000000A0 4881            LDR              R0, =GPIO_PORTK_AFSEL_R ;Carreg
                                                             a o endereco do AFS
                                                             EL da porta generic
                                                             a
   303 000000A2 6001            STR              R1, [R0]    ;Escreve na porta
-  304 000000A4 4882            LDR              R0, =GPIO_PORTM_AFSEL_R ;Carreg
+  304 000000A4 4881            LDR              R0, =GPIO_PORTM_AFSEL_R ;Carreg
                                                             a o endereco do AFS
                                                             EL da porta generic
 
@@ -851,34 +851,34 @@ ARM Macro Assembler    Page 14
 
                                                             a
   305 000000A6 6001            STR              R1, [R0]    ;Escreve na porta
-  306 000000A8 4882            LDR              R0, =GPIO_PORTJ_AHB_AFSEL_R ;Ca
+  306 000000A8 4881            LDR              R0, =GPIO_PORTJ_AHB_AFSEL_R ;Ca
                                                             rrega o endereco do
                                                              AFSEL da porta gen
                                                             erica
   307 000000AA 6001            STR              R1, [R0]    ;Escreve na porta
-  308 000000AC 4882            LDR              R0, =GPIO_PORTA_AHB_AFSEL_R ;Ca
+  308 000000AC 4881            LDR              R0, =GPIO_PORTA_AHB_AFSEL_R ;Ca
                                                             rrega o endereco do
                                                              AFSEL da porta gen
                                                             erica
   309 000000AE 6001            STR              R1, [R0]    ;Escreve na porta
-  310 000000B0 4882            LDR              R0, =GPIO_PORTQ_AFSEL_R ;Carreg
+  310 000000B0 4881            LDR              R0, =GPIO_PORTQ_AFSEL_R ;Carreg
                                                             a o endereco do AFS
                                                             EL da porta generic
                                                             a
   311 000000B2 6001            STR              R1, [R0]    ;Escreve na porta
-  312 000000B4 4882            LDR              R0, =GPIO_PORTP_AFSEL_R ;Carreg
+  312 000000B4 4881            LDR              R0, =GPIO_PORTP_AFSEL_R ;Carreg
                                                             a o endereco do AFS
                                                             EL da porta generic
                                                             a
   313 000000B6 6001            STR              R1, [R0]    ;Escreve na porta
-  314 000000B8 4882            LDR              R0, =GPIO_PORTL_AFSEL_R ;Carreg
+  314 000000B8 4881            LDR              R0, =GPIO_PORTL_AFSEL_R ;Carreg
                                                             a o endereco do AFS
                                                             EL da porta generic
                                                             a
   315 000000BA 6001            STR              R1, [R0]    ;Escreve na porta
   316 000000BC         
   317 000000BC         ; 6. Setar os bits de DEN para habilitar I/O digital
-  318 000000BC 4882            LDR              R0, =GPIO_PORTK_DEN_R ;Carrega 
+  318 000000BC 4881            LDR              R0, =GPIO_PORTK_DEN_R ;Carrega 
                                                             o endereco do DEN
   319 000000BE F04F 01FF       MOV              R1, #2_11111111 ;Ativa os pinos
                                                              PK0-PK7 como I/O D
@@ -888,7 +888,7 @@ ARM Macro Assembler    Page 14
                                                             cionalidade digital
                                                              
   321 000000C4         
-  322 000000C4 4881            LDR              R0, =GPIO_PORTM_DEN_R ;Carrega 
+  322 000000C4 4880            LDR              R0, =GPIO_PORTM_DEN_R ;Carrega 
                                                             o endereco do DEN
   323 000000C6 F04F 01F7       MOV              R1, #2_11110111 ;Ativa os pinos
                                                              PM0-PM2 como I/O D
@@ -899,13 +899,13 @@ ARM Macro Assembler    Page 14
                                                             cionalidade digital
                                                             
   325 000000CC         
-  326 000000CC 4880            LDR              R0, =GPIO_PORTL_DEN_R
+  326 000000CC 487F            LDR              R0, =GPIO_PORTL_DEN_R
   327 000000CE F04F 010F       MOV              R1, #2_00001111
   328 000000D2 6001            STR              R1, [R0]
   329 000000D4         
   330 000000D4         ; 7. Para habilitar resistor de pull-down interno, setar
                         PDR para 1
-  331 000000D4 487F            LDR              R0, =GPIO_PORTL_PDR_R ;Carrega 
+  331 000000D4 487E            LDR              R0, =GPIO_PORTL_PDR_R ;Carrega 
                                                             o endereco do PDR p
                                                             ara a porta generic
 
@@ -934,18 +934,18 @@ ARM Macro Assembler    Page 15
   340 000000DE         LCD_Init
   341 000000DE         ; 
   342 000000DE B500            PUSH             {LR}
-  343 000000E0 487D            LDR              R0, =GPIO_PORTK_DATA_R
+  343 000000E0 487C            LDR              R0, =GPIO_PORTK_DATA_R
   344 000000E2 F04F 0138       MOV              R1, #0x38
   345 000000E6 6001            STR              R1, [R0]
   346 000000E8         
-  347 000000E8 487C            LDR              R0, =GPIO_PORTM_DATA_R
+  347 000000E8 487B            LDR              R0, =GPIO_PORTM_DATA_R
   348 000000EA F04F 0104       MOV              R1, #0x04
   349 000000EE 6001            STR              R1, [R0]
   350 000000F0         
   351 000000F0 F04F 000A       LDR              R0, =10
   352 000000F4 F7FF FFFE       BL               SysTick_Wait1us
   353 000000F8         
-  354 000000F8 4878            LDR              R0, =GPIO_PORTM_DATA_R
+  354 000000F8 4877            LDR              R0, =GPIO_PORTM_DATA_R
   355 000000FA F04F 0100       MOV              R1, #0x00
   356 000000FE 6001            STR              R1, [R0]
   357 00000100         
@@ -953,18 +953,18 @@ ARM Macro Assembler    Page 15
   359 00000104 F7FF FFFE       BL               SysTick_Wait1us
   360 00000108         
   361 00000108         ; 
-  362 00000108 4873            LDR              R0, =GPIO_PORTK_DATA_R
+  362 00000108 4872            LDR              R0, =GPIO_PORTK_DATA_R
   363 0000010A F04F 0106       MOV              R1, #0x06
   364 0000010E 6001            STR              R1, [R0]
   365 00000110         
-  366 00000110 4872            LDR              R0, =GPIO_PORTM_DATA_R
+  366 00000110 4871            LDR              R0, =GPIO_PORTM_DATA_R
   367 00000112 F04F 0104       MOV              R1, #0x04
   368 00000116 6001            STR              R1, [R0]
   369 00000118         
   370 00000118 F04F 000A       LDR              R0, =10
   371 0000011C F7FF FFFE       BL               SysTick_Wait1us
   372 00000120         
-  373 00000120 486E            LDR              R0, =GPIO_PORTM_DATA_R
+  373 00000120 486D            LDR              R0, =GPIO_PORTM_DATA_R
   374 00000122 F04F 0100       MOV              R1, #0x00
   375 00000126 6001            STR              R1, [R0]
   376 00000128         
@@ -972,7 +972,7 @@ ARM Macro Assembler    Page 15
   378 0000012C F7FF FFFE       BL               SysTick_Wait1us
   379 00000130         
   380 00000130         ; 
-  381 00000130 4869            LDR              R0, =GPIO_PORTK_DATA_R
+  381 00000130 4868            LDR              R0, =GPIO_PORTK_DATA_R
 
 
 
@@ -982,14 +982,14 @@ ARM Macro Assembler    Page 16
   382 00000132 F04F 010E       MOV              R1, #0x0E
   383 00000136 6001            STR              R1, [R0]
   384 00000138         
-  385 00000138 4868            LDR              R0, =GPIO_PORTM_DATA_R
+  385 00000138 4867            LDR              R0, =GPIO_PORTM_DATA_R
   386 0000013A F04F 0104       MOV              R1, #0x04
   387 0000013E 6001            STR              R1, [R0]
   388 00000140         
   389 00000140 F04F 000A       LDR              R0, =10
   390 00000144 F7FF FFFE       BL               SysTick_Wait1us
   391 00000148         
-  392 00000148 4864            LDR              R0, =GPIO_PORTM_DATA_R
+  392 00000148 4863            LDR              R0, =GPIO_PORTM_DATA_R
   393 0000014A F04F 0100       MOV              R1, #0x00
   394 0000014E 6001            STR              R1, [R0]
   395 00000150         
@@ -997,18 +997,18 @@ ARM Macro Assembler    Page 16
   397 00000154 F7FF FFFE       BL               SysTick_Wait1us
   398 00000158         
   399 00000158         ; 
-  400 00000158 485F            LDR              R0, =GPIO_PORTK_DATA_R
+  400 00000158 485E            LDR              R0, =GPIO_PORTK_DATA_R
   401 0000015A F04F 0101       MOV              R1, #0x01
   402 0000015E 6001            STR              R1, [R0]
   403 00000160         
-  404 00000160 485E            LDR              R0, =GPIO_PORTM_DATA_R
+  404 00000160 485D            LDR              R0, =GPIO_PORTM_DATA_R
   405 00000162 F04F 0104       MOV              R1, #0x04
   406 00000166 6001            STR              R1, [R0]
   407 00000168         
   408 00000168 F04F 000A       LDR              R0, =10
   409 0000016C F7FF FFFE       BL               SysTick_Wait1us
   410 00000170         
-  411 00000170 485A            LDR              R0, =GPIO_PORTM_DATA_R
+  411 00000170 4859            LDR              R0, =GPIO_PORTM_DATA_R
   412 00000172 F04F 0100       MOV              R1, #0x00
   413 00000176 6001            STR              R1, [R0]
   414 00000178         
@@ -1021,202 +1021,202 @@ ARM Macro Assembler    Page 16
   421 00000186         ; ------------------------------------------------------
                        -------------------------
   422 00000186         ; Função LCD_Init
-  423 00000186         ; Input: R0 -> Dado a ser mostrado no display
+  423 00000186         ; Input: R1 -> Dado a ser mostrado no display
   424 00000186         LCD_Display_Character
   425 00000186 B500            PUSH             {LR}
   426 00000188         ; 
-  427 00000188 4853            LDR              R0, =GPIO_PORTK_DATA_R
-  428 0000018A F04F 01F6       MOV              R1, #0xF6
-  429 0000018E 6001            STR              R1, [R0]
-  430 00000190         
-  431 00000190 4852            LDR              R0, =GPIO_PORTM_DATA_R
-  432 00000192 F04F 0105       MOV              R1, #2_101
-  433 00000196 6001            STR              R1, [R0]
-  434 00000198         
-  435 00000198 F04F 000A       LDR              R0, =10
-  436 0000019C F7FF FFFE       BL               SysTick_Wait1us
-  437 000001A0         
-  438 000001A0 484E            LDR              R0, =GPIO_PORTM_DATA_R
-  439 000001A2 F04F 0100       MOV              R1, #0x00
+  427 00000188 4852            LDR              R0, =GPIO_PORTK_DATA_R ; Dado a
+                                                             ser mostrado
+  428 0000018A 6001            STR              R1, [R0]
+  429 0000018C         
+  430 0000018C 4852            LDR              R0, =GPIO_PORTM_DATA_R
+  431 0000018E F04F 0105       MOV              R1, #2_101
+  432 00000192 6001            STR              R1, [R0]
+  433 00000194         
+  434 00000194 F04F 000A       LDR              R0, =10
+  435 00000198 F7FF FFFE       BL               SysTick_Wait1us
+  436 0000019C         
+  437 0000019C 484E            LDR              R0, =GPIO_PORTM_DATA_R
+  438 0000019E F04F 0100       MOV              R1, #0x00
 
 
 
 ARM Macro Assembler    Page 17 
 
 
-  440 000001A6 6001            STR              R1, [R0]
-  441 000001A8         
-  442 000001A8 F04F 0028       LDR              R0, =40
-  443 000001AC F7FF FFFE       BL               SysTick_Wait1us
-  444 000001B0         
-  445 000001B0 F85D EB04       POP              {LR}
-  446 000001B4 4770            BX               LR
-  447 000001B6         
-  448 000001B6         ; ------------------------------------------------------
+  439 000001A2 6001            STR              R1, [R0]
+  440 000001A4         
+  441 000001A4 F04F 0028       LDR              R0, =40
+  442 000001A8 F7FF FFFE       BL               SysTick_Wait1us
+  443 000001AC         
+  444 000001AC F85D EB04       POP              {LR}
+  445 000001B0 4770            BX               LR
+  446 000001B2         
+  447 000001B2         ; ------------------------------------------------------
                        -------------------------
-  449 000001B6         ; Função TecladoM_Poll
-  450 000001B6         ; Retorna o dígito da 1a tecla pressionada. Pinos L0-L3
+  448 000001B2         ; Função TecladoM_Poll
+  449 000001B2         ; Retorna o dígito da 1a tecla pressionada. Pinos L0-L3
                         são entrada e M4-M7 são saída.
-  451 000001B6         ; Saída: R1 -> Valor da tecla pressionada (0xF se nenhu
+  450 000001B2         ; Saída: R1 -> Valor da tecla pressionada (0xF se nenhu
                        ma for pressionada)
-  452 000001B6         TecladoM_Poll
-  453 000001B6 B500            PUSH             {LR}
-  454 000001B8 F04F 0280       MOV              R2, #2_10000000
-  455 000001BC         ;
-  456 000001BC         loop_columns
-  457 000001BC F04F 0110       MOV              R1, #0x10   ; Seta a saída par
+  451 000001B2         TecladoM_Poll
+  452 000001B2 B500            PUSH             {LR}
+  453 000001B4 F04F 0280       MOV              R2, #2_10000000
+  454 000001B8         ;
+  455 000001B8         loop_columns
+  456 000001B8 F04F 0110       MOV              R1, #0x10   ; Seta a saída par
                                                             a 10 pois a tecla 1
                                                             0 não existe
-  458 000001C0 2A08            CMP              R2, #2_00001000
-  459 000001C2 D94A            BLS              teclado_retorno
-  460 000001C4         ;
-  461 000001C4 4845            LDR              R0, =GPIO_PORTM_DATA_R ; Habili
+  457 000001BC 2A08            CMP              R2, #2_00001000
+  458 000001BE D94A            BLS              teclado_retorno
+  459 000001C0         ;
+  460 000001C0 4845            LDR              R0, =GPIO_PORTM_DATA_R ; Habili
                                                             ta o Pino de R2
-  462 000001C6 6002            STR              R2, [R0]
-  463 000001C8         
-  464 000001C8 4845            LDR              R0, =GPIO_PORTL_DATA_R 
+  461 000001C2 6002            STR              R2, [R0]
+  462 000001C4         
+  463 000001C4 4845            LDR              R0, =GPIO_PORTL_DATA_R 
                                                             ; Leitura dos dados
                                                             
-  465 000001CA 6801            LDR              R1, [R0]
-  466 000001CC         
-  467 000001CC         ; Verifica se alguma tecla foi apertada e retorna
-  468 000001CC 2908            CMP              R1, #2_1000 ; Verifica se o pin
+  464 000001C6 6801            LDR              R1, [R0]
+  465 000001C8         
+  466 000001C8         ; Verifica se alguma tecla foi apertada e retorna
+  467 000001C8 2908            CMP              R1, #2_1000 ; Verifica se o pin
                                                             o L3 está ativo (t
                                                             eclas *, 0, # e D)
-  469 000001CE D008            BEQ              teclado_decode
-  470 000001D0         
-  471 000001D0 2904            CMP              R1, #2_0100 ; Verifica se o pin
+  468 000001CA D008            BEQ              teclado_decode
+  469 000001CC         
+  470 000001CC 2904            CMP              R1, #2_0100 ; Verifica se o pin
                                                             o L2 está ativo (t
                                                             eclas 7, 8, 9 e C)
-  472 000001D2 D006            BEQ              teclado_decode
-  473 000001D4         
-  474 000001D4 2902            CMP              R1, #2_0010 ; Verifica se o pin
+  471 000001CE D006            BEQ              teclado_decode
+  472 000001D0         
+  473 000001D0 2902            CMP              R1, #2_0010 ; Verifica se o pin
                                                             o L1 está ativo (t
                                                             eclas 4, 5, 6 e B)
-  475 000001D6 D004            BEQ              teclado_decode
-  476 000001D8         
-  477 000001D8 2901            CMP              R1, #2_0001 ; Verifica se o pin
+  474 000001D2 D004            BEQ              teclado_decode
+  475 000001D4         
+  476 000001D4 2901            CMP              R1, #2_0001 ; Verifica se o pin
                                                             o L0 está ativo (t
                                                             eclas 1, 2, 3 e A)
-  478 000001DA D002            BEQ              teclado_decode
-  479 000001DC         
-  480 000001DC EA4F 0252       LSR              R2, R2, #1
-  481 000001E0 E7EC            B                loop_columns
-  482 000001E2         
+  477 000001D6 D002            BEQ              teclado_decode
+  478 000001D8         
+  479 000001D8 EA4F 0252       LSR              R2, R2, #1
+  480 000001DC E7EC            B                loop_columns
+  481 000001DE         
 
 
 
 ARM Macro Assembler    Page 18 
 
 
-  483 000001E2         teclado_decode
-  484 000001E2         ; Decodifica a relação coluna-linha para determinar qu
+  482 000001DE         teclado_decode
+  483 000001DE         ; Decodifica a relação coluna-linha para determinar qu
                        al tecla foi pressionada
-  485 000001E2 2A10            CMP              R2, #2_00010000
-  486 000001E4 D005            BEQ              decode_coluna_1
-  487 000001E6         
-  488 000001E6 2A20            CMP              R2, #2_00100000
-  489 000001E8 D010            BEQ              decode_coluna_2
-  490 000001EA         
-  491 000001EA 2A40            CMP              R2, #2_01000000
-  492 000001EC D01B            BEQ              decode_coluna_3
-  493 000001EE         
-  494 000001EE 2A80            CMP              R2, #2_10000000
-  495 000001F0 D026            BEQ              decode_coluna_4
-  496 000001F2         
-  497 000001F2         decode_coluna_1
-  498 000001F2 2908            CMP              R1, #2_1000 ; Tecla * -> E
-  499 000001F4 BF08            IT               EQ
-  500 000001F6 210E            MOVEQ            R1, #0xE
-  501 000001F8         
-  502 000001F8 2904            CMP              R1, #2_0100 ; Tecla 7
-  503 000001FA BF08            IT               EQ
-  504 000001FC 2107            MOVEQ            R1, #0x7
-  505 000001FE         
-  506 000001FE 2902            CMP              R1, #2_0010 ; Tecla 4
-  507 00000200 BF08            IT               EQ
-  508 00000202 2104            MOVEQ            R1, #0x4
-  509 00000204         
-  510 00000204 2901            CMP              R1, #2_0001 ; Tecla 1
-  511 00000206 BF08            IT               EQ
-  512 00000208 2101            MOVEQ            R1, #0x1
-  513 0000020A         
-  514 0000020A E026            B                teclado_retorno
-  515 0000020C         
-  516 0000020C         decode_coluna_2
-  517 0000020C 2908            CMP              R1, #2_1000 ; Tecla 0
-  518 0000020E BF08            IT               EQ
-  519 00000210 2100            MOVEQ            R1, #0
-  520 00000212         
-  521 00000212 2904            CMP              R1, #2_0100 ; Tecla 8
-  522 00000214 BF08            IT               EQ
-  523 00000216 2108            MOVEQ            R1, #0x8
-  524 00000218         
-  525 00000218 2902            CMP              R1, #2_0010 ; Tecla 5
-  526 0000021A BF08            IT               EQ
-  527 0000021C 2105            MOVEQ            R1, #0x5
-  528 0000021E         
-  529 0000021E 2901            CMP              R1, #2_0001 ; Tecla 2
-  530 00000220 BF08            IT               EQ
-  531 00000222 2102            MOVEQ            R1, #0x2
-  532 00000224         
-  533 00000224 E019            B                teclado_retorno
-  534 00000226         
-  535 00000226         decode_coluna_3
-  536 00000226 2908            CMP              R1, #2_1000 ; Tecla # -> F
-  537 00000228 BF08            IT               EQ
-  538 0000022A 210F            MOVEQ            R1, #0xF
-  539 0000022C         
-  540 0000022C 2904            CMP              R1, #2_0100 ; Tecla 9
+  484 000001DE 2A10            CMP              R2, #2_00010000
+  485 000001E0 D005            BEQ              decode_coluna_1
+  486 000001E2         
+  487 000001E2 2A20            CMP              R2, #2_00100000
+  488 000001E4 D010            BEQ              decode_coluna_2
+  489 000001E6         
+  490 000001E6 2A40            CMP              R2, #2_01000000
+  491 000001E8 D01B            BEQ              decode_coluna_3
+  492 000001EA         
+  493 000001EA 2A80            CMP              R2, #2_10000000
+  494 000001EC D026            BEQ              decode_coluna_4
+  495 000001EE         
+  496 000001EE         decode_coluna_1
+  497 000001EE 2908            CMP              R1, #2_1000 ; Tecla * -> E
+  498 000001F0 BF08            IT               EQ
+  499 000001F2 210E            MOVEQ            R1, #0xE
+  500 000001F4         
+  501 000001F4 2904            CMP              R1, #2_0100 ; Tecla 7
+  502 000001F6 BF08            IT               EQ
+  503 000001F8 2107            MOVEQ            R1, #0x7
+  504 000001FA         
+  505 000001FA 2902            CMP              R1, #2_0010 ; Tecla 4
+  506 000001FC BF08            IT               EQ
+  507 000001FE 2104            MOVEQ            R1, #0x4
+  508 00000200         
+  509 00000200 2901            CMP              R1, #2_0001 ; Tecla 1
+  510 00000202 BF08            IT               EQ
+  511 00000204 2101            MOVEQ            R1, #0x1
+  512 00000206         
+  513 00000206 E026            B                teclado_retorno
+  514 00000208         
+  515 00000208         decode_coluna_2
+  516 00000208 2908            CMP              R1, #2_1000 ; Tecla 0
+  517 0000020A BF08            IT               EQ
+  518 0000020C 2100            MOVEQ            R1, #0
+  519 0000020E         
+  520 0000020E 2904            CMP              R1, #2_0100 ; Tecla 8
+  521 00000210 BF08            IT               EQ
+  522 00000212 2108            MOVEQ            R1, #0x8
+  523 00000214         
+  524 00000214 2902            CMP              R1, #2_0010 ; Tecla 5
+  525 00000216 BF08            IT               EQ
+  526 00000218 2105            MOVEQ            R1, #0x5
+  527 0000021A         
+  528 0000021A 2901            CMP              R1, #2_0001 ; Tecla 2
+  529 0000021C BF08            IT               EQ
+  530 0000021E 2102            MOVEQ            R1, #0x2
+  531 00000220         
+  532 00000220 E019            B                teclado_retorno
+  533 00000222         
+  534 00000222         decode_coluna_3
+  535 00000222 2908            CMP              R1, #2_1000 ; Tecla # -> F
+  536 00000224 BF08            IT               EQ
+  537 00000226 210F            MOVEQ            R1, #0xF
+  538 00000228         
+  539 00000228 2904            CMP              R1, #2_0100 ; Tecla 9
 
 
 
 ARM Macro Assembler    Page 19 
 
 
-  541 0000022E BF08            IT               EQ
-  542 00000230 2109            MOVEQ            R1, #0x9
-  543 00000232         
-  544 00000232 2902            CMP              R1, #2_0010 ; Tecla 6
-  545 00000234 BF08            IT               EQ
-  546 00000236 2106            MOVEQ            R1, #0x6
-  547 00000238         
-  548 00000238 2901            CMP              R1, #2_0001 ; Tecla 3
-  549 0000023A BF08            IT               EQ
-  550 0000023C 2103            MOVEQ            R1, #0x3
-  551 0000023E         
-  552 0000023E E00C            B                teclado_retorno
-  553 00000240         
-  554 00000240         decode_coluna_4
-  555 00000240 2908            CMP              R1, #2_1000 ; Tecla D
-  556 00000242 BF08            IT               EQ
-  557 00000244 210D            MOVEQ            R1, #0xD
-  558 00000246         
-  559 00000246 2904            CMP              R1, #2_0100 ; Tecla C
-  560 00000248 BF08            IT               EQ
-  561 0000024A 210C            MOVEQ            R1, #0xC
-  562 0000024C         
-  563 0000024C 2902            CMP              R1, #2_0010 ; Tecla B
-  564 0000024E BF08            IT               EQ
-  565 00000250 210B            MOVEQ            R1, #0xB
-  566 00000252         
-  567 00000252 2901            CMP              R1, #2_0001 ; Tecla A
-  568 00000254 BF08            IT               EQ
-  569 00000256 210A            MOVEQ            R1, #0xA
-  570 00000258         
-  571 00000258 E7FF            B                teclado_retorno
-  572 0000025A         
-  573 0000025A         teclado_retorno
-  574 0000025A         
-  575 0000025A F85D EB04       POP              {LR}
-  576 0000025E 4770            BX               LR          ; Retorno
-  577 00000260         
-  578 00000260         
-  579 00000260         ;
-  580 00000260                 ALIGN                        ; garante que o fim
+  540 0000022A BF08            IT               EQ
+  541 0000022C 2109            MOVEQ            R1, #0x9
+  542 0000022E         
+  543 0000022E 2902            CMP              R1, #2_0010 ; Tecla 6
+  544 00000230 BF08            IT               EQ
+  545 00000232 2106            MOVEQ            R1, #0x6
+  546 00000234         
+  547 00000234 2901            CMP              R1, #2_0001 ; Tecla 3
+  548 00000236 BF08            IT               EQ
+  549 00000238 2103            MOVEQ            R1, #0x3
+  550 0000023A         
+  551 0000023A E00C            B                teclado_retorno
+  552 0000023C         
+  553 0000023C         decode_coluna_4
+  554 0000023C 2908            CMP              R1, #2_1000 ; Tecla D
+  555 0000023E BF08            IT               EQ
+  556 00000240 210D            MOVEQ            R1, #0xD
+  557 00000242         
+  558 00000242 2904            CMP              R1, #2_0100 ; Tecla C
+  559 00000244 BF08            IT               EQ
+  560 00000246 210C            MOVEQ            R1, #0xC
+  561 00000248         
+  562 00000248 2902            CMP              R1, #2_0010 ; Tecla B
+  563 0000024A BF08            IT               EQ
+  564 0000024C 210B            MOVEQ            R1, #0xB
+  565 0000024E         
+  566 0000024E 2901            CMP              R1, #2_0001 ; Tecla A
+  567 00000250 BF08            IT               EQ
+  568 00000252 210A            MOVEQ            R1, #0xA
+  569 00000254         
+  570 00000254 E7FF            B                teclado_retorno
+  571 00000256         
+  572 00000256         teclado_retorno
+  573 00000256         
+  574 00000256 F85D EB04       POP              {LR}
+  575 0000025A 4770            BX               LR          ; Retorno
+  576 0000025C         
+  577 0000025C         
+  578 0000025C         ;
+  579 0000025C                 ALIGN                        ; garante que o fim
                                                              da secaoo esta ali
                                                             nhada 
-  581 00000260                 END                          ; fim do arquivo
+  580 0000025C                 END                          ; fim do arquivo
               400FE608 
               400FEA08 
               40063528 
@@ -1307,23 +1307,23 @@ Symbol: LCD_Init
    Uses
       At line 206 in file gpio.s
 Comment: LCD_Init used once
-TecladoM_Poll 000001B6
+TecladoM_Poll 000001B2
 
 Symbol: TecladoM_Poll
    Definitions
-      At line 452 in file gpio.s
+      At line 451 in file gpio.s
    Uses
       At line 208 in file gpio.s
 Comment: TecladoM_Poll used once
-decode_coluna_1 000001F2
+decode_coluna_1 000001EE
 
 Symbol: decode_coluna_1
    Definitions
-      At line 497 in file gpio.s
+      At line 496 in file gpio.s
    Uses
-      At line 486 in file gpio.s
+      At line 485 in file gpio.s
 Comment: decode_coluna_1 used once
-decode_coluna_2 0000020C
+decode_coluna_2 00000208
 
 Symbol: decode_coluna_2
 
@@ -1333,56 +1333,56 @@ ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Relocatable symbols
 
    Definitions
-      At line 516 in file gpio.s
+      At line 515 in file gpio.s
    Uses
-      At line 489 in file gpio.s
+      At line 488 in file gpio.s
 Comment: decode_coluna_2 used once
-decode_coluna_3 00000226
+decode_coluna_3 00000222
 
 Symbol: decode_coluna_3
    Definitions
-      At line 535 in file gpio.s
+      At line 534 in file gpio.s
    Uses
-      At line 492 in file gpio.s
+      At line 491 in file gpio.s
 Comment: decode_coluna_3 used once
-decode_coluna_4 00000240
+decode_coluna_4 0000023C
 
 Symbol: decode_coluna_4
    Definitions
-      At line 554 in file gpio.s
+      At line 553 in file gpio.s
    Uses
-      At line 495 in file gpio.s
+      At line 494 in file gpio.s
 Comment: decode_coluna_4 used once
-loop_columns 000001BC
+loop_columns 000001B8
 
 Symbol: loop_columns
    Definitions
-      At line 456 in file gpio.s
+      At line 455 in file gpio.s
    Uses
-      At line 481 in file gpio.s
+      At line 480 in file gpio.s
 Comment: loop_columns used once
-teclado_decode 000001E2
+teclado_decode 000001DE
 
 Symbol: teclado_decode
    Definitions
-      At line 483 in file gpio.s
+      At line 482 in file gpio.s
    Uses
-      At line 469 in file gpio.s
-      At line 472 in file gpio.s
-      At line 475 in file gpio.s
-      At line 478 in file gpio.s
+      At line 468 in file gpio.s
+      At line 471 in file gpio.s
+      At line 474 in file gpio.s
+      At line 477 in file gpio.s
 
-teclado_retorno 0000025A
+teclado_retorno 00000256
 
 Symbol: teclado_retorno
    Definitions
-      At line 573 in file gpio.s
+      At line 572 in file gpio.s
    Uses
-      At line 459 in file gpio.s
-      At line 514 in file gpio.s
-      At line 533 in file gpio.s
-      At line 552 in file gpio.s
-      At line 571 in file gpio.s
+      At line 458 in file gpio.s
+      At line 513 in file gpio.s
+      At line 532 in file gpio.s
+      At line 551 in file gpio.s
+      At line 570 in file gpio.s
 
 13 symbols
 
@@ -2321,7 +2321,7 @@ Symbol: GPIO_PORTL_DATA_R
    Definitions
       At line 138 in file gpio.s
    Uses
-      At line 464 in file gpio.s
+      At line 463 in file gpio.s
 Comment: GPIO_PORTL_DATA_R used once
 GPIO_PORTL_DEN_R 4006251C
 
@@ -2424,15 +2424,15 @@ Symbol: GPIO_PORTM_DATA_R
       At line 392 in file gpio.s
       At line 404 in file gpio.s
       At line 411 in file gpio.s
-      At line 431 in file gpio.s
+      At line 430 in file gpio.s
 
 
 
 ARM Macro Assembler    Page 17 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 438 in file gpio.s
-      At line 461 in file gpio.s
+      At line 437 in file gpio.s
+      At line 460 in file gpio.s
 
 GPIO_PORTM_DEN_R 4006351C
 
@@ -2783,8 +2783,8 @@ Symbol: SysTick_Wait1us
       At line 397 in file gpio.s
       At line 409 in file gpio.s
       At line 416 in file gpio.s
-      At line 436 in file gpio.s
-      At line 443 in file gpio.s
+      At line 435 in file gpio.s
+      At line 442 in file gpio.s
 
 1 symbol
 503 symbols in table

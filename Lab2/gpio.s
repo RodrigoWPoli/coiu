@@ -420,12 +420,11 @@ LCD_Init
 
 ; -------------------------------------------------------------------------------
 ; Função LCD_Init
-; Input: R0 -> Dado a ser mostrado no display
+; Input: R1 -> Dado a ser mostrado no display
 LCD_Display_Character
     PUSH {LR}
     ; 
-    LDR     R0, =GPIO_PORTK_DATA_R
-    MOV     R1, #0xF6
+    LDR     R0, =GPIO_PORTK_DATA_R                  ; Dado a ser mostrado
     STR     R1, [R0]
 
     LDR     R0, =GPIO_PORTM_DATA_R

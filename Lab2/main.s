@@ -38,6 +38,7 @@
 		IMPORT	PLL_Init
 		IMPORT	SysTick_Init
         IMPORT	SysTick_Wait1us
+        IMPORT	SysTick_Wait1ms
 		IMPORT	GPIO_Init
 		IMPORT	LCD_Init
 		IMPORT	TecladoM_Poll
@@ -53,9 +54,11 @@ Start
 	BL LCD_Init                  ;Chama a subrotina que inicializa o LCD
 
 MainLoop
-	BL LCD_Display_Character
-	BL TecladoM_Poll
-	B MainLoop                   ;Volta para o laco principal	
+	BL 	TecladoM_Poll
+	ADD R1, R1, #2_00110000		 ;Adiciona valor para escrever no display LCD (se nenhuma tecla for pressionada o símbolo @:01000000 será mostrado)
+	BL 	LCD_Display_Character
+
+	B MainLoop                   ;Volta para o laco principal
 
 
     ALIGN                        ;Garante que o fim da secao esta alinhada 
