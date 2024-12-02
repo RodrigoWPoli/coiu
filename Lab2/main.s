@@ -53,8 +53,8 @@ Start
 
 MainLoop
 	BL LCD_Display_Character
-	B MainLoop                   ;Volta para o la�o principal	
+	B MainLoop                   ;Volta para o laco principal	
 
 
-    ALIGN                        ;Garante que o fim da se��o est� alinhada 
+    ALIGN                        ;Garante que o fim da secao esta alinhada 
     END                          ;Fim do arquivo

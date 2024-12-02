@@ -196,11 +196,11 @@ GPIO_PORTQ               	EQU    2_100000000000000
 
 
 ; -------------------------------------------------------------------------------
-; �rea de C�digo - Tudo abaixo da diretiva a seguir ser� armazenado na mem�ria de 
-;                  c�digo
+; Area de Codigo - Tudo abaixo da diretiva a seguir sera armazenado na memoria de 
+;                  codigo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
-		; Se alguma fun��o do arquivo for chamada em outro arquivo	
+		; Se alguma funcao do arquivo for chamada em outro arquivo	
         EXPORT GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
 		EXPORT PortN_Output			; Permite chamar PortN_Output de outro arquivo
 		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
