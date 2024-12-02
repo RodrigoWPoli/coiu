@@ -1,6 +1,6 @@
 ; gpio.s
 ; Desenvolvido para a placa EK-TM4C1294XL
-; Jhony Minetto Araújo, Ricardo Marthus Gremmelmaier, Rodrigo Wolsky Poli
+; Jhony Minetto Araujo, Ricardo Marthus Gremmelmaier, Rodrigo Wolsky Poli
 ; Ver 1 30/11/2024
 
 ; -------------------------------------------------------------------------------
@@ -202,45 +202,85 @@ GPIO_PORTQ               	EQU    2_100000000000000
 
 		; Se alguma funcao do arquivo for chamada em outro arquivo	
         EXPORT GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
-		EXPORT PortN_Output			; Permite chamar PortN_Output de outro arquivo
-		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
 									
 
 ;--------------------------------------------------------------------------------
-; Fun��o GPIO_Init
-; Par�metro de entrada: N�o tem
-; Par�metro de sa�da: N�o tem
+; Funcao GPIO_Init
+; Parametro de entrada: Nao tem
+; Parametro de saida: Nao tem
 GPIO_Init
 ;=====================
-; ****************************************
-; Escrever fun��o de inicializa��o dos GPIO
-; Inicializar as portas J e N
-; ****************************************
-	BX LR
+; 1. Ativar o clock para a porta setando o bit correspondente no registrador RCGCGPIO,
+; apos isso verificar no PRGPIO se a porta esta pronta para uso.
+; enable clock to GPIOF at clock gating register
+            LDR     R0, =SYSCTL_RCGCGPIO_R  		                ;Carrega o endereco do registrador RCGCGPIO
+			MOV		R1, #GPIO_PORTM                 ;Seta o bit da porta generica 
+			ORR     R1, #GPIO_PORTK				;Seta o bit da porta generica, fazendo com OR
+			ORR 	R1, #GPIO_PORTJ 			;Seta o bit da porta generica, fazendo com OR
+			ORR 	R1, #GPIO_PORTA 			;Seta o bit da porta generica, fazendo com OR
+			ORR 	R1, #GPIO_PORTQ 			;Seta o bit da porta generica, fazendo com OR
+            STR     R1, [R0]						;Move para a memoria os bits das portas no endereco do RCGCGPIO
+ 
+            LDR     R0, =SYSCTL_PRGPIO_R			        ;Carrega o endereco do PRGPIO para esperar os GPIO ficarem prontos
+EsperaGPIO  LDR     R1, [R0]						;Le da memoria o conteudo do endereco do registrador
+			MOV     R2, #GPIO_PORTM                         ;Seta os bits correspondentes das portas para fazer a comparacao
+			ORR     R2, #GPIO_PORTK                         ;Seta o bit da porta generica, fazendo com OR
+			ORR     R2, #GPIO_PORTJ                         ;Seta o bit da porta generica, fazendo com OR
+			ORR     R2, #GPIO_PORTA                         ;Seta o bit da porta generica, fazendo com OR
+			ORR     R2, #GPIO_PORTQ                         ;Seta o bit da porta generica, fazendo com OR
+            TST     R1, R2						;ANDS de R1 com R2
+            BEQ     EsperaGPIO					        ;Se o flag Z=1, volta para o laco. Senao continua executando
+ 
+; 2. Limpar o AMSEL para desabilitar a analogica
+            MOV     R1, #0x00						;Colocar 0 no registrador para desabilitar a funcao analogica
+            LDR     R0, =GPIO_PORTM_AMSEL_R         ;Carrega o R0 com o endereco do AMSEL para a porta J
+            STR     R1, [R0]						;Guarda no registrador AMSEL da porta J da memoria
+            LDR     R0, =GPIO_PORTK_AMSEL_R    		;Carrega o R0 com o endereco do AMSEL para a porta F
+            STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta F da memoria
+ 
+; 3. Limpar PCTL para selecionar o GPIO
+            MOV     R1, #0x00					    ;Colocar 0 no registrador para selecionar o modo GPIO
+            LDR     R0, =GPIO_PORTM_PCTL_R		    ;Carrega o R0 com o endereco do PCTL para a porta J
+            STR     R1, [R0]                        ;Guarda no registrador PCTL da porta J da memoria
+            LDR     R0, =GPIO_PORTK_PCTL_R          ;Carrega o R0 com o endereco do PCTL para a porta F
+            STR     R1, [R0]                        ;Guarda no registrador PCTL da porta F da memoria
 
-; -------------------------------------------------------------------------------
-; Fun��o PortN_Output
-; Par�metro de entrada: 
-; Par�metro de sa�da: N�o tem
-PortN_Output
-; ****************************************
-; Escrever fun��o que acende ou apaga o LED
-; ****************************************
-	
-	BX LR
-; -------------------------------------------------------------------------------
-; Fun��o PortJ_Input
-; Par�metro de entrada: N�o tem
-; Par�metro de sa�da: R0 --> o valor da leitura
-PortJ_Input
-; ****************************************
-; Escrever fun��o que l� a chave e retorna 
-; um registrador se est� ativada ou n�o
-; ****************************************
-	
-	BX LR
+; 4. DIR para 0 se for entrada, 1 se for saida
+            LDR     R0, =GPIO_PORTK_DIR_R	    	;Carrega o R0 com o endereco do DIR para a porta F
+			MOV     R1, #2_11111111					;PK0-PK7 para Dados do LCD
+            STR     R1, [R0]						;Guarda no registrador
+            
+            LDR     R0, =GPIO_PORTM_DIR_R		    ;Carrega o R0 com o endereco do DIR para a porta J
+            MOV     R1, #2_0000111             		;PM0-PM2 para saida de controle do LCD
+            STR     R1, [R0]						;Guarda no registrador PCTL da porta J da memoria
+
+; 5. Limpar os bits AFSEL para 0 para selecionar GPIO 
+;    Sem funcao alternativa
+            MOV     R1, #0x00						;Colocar o valor 0 para nao setar funcao alternativa
+            LDR     R0, =GPIO_PORTK_AFSEL_R		    ;Carrega o endereco do AFSEL da porta F
+            STR     R1, [R0]						;Escreve na porta
+            LDR     R0, =GPIO_PORTM_AFSEL_R         ;Carrega o endereco do AFSEL da porta J
+            STR     R1, [R0]                        ;Escreve na porta
+
+; 6. Setar os bits de DEN para habilitar I/O digital
+            LDR     R0, =GPIO_PORTK_DEN_R			;Carrega o endereco do DEN
+            MOV     R1, #2_11111111                 ;Ativa os pinos PK0-PK7 como I/O Digital
+            STR     R1, [R0]					    ;Escreve no registrador da memoria funcionalidade digital 
+ 
+            LDR     R0, =GPIO_PORTM_DEN_R			;Carrega o endereco do DEN
+			MOV     R1, #2_00000111                 ;Ativa os pinos PM0-PM2 como I/O Digital      
+            STR     R1, [R0]                        ;Escreve no registrador da memoria funcionalidade digital
+			
+; 7. Para habilitar resistor de pull-up interno, setar PUR para 1
+;			LDR     R0, =GPIO_PORT_PUR_R			;Carrega o endereco do PUR para a porta J
+;			MOV     R1, #2_00000011					;Habilitar funcionalidade digital de resistor de pull-up 
+                                                    ;nos bits 0 e 1
+;            STR     R1, [R0]						;Escreve no registrador da memoria do resistor de pull-up
+            
+;retorno            
+			BX      LR
 
 
 
-    ALIGN                           ; garante que o fim da se��o est� alinhada 
+    ALIGN                           ; garante que o fim da secaoo esta alinhada 
     END                             ; fim do arquivo
