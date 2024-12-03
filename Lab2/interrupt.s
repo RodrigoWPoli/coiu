@@ -1,7 +1,7 @@
 ; timer.s
 ; Desenvolvido para a placa EK-TM4C1294XL
 ; Jhony Minetto Araujo, Ricardo Marthus Gremmelmaier, Rodrigo Wolsky Poli
-; Ver 1 30/11/2024
+; Ver 1 2/12/2024
 
 
 ; -------------------------------------------------------------------------------
@@ -10,7 +10,7 @@
 ; Declaracoes EQU - Defines
 ; ========================
 
-; ================== DEFINIÇÕES DOS PORTS ===================
+; ================== DEFINICOES DOS PORTS ===================
 
 ; ~~~~~~~~~~~~~~~~ PORT A ~~~~~~~~~~~~~~~~~~
 GPIO_PORTA_AHB_IM_R             EQU    0x40058410
@@ -94,61 +94,61 @@ GPIO_PORTJ_AHB_DATA_R    	EQU    0x400603FC
 GPIO_PORTJ               	EQU    2_000000100000000
 
 ; ~~~~~~~~~~~~~~~~ PORT K ~~~~~~~~~~~~~~~~~~
-GPIO_PORTK_AHB_IM_R             EQU    0x40061410
-GPIO_PORTK_AHB_IS_R             EQU    0x40061404
-GPIO_PORTK_AHB_IBE_R            EQU    0x40061408
-GPIO_PORTK_AHB_IEV_R            EQU    0x4006140C
-GPIO_PORTK_AHB_ICR_R            EQU    0x4006141C
-GPIO_PORTK_AHB_DATA_R    	EQU    0x400613FC
+GPIO_PORTK_IM_R                 EQU    0x40061410
+GPIO_PORTK_IS_R                 EQU    0x40061404
+GPIO_PORTK_IBE_R                EQU    0x40061408
+GPIO_PORTK_IEV_R                EQU    0x4006140C
+GPIO_PORTK_ICR_R                EQU    0x4006141C
+GPIO_PORTK_DATA_R    	        EQU    0x400613FC
 GPIO_PORTK               	EQU    2_000001000000000
 
 ; ~~~~~~~~~~~~~~~~ PORT L ~~~~~~~~~~~~~~~~~~
-GPIO_PORTL_AHB_IM_R             EQU    0x40062410
-GPIO_PORTL_AHB_IS_R             EQU    0x40062404
-GPIO_PORTL_AHB_IBE_R            EQU    0x40062408
-GPIO_PORTL_AHB_IEV_R            EQU    0x4006240C
-GPIO_PORTL_AHB_ICR_R            EQU    0x4006241C
+GPIO_PORTL_IM_R                 EQU    0x40062410
+GPIO_PORTL_IS_R                 EQU    0x40062404
+GPIO_PORTL_IBE_R                EQU    0x40062408
+GPIO_PORTL_IEV_R                EQU    0x4006240C
+GPIO_PORTL_ICR_R                EQU    0x4006241C
 GPIO_PORTL_DATA_R               EQU    0x400623FC
 GPIO_PORTL                      EQU    2_000010000000000
 
 ; ~~~~~~~~~~~~~~~~ PORT M ~~~~~~~~~~~~~~~~~~
-GPIO_PORTM_AHB_IM_R             EQU    0x40063410
-GPIO_PORTM_AHB_IS_R             EQU    0x40063404
-GPIO_PORTM_AHB_IBE_R            EQU    0x40063408
-GPIO_PORTM_AHB_IEV_R            EQU    0x4006340C
-GPIO_PORTM_AHB_ICR_R            EQU    0x4006341C
+GPIO_PORTM_IM_R                 EQU    0x40063410
+GPIO_PORTM_IS_R                 EQU    0x40063404
+GPIO_PORTM_IBE_R                EQU    0x40063408
+GPIO_PORTM_IEV_R                EQU    0x4006340C
+GPIO_PORTM_ICR_R                EQU    0x4006341C
 GPIO_PORTM_DATA_R               EQU    0x400633FC
 GPIO_PORTM                      EQU    2_000100000000000
 
 ; ~~~~~~~~~~~~~~~~ PORT N ~~~~~~~~~~~~~~~~~~
-GPIO_PORTN_AHB_IM_R             EQU    0x40064410
-GPIO_PORTN_AHB_IS_R             EQU    0x40064404
-GPIO_PORTN_AHB_IBE_R            EQU    0x40064408
-GPIO_PORTN_AHB_IEV_R            EQU    0x4006440C
-GPIO_PORTN_AHB_ICR_R            EQU    0x4006441C
+GPIO_PORTN_IM_R                 EQU    0x40064410
+GPIO_PORTN_IS_R                 EQU    0x40064404
+GPIO_PORTN_IBE_R                EQU    0x40064408
+GPIO_PORTN_IEV_R                EQU    0x4006440C
+GPIO_PORTN_ICR_R                EQU    0x4006441C
 GPIO_PORTN_DATA_R               EQU    0x400643FC
 GPIO_PORTN                      EQU    2_001000000000000
 
 ; ~~~~~~~~~~~~~~~~ PORT P ~~~~~~~~~~~~~~~~~~
-GPIO_PORTP_AHB_IM_R             EQU    0x40065410
-GPIO_PORTP_AHB_IS_R             EQU    0x40065404
-GPIO_PORTP_AHB_IBE_R            EQU    0x40065408
-GPIO_PORTP_AHB_IEV_R            EQU    0x4006540C
-GPIO_PORTP_AHB_ICR_R            EQU    0x4006541C
+GPIO_PORTP_IM_R                 EQU    0x40065410
+GPIO_PORTP_IS_R                 EQU    0x40065404
+GPIO_PORTP_IBE_R                EQU    0x40065408
+GPIO_PORTP_IEV_R                EQU    0x4006540C
+GPIO_PORTP_ICR_R                EQU    0x4006541C
 GPIO_PORTP_DATA_R               EQU    0x400653FC
 GPIO_PORTP                      EQU    2_010000000000000
 
 ; ~~~~~~~~~~~~~~~~ PORT Q ~~~~~~~~~~~~~~~~~~
-GPIO_PORTQ_AHB_IM_R             EQU    0x40066410
-GPIO_PORTQ_AHB_IS_R             EQU    0x40066404
-GPIO_PORTQ_AHB_IBE_R            EQU    0x40066408
-GPIO_PORTQ_AHB_IEV_R            EQU    0x4006640C
-GPIO_PORTQ_AHB_ICR_R            EQU    0x4006641C
+GPIO_PORTQ_IM_R                 EQU    0x40066410
+GPIO_PORTQ_IS_R                 EQU    0x40066404
+GPIO_PORTQ_IBE_R                EQU    0x40066408
+GPIO_PORTQ_IEV_R                EQU    0x4006640C
+GPIO_PORTQ_ICR_R                EQU    0x4006641C
 GPIO_PORTQ_DATA_R               EQU    0x400663FC
 GPIO_PORTQ                      EQU    2_100000000000000
 
 
-; ================== DEFINIÇÕES DO NVIC ===================
+; ================== DEFINICOES DO NVIC ===================
 
 ; ~~~~~~~~~~~~~~~~ ENABLE ~~~~~~~~~~~~~~~~~~
 NVIC_EN0_R                      EQU     0xE000E100
@@ -199,14 +199,101 @@ NVIC_PRI28_R                    EQU     0xE000E470
 
 		; Se alguma funcao do arquivo for chamada em outro arquivo	
         EXPORT Interrupt_Init
+        EXPORT GPIOPortJ_Handler
 									
-
+        IMPORT SysTick_Wait1ms
 ;--------------------------------------------------------------------------------
+;=========================================
 ; Funcao Timer_Init
 ; Parametro de entrada: Nao tem
 ; Parametro de saida: Nao tem
 Interrupt_Init
 
+; 1. Desabilitar a interrupcao no registradore IM
+        MOV     R1, #0x00						                ;Desabilitar as interrupcoes
+        LDR     R0, =GPIO_PORTJ_AHB_IM_R                                                ;Carrega o endereco do IM para a porta generica
+        STR     R1, [R0]                                                                ;Escreve no registrador
         
-;=====================
-; ****************************************
+;       LDR     R0, =GPIO_PORTM_IM_R                                                    ;Carrega o endereco do IM para a porta generica
+;       STR     R1, [R0]						                ;Escreve no registrador
+
+;       LDR     R0, =GPIO_PORTL_IM_R                                                    ;Carrega o endereco do IM para a porta generica
+;       STR     R1, [R0]						                ;Escreve no registrador
+
+; 2. Configurar o tipo de interrupcao (borda = 0 , nivel = 1) no IS
+
+        MOV     R1, #2_00                                                               ;Por borda
+        LDR     R0, =GPIO_PORTJ_AHB_IS_R                                                ;Carrega o endereco IS para a porta generica
+        STR     R1, [R0]                                                                ;Seta o valor no registrador
+
+; 3. Configurar tipo de borda (unica = 0, dupla = 1) no IBE
+
+        MOV     R1, #2_00                                                               ;Por borda unica
+        LDR     R0, =GPIO_PORTJ_AHB_IBE_R                                               ;Carrega o endereco IBE para a porta generica
+        STR     R1, [R0]                                                                ;Seta o valor no registrador
+
+; 4. Configurar modo da borda (descida = 0, subida = 1) no IEV                          
+
+        MOV     R1, #2_00                                                               ;Por borda de descida
+        LDR     R0, =GPIO_PORTJ_AHB_IEV_R                                               ;Carrega o endereco IEV para a porta generica
+        STR     R1, [R0]                                                                ;Seta o valor no registrador
+
+; 5. Realizar o ack para garantir que a interrupcao ira ocorrer no ICR
+
+        MOV     R1, #2_01                                                               ;Seta o bit de acknowledge
+        LDR     R0, =GPIO_PORTJ_AHB_ICR_R                                               ;Pega o endereco do ICR
+        STR     R1, [R0]                                                                ;Seta o valor no registrador
+        
+; 6. Habilitar a interrupcao no registrador IM
+
+        MOV     R1, #2_01						                ;Habilitar as interrupcoes
+        LDR     R0, =GPIO_PORTJ_AHB_IM_R                                                ;Carrega o endereco do IM para a porta generica
+        STR     R1, [R0]                                                                ;Escreve no registrador
+
+; 7. Habilitar fonte de interrupcao no NVIC (Portj = interrupcao 51 - Tabela 3-8, pagina 146)
+; Achar qual o ENX, pag 154
+
+        MOV     R1, #1                                                                  ;Seta 1
+        LSL     R1, #19                                                                 ;Desloca 19 bits, ja que 51-32=19 (intervalo entre inicio do EN que contem o 51)
+        LDR     R0, =NVIC_EN1_R                                                         ;Carrega o endereco do EN1
+        STR     R1, [R0]                                                                ;Seta no registrador
+
+; 8. Setar prioridade no NVIC, achar qual PRIX, pag 159
+ 
+        MOV     R1, #2                                                                  ;Prioridade 2
+        LSL     R1, #29                                                                 ;Deslocar 29 bits para ir pro ultimo byte do PRI12
+        LDR     R0, =NVIC_PRI12_R                                                       ;Carrega o endereco do PRI12
+        STR     R1, [R0]                                                                ;Seta no registrador
+;=========================================
+; ******************************************************
+
+;Funcao GPIOPortJ_Handler ISR, tratamento de interrupcao
+;Parametro de entrada: nao tem
+;Parametro de saida: nao tem
+GPIOPortJ_Handler
+        LDR     R0, =GPIO_PORTJ_AHB_ICR_R                                               ;Carrega o endereco do ICR para o ack
+        MOV     R1, #2_00000001                                                         ;Seta o bit 0 para ack
+        STR     R1, [R0]                                                                ;Salva no registrador
+
+        LDR     R1, =GPIO_PORTA_AHB_DATA_R 		                                ; Teste para setar leds
+        MOV     R0, #2_11110000
+        STR     R0, [R1]
+        LDR     R1, =GPIO_PORTQ_DATA_R 		                                
+        MOV     R0, #2_00001111
+        STR     R0, [R1]                                
+        LDR     R1, =GPIO_PORTP_DATA_R 			
+	MOV     R0, #2_00100000					
+	STR     R0, [R1]				
+        MOV R2, #200
+        BL SysTick_Wait1ms
+        LDR     R1, =GPIO_PORTP_DATA_R 			
+	MOV     R0, #2_00000000					
+	STR     R0, [R1]                  
+        MOV R2, #100
+        BL SysTick_Wait1ms
+
+;=========================================
+; ******************************************************
+
+        ALIGN                        ;Garante que o fim da secao esta alinhada 
+        END                          ;Fim do arquivo

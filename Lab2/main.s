@@ -1,62 +1,81 @@
 ; main.s
 ; Desenvolvido para a placa EK-TM4C1294XL
-; Este programa espera o usu�rio apertar a chave USR_SW1 e/ou a chave USR_SW2.
-; Caso o usu�rio pressione a chave USR_SW1, acender� o LED3 (PF4). Caso o usu�rio pressione 
-; a chave USR_SW2, acender� o LED4 (PF0). Caso as duas chaves sejam pressionadas, os dois 
+; Este programa espera o usuario apertar a chave USR_SW1 e/ou a chave USR_SW2.
+; Caso o usuario pressione a chave USR_SW1, acendera o LED3 (PF4). Caso o usuario pressione 
+; a chave USR_SW2, acendera o LED4 (PF0). Caso as duas chaves sejam pressionadas, os dois 
 ; LEDs acendem.
 
 ; -------------------------------------------------------------------------------
-        THUMB                        ; Instru��es do tipo Thumb-2
+        THUMB                        ; Instrucoes do tipo Thumb-2
 ; -------------------------------------------------------------------------------
-; Declara��es EQU - Defines
+; Declaracoes EQU - Defines
 ;<NOME>         EQU <VALOR>
 ; ========================
-
+; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
+Timer0A_Addr             EQU     0x60010000
 
 ; -------------------------------------------------------------------------------
-; �rea de Dados - Declara��es de vari�veis
+; Area de Dados - Declaracoes de variaveis
 		AREA  DATA, ALIGN=2
-		; Se alguma vari�vel for chamada em outro arquivo
-		;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a vari�vel <var> a 
+		; Se alguma variavel for chamada em outro arquivo
+		;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a variavel <var> a 
 		                                   ; partir de outro arquivo
-;<var>	SPACE <tam>                        ; Declara uma vari�vel de nome <var>
+;<var>	SPACE <tam>                        ; Declara uma variavel de nome <var>
                                            ; de <tam> bytes a partir da primeira 
-                                           ; posi��o da RAM		
+                                           ; posicao da RAM		
 
 ; -------------------------------------------------------------------------------
-; �rea de C�digo - Tudo abaixo da diretiva a seguir ser� armazenado na mem�ria de 
-;                  c�digo
+; Area de Codigo - Tudo abaixo da diretiva a seguir sera armazenado na memoria de 
+;                  codigo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
-		; Se alguma fun��o do arquivo for chamada em outro arquivo	
-        EXPORT Start                ; Permite chamar a fun��o Start a partir de 
+		; Se alguma funcao do arquivo for chamada em outro arquivo	
+        EXPORT Start                ; Permite chamar a funcao Start a partir de 
 			                        ; outro arquivo. No caso startup.s
 									
-		; Se chamar alguma fun��o externa	
+		; Se chamar alguma funcao externa	
         ;IMPORT <func>              ; Permite chamar dentro deste arquivo uma 
-									; fun��o <func>
+									; funcao <func>
 		IMPORT	PLL_Init
 		IMPORT	SysTick_Init
         IMPORT	SysTick_Wait1us
         IMPORT	SysTick_Wait1ms
 		IMPORT	GPIO_Init
 		IMPORT	LCD_Init
-		IMPORT	TecladoM_Poll
+		IMPORT  Timer0A_Init
 
+		IMPORT	TecladoM_Poll
+		IMPORT  create_table
+		IMPORT  multi_table
+        IMPORT Timer0A_Handler
 		IMPORT	LCD_Display_Character
 
 ; -------------------------------------------------------------------------------
-; Fun��o main()
+; Funcao main()
 Start  			
-	BL PLL_Init					 ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
-	BL SysTick_Init				 ;
-	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
-	BL LCD_Init                  ;Chama a subrotina que inicializa o LCD
+	BL 	PLL_Init					 ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
+	BL 	SysTick_Init				 ;
+	BL 	GPIO_Init                 	 ;Chama a subrotina que inicializa os GPIO
+	BL 	LCD_Init                  	 ;Chama a subrotina que inicializa o LCD
+	BL 	Timer0A_Init              	 ;Chama a subrotina que inicializa o Timer0A
+	;BL 	create_table			 ;Chama a subrotina que cria a tabela de multiplicacao
+
+; -------------------------------------------------------------------------------
+; Laco principal
+; R1 = valor da tecla pressionada
+; R2 = valor da tabela de multiplicacao
+; R3 = resultado da multiplicacao
 
 MainLoop
-	BL 	TecladoM_Poll
-	ADD R1, R1, #2_00110000		 ;Adiciona valor para escrever no display LCD (se nenhuma tecla for pressionada o símbolo @:01000000 será mostrado)
-	BL 	LCD_Display_Character
+	BL 		TecladoM_Poll
+	;PUSH 	{R1}
+	;BL 		multi_table
+	;POP 	{R1}
+	;MULS 	R3, R1, R2 	; oq q é isso aqui?
+	;ADD 	R1, R1, #2_00110000		 ;Adiciona valor para escrever no display LCD (se nenhuma tecla for pressionada o simbolo @:01000000 sera mostrado)
+	;BL 		LCD_Display_Character
+
+
 
 	B MainLoop                   ;Volta para o laco principal
 

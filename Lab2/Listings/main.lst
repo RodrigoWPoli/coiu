@@ -6,105 +6,135 @@ ARM Macro Assembler    Page 1
 
     1 00000000         ; main.s
     2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
-    3 00000000         ; Este programa espera o usu�rio apertar a chave USR_S
-                       W1 e/ou a chave USR_SW2.
-    4 00000000         ; Caso o usu�rio pressione a chave USR_SW1, acender�
-                        o LED3 (PF4). Caso o usu�rio pressione 
-    5 00000000         ; a chave USR_SW2, acender� o LED4 (PF0). Caso as duas
-                        chaves sejam pressionadas, os dois 
+    3 00000000         ; Este programa espera o usuario apertar a chave USR_SW1
+                        e/ou a chave USR_SW2.
+    4 00000000         ; Caso o usuario pressione a chave USR_SW1, acendera o L
+                       ED3 (PF4). Caso o usuario pressione 
+    5 00000000         ; a chave USR_SW2, acendera o LED4 (PF0). Caso as duas c
+                       haves sejam pressionadas, os dois 
     6 00000000         ; LEDs acendem.
     7 00000000         
     8 00000000         ; ------------------------------------------------------
                        -------------------------
-    9 00000000                 THUMB                        ; Instru��es do
-                                                             tipo Thumb-2
+    9 00000000                 THUMB                        ; Instrucoes do tip
+                                                            o Thumb-2
    10 00000000         ; ------------------------------------------------------
                        -------------------------
-   11 00000000         ; Declara��es EQU - Defines
+   11 00000000         ; Declaracoes EQU - Defines
    12 00000000         ;<NOME>         EQU <VALOR>
    13 00000000         ; ========================
-   14 00000000         
-   15 00000000         
-   16 00000000         ; ------------------------------------------------------
+   14 00000000         ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
+   15 00000000 60010000 
+                       Timer0A_Addr
+                               EQU              0x60010000
+   16 00000000         
+   17 00000000         ; ------------------------------------------------------
                        -------------------------
-   17 00000000         ; �rea de Dados - Declara��es de vari�veis
-   18 00000000                 AREA             DATA, ALIGN=2
-   19 00000000         ; Se alguma vari�vel for chamada em outro arquivo
-   20 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
-                       ri�vel <var> a 
-   21 00000000         ; partir de outro arquivo
-   22 00000000         ;<var> SPACE <tam>                        ; Declara uma 
-                       vari�vel de nome <var>
-   23 00000000         ; de <tam> bytes a partir da primeira 
-   24 00000000         ; posi��o da RAM  
-   25 00000000         
-   26 00000000         ; ------------------------------------------------------
+   18 00000000         ; Area de Dados - Declaracoes de variaveis
+   19 00000000                 AREA             DATA, ALIGN=2
+   20 00000000         ; Se alguma variavel for chamada em outro arquivo
+   21 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
+                       riavel <var> a 
+   22 00000000         ; partir de outro arquivo
+   23 00000000         ;<var> SPACE <tam>                        ; Declara uma 
+                       variavel de nome <var>
+   24 00000000         ; de <tam> bytes a partir da primeira 
+   25 00000000         ; posicao da RAM  
+   26 00000000         
+   27 00000000         ; ------------------------------------------------------
                        -------------------------
-   27 00000000         ; �rea de C�digo - Tudo abaixo da diretiva a seguir 
-                       ser� armazenado na mem�ria de 
-   28 00000000         ;                  c�digo
-   29 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+   28 00000000         ; Area de Codigo - Tudo abaixo da diretiva a seguir sera
+                        armazenado na memoria de 
+   29 00000000         ;                  codigo
+   30 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
 2
-   30 00000000         
-   31 00000000         ; Se alguma fun��o do arquivo for chamada em outro a
-                       rquivo 
-   32 00000000                 EXPORT           Start       ; Permite chamar a 
-                                                            fun��o Start a 
-                                                            partir de 
-   33 00000000         ; outro arquivo. No caso startup.s
-   34 00000000         
-   35 00000000         ; Se chamar alguma fun��o externa 
-   36 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+   31 00000000         
+   32 00000000         ; Se alguma funcao do arquivo for chamada em outro arqui
+                       vo 
+   33 00000000                 EXPORT           Start       ; Permite chamar a 
+                                                            funcao Start a part
+                                                            ir de 
+   34 00000000         ; outro arquivo. No caso startup.s
+   35 00000000         
+   36 00000000         ; Se chamar alguma funcao externa 
+   37 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
                        e arquivo uma 
-   37 00000000         ; fun��o <func>
-   38 00000000                 IMPORT           PLL_Init
-   39 00000000                 IMPORT           SysTick_Init
-   40 00000000                 IMPORT           SysTick_Wait1us
-   41 00000000                 IMPORT           SysTick_Wait1ms
-   42 00000000                 IMPORT           GPIO_Init
-   43 00000000                 IMPORT           LCD_Init
+   38 00000000         ; funcao <func>
+   39 00000000                 IMPORT           PLL_Init
+   40 00000000                 IMPORT           SysTick_Init
+   41 00000000                 IMPORT           SysTick_Wait1us
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   44 00000000                 IMPORT           TecladoM_Poll
-   45 00000000         
-   46 00000000                 IMPORT           LCD_Display_Character
-   47 00000000         
-   48 00000000         ; ------------------------------------------------------
+   42 00000000                 IMPORT           SysTick_Wait1ms
+   43 00000000                 IMPORT           GPIO_Init
+   44 00000000                 IMPORT           LCD_Init
+   45 00000000                 IMPORT           Timer0A_Init
+   46 00000000         
+   47 00000000                 IMPORT           TecladoM_Poll
+   48 00000000                 IMPORT           create_table
+   49 00000000                 IMPORT           multi_table
+   50 00000000                 IMPORT           Timer0A_Handler
+   51 00000000                 IMPORT           LCD_Display_Character
+   52 00000000         
+   53 00000000         ; ------------------------------------------------------
                        -------------------------
-   49 00000000         ; Fun��o main()
-   50 00000000         Start
-   51 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
+   54 00000000         ; Funcao main()
+   55 00000000         Start
+   56 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
                                                             para alterar o cloc
                                                             k do microcontrolad
                                                             or para 80MHz
-   52 00000004 F7FF FFFE       BL               SysTick_Init ;
-   53 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
+   57 00000004 F7FF FFFE       BL               SysTick_Init ;
+   58 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
                                                             que inicializa os G
                                                             PIO
-   54 0000000C F7FF FFFE       BL               LCD_Init    ;Chama a subrotina 
+   59 0000000C F7FF FFFE       BL               LCD_Init    ;Chama a subrotina 
                                                             que inicializa o LC
                                                             D
-   55 00000010         
-   56 00000010         MainLoop
-   57 00000010 F7FF FFFE       BL               TecladoM_Poll
-   58 00000014 F101 0130       ADD              R1, R1, #2_00110000
-   59 00000018 F7FF FFFE       BL               LCD_Display_Character
-   60 0000001C         
-   61 0000001C F04F 000A       LDR              R0, =10
-   62 00000020 F7FF FFFE       BL               SysTick_Wait1ms
-   63 00000024         
-   64 00000024 E7F4            B                MainLoop    ;Volta para o laco 
+   60 00000010 F7FF FFFE       BL               Timer0A_Init ;Chama a subrotina
+                                                             que inicializa o T
+                                                            imer0A
+   61 00000014         ;BL  create_table    ;Chama a subrotina que cria a tabel
+                       a de multiplicacao
+   62 00000014         
+   63 00000014         ; ------------------------------------------------------
+                       -------------------------
+   64 00000014         ; Laco principal
+   65 00000014         ; R1 = valor da tecla pressionada
+   66 00000014         ; R2 = valor da tabela de multiplicacao
+   67 00000014         ; R3 = resultado da multiplicacao
+   68 00000014         
+   69 00000014         MainLoop
+   70 00000014 F7FF FFFE       BL               TecladoM_Poll
+   71 00000018         ;PUSH  {R1}
+   72 00000018         ;BL   multi_table
+   73 00000018         ;POP  {R1}
+   74 00000018         ;MULS  R3, R1, R2  ; oq q é isso aqui?
+   75 00000018         ;ADD  R1, R1, #2_00110000   ;Adiciona valor para escreve
+                       r no display LCD (se nenhuma tecla for pressionada o sim
+                       bolo @:01000000 sera mostrado)
+   76 00000018         ;BL   LCD_Display_Character
+   77 00000018         
+   78 00000018         
+   79 00000018         
+   80 00000018 E7FC            B                MainLoop    ;Volta para o laco 
                                                             principal
-   65 00000026         
-   66 00000026         
-   67 00000026 00 00           ALIGN                        ;Garante que o fim 
+   81 0000001A         
+   82 0000001A         
+   83 0000001A 00 00           ALIGN                        ;Garante que o fim 
                                                             da secao esta alinh
                                                             ada 
-   68 00000028                 END                          ;Fim do arquivo
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   84 0000001C                 END                          ;Fim do arquivo
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\jhony\AppData\Local\Arm
 \Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1" -
@@ -120,7 +150,7 @@ DATA 00000000
 
 Symbol: DATA
    Definitions
-      At line 18 in file main.s
+      At line 19 in file main.s
    Uses
       None
 Comment: DATA unused
@@ -135,27 +165,42 @@ Relocatable symbols
 
 Symbol: .text
    Definitions
-      At line 29 in file main.s
+      At line 30 in file main.s
    Uses
       None
 Comment: .text unused
-MainLoop 00000010
+MainLoop 00000014
 
 Symbol: MainLoop
    Definitions
-      At line 56 in file main.s
+      At line 69 in file main.s
    Uses
-      At line 64 in file main.s
+      At line 80 in file main.s
 Comment: MainLoop used once
 Start 00000000
 
 Symbol: Start
    Definitions
-      At line 50 in file main.s
+      At line 55 in file main.s
    Uses
-      At line 32 in file main.s
+      At line 33 in file main.s
 Comment: Start used once
 3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+Timer0A_Addr 60010000
+
+Symbol: Timer0A_Addr
+   Definitions
+      At line 15 in file main.s
+   Uses
+      None
+Comment: Timer0A_Addr unused
+1 symbol
 
 
 
@@ -166,55 +211,55 @@ GPIO_Init 00000000
 
 Symbol: GPIO_Init
    Definitions
-      At line 42 in file main.s
+      At line 43 in file main.s
    Uses
-      At line 53 in file main.s
+      At line 58 in file main.s
 Comment: GPIO_Init used once
 LCD_Display_Character 00000000
 
 Symbol: LCD_Display_Character
    Definitions
-      At line 46 in file main.s
+      At line 51 in file main.s
    Uses
-      At line 59 in file main.s
-Comment: LCD_Display_Character used once
+      None
+Comment: LCD_Display_Character unused
 LCD_Init 00000000
 
 Symbol: LCD_Init
    Definitions
-      At line 43 in file main.s
+      At line 44 in file main.s
    Uses
-      At line 54 in file main.s
+      At line 59 in file main.s
 Comment: LCD_Init used once
 PLL_Init 00000000
 
 Symbol: PLL_Init
    Definitions
-      At line 38 in file main.s
+      At line 39 in file main.s
    Uses
-      At line 51 in file main.s
+      At line 56 in file main.s
 Comment: PLL_Init used once
 SysTick_Init 00000000
 
 Symbol: SysTick_Init
    Definitions
-      At line 39 in file main.s
+      At line 40 in file main.s
    Uses
-      At line 52 in file main.s
+      At line 57 in file main.s
 Comment: SysTick_Init used once
 SysTick_Wait1ms 00000000
 
 Symbol: SysTick_Wait1ms
    Definitions
-      At line 41 in file main.s
+      At line 42 in file main.s
    Uses
-      At line 62 in file main.s
-Comment: SysTick_Wait1ms used once
+      None
+Comment: SysTick_Wait1ms unused
 SysTick_Wait1us 00000000
 
 Symbol: SysTick_Wait1us
    Definitions
-      At line 40 in file main.s
+      At line 41 in file main.s
    Uses
       None
 Comment: SysTick_Wait1us unused
@@ -228,9 +273,41 @@ ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 External symbols
 
    Definitions
-      At line 44 in file main.s
+      At line 47 in file main.s
    Uses
-      At line 57 in file main.s
+      At line 70 in file main.s
 Comment: TecladoM_Poll used once
-8 symbols
-346 symbols in table
+Timer0A_Handler 00000000
+
+Symbol: Timer0A_Handler
+   Definitions
+      At line 50 in file main.s
+   Uses
+      None
+Comment: Timer0A_Handler unused
+Timer0A_Init 00000000
+
+Symbol: Timer0A_Init
+   Definitions
+      At line 45 in file main.s
+   Uses
+      At line 60 in file main.s
+Comment: Timer0A_Init used once
+create_table 00000000
+
+Symbol: create_table
+   Definitions
+      At line 48 in file main.s
+   Uses
+      None
+Comment: create_table unused
+multi_table 00000000
+
+Symbol: multi_table
+   Definitions
+      At line 49 in file main.s
+   Uses
+      None
+Comment: multi_table unused
+12 symbols
+351 symbols in table

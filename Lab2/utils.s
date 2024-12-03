@@ -1,21 +1,15 @@
 ; utils.s
 ; Desenvolvido para a placa EK-TM4C1294XL
-; C�digo que apresenta algumas funcionalidades:
-; - Altera a frequ�ncia do barramento usando o PLL
+; Codigo que apresenta algumas funcionalidades:
+; - Altera a frequencia do barramento usando o PLL
 ; - Configura o Systick para utilizar delays precisos
-
-; Editado por Guilherme Peron
-; 15/03/2018
-; 26/08/2020
-; 04/04/2023
-; Copyright 2014 by Jonathan W. Valvano, valvano@mail.utexas.edu
 
 ; -------------------------------------------------------------------------------------------------------------------------
 ; PLL
 ; -------------------------------------------------------------------------------------------------------------------------
-; A frequ�ncia do barramento ser� 80MHz
-; Representa o divisor para inicializar o PLL para a frequ�ncia desejada
-; Frequ�ncia do barramento � 480MHz/(PSYSDIV+1) = 480MHz/(5+1) = 80 MHz
+; A frequencia do barramento sera 80MHz
+; Representa o divisor para inicializar o PLL para a frequencia desejada
+; Frequencia do barramento eh 480MHz/(PSYSDIV+1) = 480MHz/(5+1) = 80 MHz
 PSYSDIV                       EQU 5
 
 SYSCTL_RIS_R                  EQU 0x400FE050
@@ -57,27 +51,27 @@ SYSCTL_PLLSTAT_LOCK           EQU 0x00000001  ; PLL Lock
 ;------------PLL_Init------------
 ; Configura o sistema para utilizar o clock do PLL
 ; Entrada: Nenhum
-; Sa�da: Nenhum
+; Saida: Nenhum
 ; Modifica: R0, R1, R2, R3
 PLL_Init
-    ; Cap�tulo 5 do Datasheet
-    ; 1) Depois que a configura��o for pronta, o PIOSC prov� o clock do sistema. Este,
-    ;    passo garante que se a fun��o j� tenha sido chamada antes, o sistema desabilite
-    ;    o clock do PLL antes de configur�-lo novamente.
+    ; Capitulo 5 do Datasheet
+    ; 1) Depois que a configuracao for pronta, o PIOSC prove o clock do sistema. Este,
+    ;    passo garante que se a funcao ja tenha sido chamada antes, o sistema desabilite
+    ;    o clock do PLL antes de configura-lo novamente.
     LDR R1, =SYSCTL_RSCLKCFG_R                 ; R1 = SYSCTL_RSCLKCFG_R (ponteiro)
     LDR R0, [R1]                               ; R0 = [R1] (value)
     BIC R0, R0, #SYSCTL_RSCLKCFG_USEPLL        ; R0 = R0&~SYSCTL_RSCLKCFG_USEPLL (limpar o bit USEPLL bit para n�o clockar pelo PLL)
     STR R0, [R1]                               ; [R1] = R0
     ; 2) Ligar o MOSC limpando o bit NOXTAL bit no registrador SYSCTL_MOSCCTL_R.
-    ; 3) Como o modo cristal � requerido, limpar o bit de PWRDN. O datasheet pede 
-	;     para fazer estas duas opera��es em um �nico acesso de escrita ao SYSCTL_MOSCCTL_R.
+    ; 3) Como o modo cristal eh requerido, limpar o bit de PWRDN. O datasheet pede 
+	;     para fazer estas duas operacoes em um unico acesso de escrita ao SYSCTL_MOSCCTL_R.
     LDR R1, =SYSCTL_MOSCCTL_R                  ; R1 = SYSCTL_MOSCCTL_R (pointer)
     LDR R0, [R1]                               ; R0 = [R1] (value)
     BIC R0, R0, #SYSCTL_MOSCCTL_NOXTAL         ; R0 = R0&~SYSCTL_MOSCCTL_NOXTAL (limpa o bit NOXTAL para usar o cristal externo de 25 MHz)
     BIC R0, R0, #SYSCTL_MOSCCTL_PWRDN          ; R0 = R0&~SYSCTL_MOSCCTL_PWRDN (limpa o bit PWRDN para ligar o oscilador principal)
-    STR R0, [R1]                               ; [R1] = R0 (ambas altera��es em um �nico acesso)
+    STR R0, [R1]                               ; [R1] = R0 (ambas alteracoes em um unico acesso)
     ;    Esperar pelo bit MOSCPUPRIS ser setado no registrador SYSCTL_RIS_R register, indicando
-	;    que o cristal modo MOSC est� pronto
+	;    que o cristal modo MOSC esta pronto
     LDR R1, =SYSCTL_RIS_R                      ; R1 = SYSCTL_RIS_R (pointer)
 PLL_Init_step3loop
     LDR R0, [R1]                               ; R0 = [R1] (value)
@@ -93,7 +87,7 @@ PLL_Init_step3loop
     BIC R0, R0, #SYSCTL_RSCLKCFG_PLLSRC_M      ; R0 = R0&~SYSCTL_RSCLKCFG_PLLSRC_M (limpar o campo PLL clock source)
     ADD R0, R0, #SYSCTL_RSCLKCFG_PLLSRC_MOSC   ; R0 = R0 + SYSCTL_RSCLKCFG_PLLSRC_MOSC (configurar para o clock do PLL do oscilador principal)
     STR R0, [R1]                               ; [R1] = R0
-    ; 5) Se a aplica��o tamb�m necessita que o MOSC seja a fonte de clock para deep-sleep
+    ; 5) Se a aplicacao tamb�m necessita que o MOSC seja a fonte de clock para deep-sleep
     ;    ent�o programar o campo DSOSCSRC no registrador SYSCTL_DSCLKCFG_R para 0x3.
     LDR R1, =SYSCTL_DSCLKCFG_R                 ; R1 = SYSCTL_DSCLKCFG_R (pointer)
     LDR R0, [R1]                               ; R0 = [R1] (value)
@@ -105,7 +99,7 @@ PLL_Init_step3loop
     ;    ************
     ;    fVC0 = (fXTAL/(Q + 1)/(N + 1))*(MINT + (MFRAC/1,024))
     ;    fVCO = 480,000,000 Hz (arbitrary, but presumably as small as needed)
-	;    Para uma frequ�ncia que n�o seja um divisor inteiro de 480 MHz, mudar esta se��o
+	;    Para uma frequ�ncia que n�o seja um divisor inteiro de 480 MHz, mudar esta secao
 FXTAL  EQU 25000000                 ; fixa, o cristal est� soldado no Launchpad
 Q      EQU        0
 N      EQU        4                 ; escolhido para ser a frequ�ncia de refer�ncia entre 4 e 30 MHz
@@ -136,11 +130,11 @@ SYSCLK EQU (FXTAL/(Q+1)/(N+1))*(MINT+MFRAC/1024)/(PSYSDIV+1)
     STR R0, [R1]                               ; [R1] = R0
     LDR R1, =SYSCTL_RSCLKCFG_R                 ; R1 = SYSCTL_RSCLKCFG_R (ponteiro)
     LDR R0, [R1]                               ; R0 = [R1] (valor)
-    ORR R0, R0, #SYSCTL_RSCLKCFG_NEWFREQ       ; R0 = R0|SYSCTL_RSCLKCFG_NEWFREQ (fixar as mudan�as no registrador)
+    ORR R0, R0, #SYSCTL_RSCLKCFG_NEWFREQ       ; R0 = R0|SYSCTL_RSCLKCFG_NEWFREQ (fixar as mudancas no registrador)
     STR R0, [R1]                               ; [R1] = R0
-    ; 7) Escrever o registrador SYSCTL_MEMTIM0_R para a nova configura��o de clock.
+    ; 7) Escrever o registrador SYSCTL_MEMTIM0_R para a nova configuracao de clock.
     ;    ************
-    ;    Configurar os par�metros de tempo para as mem�rias Flash e EEPROM que 
+    ;    Configurar os par�metros de tempo para as memorias Flash e EEPROM que 
 	;    dependem da frequ�ncia do clock do sistema. Ver a Tabela 5-12 do datasheet.
     LDR R1, =SYSCTL_MEMTIM0_R                  ; R1 = SYSCTL_MEMTIM0_R (ponteiro)
     LDR R0, [R1]                               ; R0 = [R1] (valor)
@@ -149,49 +143,49 @@ SYSCLK EQU (FXTAL/(Q+1)/(N+1))*(MINT+MFRAC/1024)/(PSYSDIV+1)
     LDR R2, =SYSCLK                            ; R2 = (FXTAL/(Q+1)/(N+1))*(MINT+MFRAC/1024)/(PSYSDIV+1)
     LDR R3, =120000000                          ; R3 = 80,000,000 (value)
     CMP R2, R3                                 ; � R2 (SysClk) <= R3 (120,000,000 Hz)?
-    BLS PLL_Init_step7fullspeed                ; se sim, pular o pr�ximo teste
+    BLS PLL_Init_step7fullspeed                ; se sim, pular o proximo teste
 PLL_Init_step7toofast                          ; 120 MHz < SysClk: "too fast"
-    ; Um configura��o � inv�lida e o PLL n�o pode operar mais r�pido que 120MHz.
-    ; Pula o resto da inicializa��o, levando o sistema a operar pelo MOSC
+    ; Um configuracao � inv�lida e o PLL n�o pode operar mais r�pido que 120MHz.
+    ; Pula o resto da inicializacao, levando o sistema a operar pelo MOSC
     ; que � o cristal de 25MHz.
     BX  LR                                     ; retorna
 PLL_Init_step7fullspeed                        ; 100 MHz < SysClk <= 120 MHz: "full speed"
     LDR R3, =100000000                         ; R3 = 100,000,000 (valor)
     CMP R2, R3                                 ; � R2 (SysClk) <= R3 (100,000,000 Hz)?
-    BLS PLL_Init_step7veryfast                 ; se sim, pula o pr�ximo teste
+    BLS PLL_Init_step7veryfast                 ; se sim, pula o proximo teste
     LDR R3, =0x01850185                        ; R3 = 0x01850185 (valores deslocados)
     ADD R0, R0, R3                             ; R0 = R0 + 0x01850185 (FBCHT/EBCHT = 6, FBCE/EBCE = 0, FWS/EWS = 5)
     B   PLL_Init_step7done                     ; branch incondicional para o fim
 PLL_Init_step7veryfast                         ; 80 MHz < SysClk <= 100 MHz: "very fast"
     LDR R3, =80000000                          ; R3 = 80,000,000 (valor)
     CMP R2, R3                                 ; � R2 (SysClk) <= R3 (80,000,000 Hz)?
-    BLS PLL_Init_step7fast                     ; se sim, pula o pr�ximo teste
+    BLS PLL_Init_step7fast                     ; se sim, pula o proximo teste
     LDR R3, =0x01440144                        ; R3 = 0x01440144 (valores deslocados)
     ADD R0, R0, R3                             ; R0 = R0 + 0x01440144 (FBCHT/EBCHT = 5, FBCE/EBCE = 0, FWS/EWS = 4)
     B   PLL_Init_step7done                     ; branch incondicional para o fim
 PLL_Init_step7fast                             ; 60 MHz < SysClk <= 80 MHz: "fast"
     LDR R3, =60000000                          ; R3 = 60,000,000 (valor)
     CMP R2, R3                                 ; � R2 (SysClk) <= R3 (60,000,000 Hz)?
-    BLS PLL_Init_step7medium                   ; se sim, pula o pr�ximo teste
+    BLS PLL_Init_step7medium                   ; se sim, pula o proximo teste
     LDR R3, =0x01030103                        ; R3 = 0x01030103 (valores deslocados)
     ADD R0, R0, R3                             ; R0 = R0 + 0x01030103 (FBCHT/EBCHT = 4, FBCE/EBCE = 0, FWS/EWS = 3)
     B   PLL_Init_step7done                     ; branch incondicional para o fim
 PLL_Init_step7medium                           ; 40 MHz < SysClk <= 60 MHz: "medium"
     LDR R3, =40000000                          ; R3 = 40,000,000 (valor)
     CMP R2, R3                                 ; � R2 (SysClk) <= R3 (40,000,000 Hz)?
-    BLS PLL_Init_step7slow                     ; se sim, pula o pr�ximo teste
+    BLS PLL_Init_step7slow                     ; se sim, pula o proximo teste
     ADD R0, R0, #0x00C200C2                    ; R0 = R0 + 0x00C200C2 (FBCHT/EBCHT = 3, FBCE/EBCE = 0, FWS/EWS = 2)
     B   PLL_Init_step7done                     ; branch incondicional para o fim
 PLL_Init_step7slow                             ; 16 MHz < SysClk <= 40 MHz: "slow"
     LDR R3, =16000000                          ; R3 = 16,000,000 (value)
     CMP R2, R3                                 ; � R2 (SysClk) <= R3 (16,000,000 Hz)?
-    BLS PLL_Init_step7veryslow                 ; se sim, pula o pr�ximo teste
+    BLS PLL_Init_step7veryslow                 ; se sim, pula o proximo teste
     ADD R0, R0, #0x00810081                    ; R0 = R0 + 0x00810081 (FBCHT/EBCHT = 2, FBCE/EBCE = 1, FWS/EWS = 1)
     B   PLL_Init_step7done                     ; branch incondicional para o fim
 PLL_Init_step7veryslow                         ; SysClk == 16 MHz: "very slow"
     LDR R3, =16000000                          ; R3 = 16,000,000 (value)
     CMP R2, R3                                 ; � R2 (SysClk) < R3 (16,000,000 Hz)?
-    BLO PLL_Init_step7extremelyslow            ; se sim, pula o pr�ximo teste
+    BLO PLL_Init_step7extremelyslow            ; se sim, pula o proximo teste
     ADD R0, R0, #0x00200020                    ; R0 = R0 + 0x00200020 (FBCHT/EBCHT = 0, FBCE/EBCE = 1, FWS/EWS = 0)
     B   PLL_Init_step7done                     ; branch incondicional para o fim
 PLL_Init_step7extremelyslow                    ; SysClk < 16 MHz: "extremely slow"
@@ -199,8 +193,8 @@ PLL_Init_step7extremelyslow                    ; SysClk < 16 MHz: "extremely slo
 PLL_Init_step7done
     STR R0, [R1]                               ; [R1] = R0 (SYSCTL_MEMTIM0_R alterado mas n�o fixado ainda)
     ; 8) Espera pelo registrador SYSCTL_PLLSTAT_R indicar que o PLL atingiu travamento
-    ;    no novo ponto de opera��o (ou que um per�odo de timeout passou e o travamento
-    ;    falhou, que no caso uma condi��o de erro existe e esta sequ�ncia � abandonada
+    ;    no novo ponto de operacao (ou que um per�odo de timeout passou e o travamento
+    ;    falhou, que no caso uma condicao de erro existe e esta sequ�ncia � abandonada
     LDR R1, =SYSCTL_PLLSTAT_R                  ; R1 = SYSCTL_PLLSTAT_R (pointer)
     MOV R2, #0                                 ; R2 = 0 (timeout counter)
     MOV R3, #0xFFFF                            ; R3 = 0xFFFF (value)
@@ -212,7 +206,7 @@ PLL_Init_step8loop
     CMP R2, R3                                 ; se (R2 < 0xFFFF), continuar o polling
     BLO PLL_Init_step8loop
     ; O PLL nunca travou ou n�o est� ligado.
-	; Pular o resto da inicializa��o, levando o sistema ser clockado pelo MOSC,
+	; Pular o resto da inicializacao, levando o sistema ser clockado pelo MOSC,
 	; que � um cristal de 25MHz.
     BX  LR                                     ; return
 PLL_Init_step8done
@@ -223,9 +217,9 @@ PLL_Init_step8done
     LDR R3, =SYSCTL_RSCLKCFG_PSYSDIV_M         ; R3 = SYSCTL_RSCLKCFG_PSYSDIV_M (mascara)
     BIC R0, R0, R3                             ; R0 = R0&~SYSCTL_RSCLKCFG_PSYSDIV_M (limpar o campo PSYSDIV)
     ADD R0, R0, #(PSYSDIV&SYSCTL_RSCLKCFG_PSYSDIV_M); R0 = R0 + (PSYSDIV&SYSCTL_RSCLKCFG_PSYSDIV_M) (configurar PSYSDIV como definido acima)
-    ORR R0, R0, #SYSCTL_RSCLKCFG_MEMTIMU       ; R0 = R0|SYSCTL_RSCLKCFG_MEMTIMU (setar o bit MEMTIMU para atualizar os par�metros de temporiza��o de mem�ria)
+    ORR R0, R0, #SYSCTL_RSCLKCFG_MEMTIMU       ; R0 = R0|SYSCTL_RSCLKCFG_MEMTIMU (setar o bit MEMTIMU para atualizar os paremetros de temporizacao de memoria)
     ORR R0, R0, #SYSCTL_RSCLKCFG_USEPLL        ; R0 = R0|SYSCTL_RSCLKCFG_USEPLL (setar o bit USEPLL para pegar o clock do PLL)
-    STR R0, [R1]                               ; [R1] = R0 (execu��o e acesso s�o suspensas enquanto as atualiza��es na temporiza��o da mem�ria s�o atualizadas)
+    STR R0, [R1]                               ; [R1] = R0 (execucao e acesso sao suspensas enquanto as atualizacoes na temporizacao da memoria sao atualizadas)
     BX  LR                                     ; return
 
 
@@ -246,17 +240,17 @@ NVIC_ST_CURRENT_R     EQU 0xE000E018
 ; Modifica: R0, R1
 SysTick_Init
 	LDR R1, =NVIC_ST_CTRL_R			; R1 = &NVIC_ST_CTRL_R (ponteiro)
-	MOV R0, #0 						; desabilita Systick durante a configura��o
-	STR R0, [R1]					; escreve no endere�o de mem�ria do perif�rico
+	MOV R0, #0 						; desabilita Systick durante a configuracao
+	STR R0, [R1]					; escreve no endereco de memoria do periferico
 	LDR R1, =NVIC_ST_RELOAD_R 		; R1 = &NVIC_ST_RELOAD_R (pointeiro)
 	LDR R0, =0x00FFFFFF; 			; valor m�ximo de recarga 2^24 ticks
-	STR R0, [R1] 					; escreve no endere�o de mem�ria do perif�rico o NVIC_ST_RELOAD_M
+	STR R0, [R1] 					; escreve no endereco de memoria do periferico o NVIC_ST_RELOAD_M
 	LDR R1, =NVIC_ST_CURRENT_R 		; R1 = &NVIC_ST_CURRENT_R (ponteiro)
-	MOV R0, #0 						; qualquer escrita no endere�o NVIC_ST_CURRENT_R o limpa
+	MOV R0, #0 						; qualquer escrita no endereco NVIC_ST_CURRENT_R o limpa
 	STR R0, [R1] 					; limpa o contador
 	LDR R1, =NVIC_ST_CTRL_R 		; habilita o SysTick com o clock do core
 	MOV R0, #0x05					; ENABLE | CLK_SRC
-	STR R0, [R1] 					; Seta os bits de ENABLE e CLK_SRC na mem�ria
+	STR R0, [R1] 					; Seta os bits de ENABLE e CLK_SRC na memoria
 	BX LR
 	
 ;------------SysTick_Wait------------
@@ -287,7 +281,7 @@ DELAY1MS EQU 80000 ; n�mero de ciclos de clock para contar 1ms (assumindo 80 M
 
 SysTick_Wait1ms
 	PUSH {R4, LR} 						; salva o valor atual de R4 e Link Register
-	MOVS R4, R2 						; R4 = R2  numEsperasRestantes com atualiza��o dos flags
+	MOVS R4, R2 						; R4 = R2  numEsperasRestantes com atualizacao dos flags
 	BEQ SysTick_Wait1ms_done 			; Se o numEsperasRestantes == 0, vai para o fim
 SysTick_Wait1ms_loop					
 	LDR R2, =DELAY1MS 					; R2 = DELAY1MS (n�mero de ticks para contar 1ms)
@@ -307,7 +301,7 @@ DELAY1US EQU 80    ; n�mero de ciclos de clock para contar 1ms (assumindo 80 M
 
 SysTick_Wait1us
 	PUSH {R4, LR} 						; salva o valor atual de R4 e Link Register
-	MOVS R4, R0 						; R4 = R0  numEsperasRestantes com atualiza��o dos flags
+	MOVS R4, R0 						; R4 = R0  numEsperasRestantes com atualizacao dos flags
 	BEQ SysTick_Wait1us_done 			; Se o numEsperasRestantes == 0, vai para o fim
 SysTick_Wait1us_loop					
 	LDR R0, =DELAY1US 					; R0 = DELAY1MS (n�mero de ticks para contar 1ms)
@@ -321,5 +315,5 @@ SysTick_Wait1us_done
 ; -------------------------------------------------------------------------------------------------------------------------
 ; Fim do Arquivo
 ; -------------------------------------------------------------------------------------------------------------------------
-    ALIGN                        ;Garante que o fim da se��o est� alinhada 
+    ALIGN                        ;Garante que o fim da secao est� alinhada 
     END                          ;Fim do arquivo

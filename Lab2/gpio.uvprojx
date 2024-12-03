@@ -415,6 +415,11 @@
               <FileType>2</FileType>
               <FilePath>.\multi_table.s</FilePath>
             </File>
+            <File>
+              <FileName>timers.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\timers.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

@@ -24,34 +24,32 @@ MULTI_HEAD	EQU 0x20000A00
 create_table
     LDR     R3, =MULTI_HEAD
     MOV     R1, #9
-    MOV     R2, #0
-    ;store_loop
+    MOV     R2, #9
 
 store_loop
     STRB    R2, [R3], #1
     SUBS    R1, R1, #1
     CMP     R1, #1
     BNE     store_loop
-    bx      LR
+    BX      LR
+
         
-; R0: Numero a alterar o fator multiplicativo
-; R1: Retorna o fator multiplicativo atualizado do numero
+; input R1 -> Numero a alterar o fator multiplicativo
+; Saida: R2 -> Retorna o fator multiplicativo atualizado do numero
 
 
 multi_table
     LDR     R3, =MULTI_HEAD
-    ;MULS    R0, R0, #4
-    LDRB    R1, [R3, R0]
-    CMP     R1, #9
-    BEQ     overflowHandler
-    ADDS    R1, R1, #1
-    STRB    R1, [R3, R0]
+    MOV     R4, #4
+    ;MULS    R1, R4
+    LDRB    R2, [R3, R1]
+    CMP     R2, #9
+    ITE    EQ
+        MOVEQ     R2, #0
+        ADDSNE    R2, R2, #1
+    STRB    R2, [R3, R1]
+    BX      LR 
 
-    LDR     R1, [R3]
-    bx      LR
-
-overflowHandler
-    MOV     R1, #0
 
     ALIGN
     END
