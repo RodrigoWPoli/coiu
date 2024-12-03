@@ -134,7 +134,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=71,-703,521,-146,0)(1007=105,137,292,412,0)(1008=90,121,466,357,0)(1009=582,-707,840,-119,0)(1012=-1,-1,-1,-1,0)</Name>
+          <Name>(1010=71,-703,521,-146,1)(1007=105,137,292,412,0)(1008=90,121,466,357,0)(1009=582,-707,840,-119,0)(1012=-1,-1,-1,-1,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -156,9 +156,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>494</LineNumber>
+          <LineNumber>514</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>1110</Address>
+          <Address>1134</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -167,14 +167,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\gpio.s</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\gpio\gpio.s\494</Expression>
+          <Expression>\\gpio\gpio.s\514</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>516</LineNumber>
+          <LineNumber>492</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>1138</Address>
+          <Address>1106</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -183,7 +183,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\gpio.s</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\gpio\gpio.s\516</Expression>
+          <Expression>\\gpio\gpio.s\492</Expression>
         </Bp>
       </Breakpoint>
       <MemoryWindow1>
@@ -236,6 +236,12 @@
       <pszMrulep></pszMrulep>
       <pSingCmdsp></pSingCmdsp>
       <pMultCmdsp></pMultCmdsp>
+      <SystemViewers>
+        <Entry>
+          <Name>System Viewer\TIMER0</Name>
+          <WinId>35905</WinId>
+        </Entry>
+      </SystemViewers>
     </TargetOption>
   </Target>
 

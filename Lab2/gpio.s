@@ -209,6 +209,7 @@ GPIO_PORTQ               	EQU    2_100000000000000
 
         
         IMPORT SysTick_Wait1us
+		IMPORT SysTick_Wait1ms
 									
 
 ;--------------------------------------------------------------------------------
@@ -468,15 +469,12 @@ LCD_Display_Character
             MOV     R1, #2_101
             STR     R1, [R0]
 
-            LDR     R0, =1
-            BL      SysTick_Wait1us
+            LDR     R2, =1
+            BL      SysTick_Wait1ms
             
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]
-
-            LDR     R0, =4
-            BL      SysTick_Wait1us
 
             POP {LR}
             BX LR

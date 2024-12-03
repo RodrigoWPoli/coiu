@@ -115,39 +115,40 @@ ARM Macro Assembler    Page 2
    73 00000014         ;POP  {R1}
    74 00000014         ;MULS  R3, R1, R2  ; oq q é isso aqui?
    75 00000014         
-   76 00000014 4806            LDR              R0, =Timer0A_Addr
+   76 00000014 4807            LDR              R0, =Timer0A_Addr
    77 00000016 6801            LDR              R1, [R0]
    78 00000018 2901            CMP              R1, #1
-   79 0000001A BF08            IT               EQ
-   80 0000001C F7FF FFFE       BLEQ             TecladoM_Poll
-   81 00000020 F04F 0200       MOV              R2, #0
-   82 00000024 6002            STR              R2, [R0]
-   83 00000026         
-   84 00000026 F101 0130       ADD              R1, R1, #2_00110000 ;Adiciona v
-                                                            alor para escrever 
-                                                            no display LCD (se 
-                                                            nenhuma tecla for p
-                                                            ressionada o simbol
+   79 0000001A D003            BEQ              update_data
+   80 0000001C F04F 0200       MOV              R2, #0
+   81 00000020 6002            STR              R2, [R0]
+   82 00000022         
+   83 00000022 E7F7            B                MainLoop    ;Volta para o laco 
+                                                            principal
+   84 00000024         
+   85 00000024         
+   86 00000024         update_data
+   87 00000024 F7FF FFFE       BL               TecladoM_Poll
 
 
 
 ARM Macro Assembler    Page 3 
 
 
+   88 00000028 F101 0130       ADD              R1, R1, #2_00110000 ;Adiciona v
+                                                            alor para escrever 
+                                                            no display LCD (se 
+                                                            nenhuma tecla for p
+                                                            ressionada o simbol
                                                             o @:01000000 sera m
                                                             ostrado)
-   85 0000002A F7FF FFFE       BL               LCD_Display_Character
-   86 0000002E         
-   87 0000002E         
-   88 0000002E         
-   89 0000002E E7F1            B                MainLoop    ;Volta para o laco 
-                                                            principal
+   89 0000002C F7FF FFFE       BL               LCD_Display_Character
    90 00000030         
-   91 00000030         
-   92 00000030                 ALIGN                        ;Garante que o fim 
+   91 00000030 E7F0            B                MainLoop
+   92 00000032         
+   93 00000032 00 00           ALIGN                        ;Garante que o fim 
                                                             da secao esta alinh
                                                             ada 
-   93 00000030                 END                          ;Fim do arquivo
+   94 00000034                 END                          ;Fim do arquivo
               20010000 
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\jhony\AppData\Local\Arm
@@ -189,8 +190,9 @@ Symbol: MainLoop
    Definitions
       At line 69 in file main.s
    Uses
-      At line 89 in file main.s
-Comment: MainLoop used once
+      At line 83 in file main.s
+      At line 91 in file main.s
+
 Start 00000000
 
 Symbol: Start
@@ -199,7 +201,15 @@ Symbol: Start
    Uses
       At line 33 in file main.s
 Comment: Start used once
-3 symbols
+update_data 00000024
+
+Symbol: update_data
+   Definitions
+      At line 86 in file main.s
+   Uses
+      At line 79 in file main.s
+Comment: update_data used once
+4 symbols
 
 
 
@@ -235,7 +245,7 @@ Symbol: LCD_Display_Character
    Definitions
       At line 51 in file main.s
    Uses
-      At line 85 in file main.s
+      At line 89 in file main.s
 Comment: LCD_Display_Character used once
 LCD_Init 00000000
 
@@ -289,7 +299,7 @@ External symbols
    Definitions
       At line 47 in file main.s
    Uses
-      At line 80 in file main.s
+      At line 87 in file main.s
 Comment: TecladoM_Poll used once
 Timer0A_Handler 00000000
 
@@ -324,4 +334,4 @@ Symbol: multi_table
       None
 Comment: multi_table unused
 12 symbols
-353 symbols in table
+354 symbols in table

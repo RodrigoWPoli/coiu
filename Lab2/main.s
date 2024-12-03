@@ -76,18 +76,19 @@ MainLoop
 	LDR     R0, =Timer0A_Addr
 	LDR     R1, [R0]
 	CMP     R1, #1
-	IT     	EQ
-	BLEQ	TecladoM_Poll
+	BEQ 	update_data
 	MOV 	R2, #0
 	STR     R2, [R0]
 
-	ADD 	R1, R1, #2_00110000		 ;Adiciona valor para escrever no display LCD (se nenhuma tecla for pressionada o simbolo @:01000000 sera mostrado)
-	BL 		LCD_Display_Character
-
-
-
 	B MainLoop                   ;Volta para o laco principal
 
+
+update_data
+	BL		TecladoM_Poll
+	ADD 	R1, R1, #2_00110000		 ;Adiciona valor para escrever no display LCD (se nenhuma tecla for pressionada o simbolo @:01000000 sera mostrado)
+	BL 		LCD_Display_Character
+	
+	B MainLoop
 
     ALIGN                        ;Garante que o fim da secao esta alinhada 
     END                          ;Fim do arquivo
