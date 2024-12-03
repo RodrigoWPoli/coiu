@@ -20,34 +20,41 @@ MULTI_HEAD	EQU 0x20000A00
 
         EXPORT  create_table
         EXPORT  multi_table
+        EXPORT  create_table
 
+; Funcao create_table
+; Configura o espaço de memória para armazenar os números da tabuada e dígito 'atual'
 create_table
     LDR     R3, =MULTI_HEAD
-    MOV     R1, #9
-    MOV     R2, #9
+    MOV     R1, #10              ; Qtd de numeros a serem armazenados + 1
+    MOV     R2, #9              ; Digito inicial armazenado
 
 store_loop
     STRB    R2, [R3], #1
     SUBS    R1, R1, #1
-    CMP     R1, #1
+    CMP     R1, #0
     BNE     store_loop
+
     BX      LR
 
-        
-; input R1 -> Numero a alterar o fator multiplicativo
-; Saida: R2 -> Retorna o fator multiplicativo atualizado do numero
-
-
+; Funcao multi_table
+; input: R1 -> Valor da tecla pressionada
+; Saida: R2 -> Fator multiplicativo atualizado do numero
 multi_table
-    LDR     R3, =MULTI_HEAD
-    MOV     R4, #4
-    ;MULS    R1, R4
-    LDRB    R2, [R3, R1]
-    CMP     R2, #9
-    ITE    EQ
-        MOVEQ     R2, #0
-        ADDSNE    R2, R2, #1
-    STRB    R2, [R3, R1]
+    LDR     R0, =MULTI_HEAD     
+    ADD     R0, R0, R1
+    LDRB    R2, [R0]            ; Carrega o valor atual da tabuada do dígito em R2
+    
+    ADD     R2, R2, #1          ; Incrementa o contador do dígito
+
+    CMP     R2, #9              ; Checa se o valor ultrapassa 9
+    IT      HI
+    MOVHI   R2, #0
+
+    STRB    R2, [R0]            ; Armazena o valor atualizado na memória
+    
+    MUL     R2, R2, R1          ; Multiplica o dígito pelo contador para determinar o resultado
+
     BX      LR 
 
 

@@ -13,6 +13,7 @@
 ; ========================
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
 Timer0A_Addr             EQU     0x20010000
+PREV_KEYPRESS            EQU     0x20020000
 
 ; -------------------------------------------------------------------------------
 ; Area de Dados - Declaracoes de variaveis
@@ -54,27 +55,20 @@ Timer0A_Addr             EQU     0x20010000
 ; -------------------------------------------------------------------------------
 ; Funcao main()
 Start  			
-	BL 	PLL_Init					 ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
+	BL 	PLL_Init					 ;Subrotina para alterar o clock do microcontrolador para 80MHz
 	BL 	SysTick_Init				 ;
-	BL 	GPIO_Init                 	 ;Chama a subrotina que inicializa os GPIO
-	BL 	LCD_Init                  	 ;Chama a subrotina que inicializa o LCD
-	BL 	Timer0A_Init              	 ;Chama a subrotina que inicializa o Timer0A
-	BL	Interrupt_Init
-	;BL 	create_table			 ;Chama a subrotina que cria a tabela de multiplicacao
+	BL 	GPIO_Init                 	 ;Subrotina que inicializa os GPIO
+	BL 	LCD_Init                  	 ;Subrotina que inicializa o LCD
+	BL 	Timer0A_Init              	 ;Subrotina que inicializa o Timer0A
+	BL	Interrupt_Init				 ;Subrotina que inicializa os Interrupts de GPIO
+	BL 	create_table				 ;Subrotina que cria a tabela de multiplicacao
 
 ; -------------------------------------------------------------------------------
 ; Laco principal
 ; R1 = valor da tecla pressionada
-; R2 = valor da tabela de multiplicacao
-; R3 = resultado da multiplicacao
+
 
 MainLoop
-	
-	;PUSH 	{R1}
-	;BL 		multi_table
-	;POP 	{R1}
-	;MULS 	R3, R1, R2 	; oq q é isso aqui?
-
 	LDR     R0, =Timer0A_Addr
 	LDR     R1, [R0]
 	CMP     R1, #1
@@ -86,9 +80,35 @@ MainLoop
 
 
 update_data
+	LDR     R0, =Timer0A_Addr
+	MOV 	R1, #0
+	STR 	R1, [R0]
+
 	BL		TecladoM_Poll
-	ADD 	R1, R1, #2_00110000		 ;Adiciona valor para escrever no display LCD (se nenhuma tecla for pressionada o simbolo @:01000000 sera mostrado)
-	BL 		LCD_Display_Character
+
+	LDR		R0, =PREV_KEYPRESS
+	LDR 	R2, [R0]
+	STR 	R1, [R0]
+	; PUSH 	{R1}
+	; BL 		LCD_Display_Character
+	; POP 	{R1}
+	CMP 	R2, #0x10			; Se a última tecla for nula pula
+	BEQ		skip
+
+	CMP 	R1, #0x10			; Detecta falling-edge da tecla
+	BNE 	skip 
+
+	AND 	R1, R2, #0x0F		 ; Filtra os 4 LSB de R1
+	CMP 	R1, #0x1			 ; Verifica se a tecla pressionada esta entre 1 e 9
+	BLO		skip
+	
+	CMP 	R1, #0x9
+	BHI		skip
+	
+	; R2 = resultado da multiplicacao
+	BL multi_table
+	
+skip
 	
 	B MainLoop
 

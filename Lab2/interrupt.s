@@ -202,6 +202,7 @@ NVIC_PRI28_R                    EQU     0xE000E470
         EXPORT GPIOPortJ_Handler
 									
         IMPORT SysTick_Wait1ms
+        IMPORT create_table
 ;--------------------------------------------------------------------------------
 ;=========================================
 ; Funcao Timer_Init
@@ -273,28 +274,15 @@ Interrupt_Init
 ;Parametro de entrada: nao tem
 ;Parametro de saida: nao tem
 GPIOPortJ_Handler
+        PUSH    {LR}
         LDR     R0, =GPIO_PORTJ_AHB_ICR_R                                               ;Carrega o endereco do ICR para o ack
         MOV     R1, #2_00000001                                                         ;Seta o bit 0 para ack
         STR     R1, [R0]                                                                ;Salva no registrador
 
-        LDR     R1, =GPIO_PORTA_AHB_DATA_R 		                                ; Teste para setar leds
-        MOV     R0, #2_11110000
-        STR     R0, [R1]
-        LDR     R1, =GPIO_PORTQ_DATA_R 		                                
-        MOV     R0, #2_00001111
-        STR     R0, [R1]                                
-        LDR     R1, =GPIO_PORTP_DATA_R 			
-		MOV     R0, #2_00100000					
-		STR     R0, [R1]				
-        MOV R2, #200
-        BL SysTick_Wait1ms
-        LDR     R1, =GPIO_PORTP_DATA_R 			
-		MOV     R0, #2_00000000					
-		STR     R0, [R1]                  
-        MOV R2, #100
-        BL SysTick_Wait1ms
-		
-		BX LR
+        BL      create_table
+        
+        POP     {LR}
+        BX      LR
 
 ;=========================================
 ; ******************************************************

@@ -195,6 +195,10 @@ GPIO_PORTQ_AMSEL_R          EQU     0x40066528
 GPIO_PORTQ_PCTL_R           EQU     0x4006652C
 GPIO_PORTQ               	EQU    2_100000000000000
 
+; ===========================================
+;~~~~~~~~~~~~ OUTRAS CONSTANTES ~~~~~~~~~~~~~
+TECLADO_PRESS_ADDR          EQU     0x20000B00
+
 
 ; -------------------------------------------------------------------------------
 ; Area de Codigo - Tudo abaixo da diretiva a seguir sera armazenado na memoria de 
@@ -484,7 +488,6 @@ LCD_Display_Character
 ; Retorna o digito da 1a tecla pressionada. Pinos L0-L3 sao entrada e M4-M7 sao saida.
 ; Saida: R1 -> Valor da tecla pressionada (0xF se nenhuma for pressionada)
 TecladoM_Poll
-            ; PUSH    {LR}
             MOV     R2, #2_10000000
             ;
 loop_columns
@@ -529,84 +532,86 @@ teclado_decode
             BEQ     decode_coluna_4
 
 decode_coluna_1
-            CMP     R1, #2_1000                                 ; Tecla * -> E
+            CMP     R1, #2_1000                                 ; Tecla *
             IT      EQ
-            MOVEQ   R1, #0xE
+            MOVEQ   R1, #2_00101010
 
             CMP     R1, #2_0100                                 ; Tecla 7
             IT      EQ
-            MOVEQ   R1, #0x7
+            MOVEQ   R1, #0x37
 
             CMP     R1, #2_0010                                 ; Tecla 4
             IT      EQ
-            MOVEQ   R1, #0x4
+            MOVEQ   R1, #0x34
 
             CMP     R1, #2_0001                                 ; Tecla 1
             IT      EQ
-            MOVEQ   R1, #0x1
+            MOVEQ   R1, #0x31
 
             B       teclado_retorno
 
 decode_coluna_2
             CMP     R1, #2_1000                                 ; Tecla 0
             IT      EQ
-            MOVEQ   R1, #0
+            MOVEQ   R1, #0x30
 
             CMP     R1, #2_0100                                 ; Tecla 8
             IT      EQ
-            MOVEQ   R1, #0x8
+            MOVEQ   R1, #0x38
 
             CMP     R1, #2_0010                                 ; Tecla 5
             IT      EQ
-            MOVEQ   R1, #0x5
+            MOVEQ   R1, #0x35
 
             CMP     R1, #2_0001                                 ; Tecla 2
             IT      EQ
-            MOVEQ   R1, #0x2
+            MOVEQ   R1, #0x32
 
             B       teclado_retorno
 
 decode_coluna_3
-            CMP     R1, #2_1000                                 ; Tecla # -> F
+            CMP     R1, #2_1000                                 ; Tecla #
             IT      EQ
-            MOVEQ   R1, #0xF
+            MOVEQ   R1, #2_00100011
 
             CMP     R1, #2_0100                                 ; Tecla 9
             IT      EQ
-            MOVEQ   R1, #0x9
+            MOVEQ   R1, #0x39
 
             CMP     R1, #2_0010                                 ; Tecla 6
             IT      EQ
-            MOVEQ   R1, #0x6
+            MOVEQ   R1, #0x36
 
             CMP     R1, #2_0001                                 ; Tecla 3
             IT      EQ
-            MOVEQ   R1, #0x3
+            MOVEQ   R1, #0x33
 
             B       teclado_retorno
 
 decode_coluna_4
             CMP     R1, #2_1000                                 ; Tecla D
             IT      EQ
-            MOVEQ   R1, #0xD
+            MOVEQ   R1, #2_01000100
 
             CMP     R1, #2_0100                                 ; Tecla C
             IT      EQ
-            MOVEQ   R1, #0xC
+            MOVEQ   R1, #2_01000011
 
             CMP     R1, #2_0010                                 ; Tecla B
             IT      EQ
-            MOVEQ   R1, #0xB
+            MOVEQ   R1, #2_01000010
 
             CMP     R1, #2_0001                                 ; Tecla A
             IT      EQ
-            MOVEQ   R1, #0xA
+            MOVEQ   R1, #2_01000001
 
             B       teclado_retorno
 
 teclado_retorno
+            LDR     R0, =TECLADO_PRESS_ADDR                     ; Sinala que um botão foi clicado
+            MOV     R2, #1
+            STR     R2, [R0]
 
-            ; POP     {LR}
             BX      LR       ; Retorno
 
 

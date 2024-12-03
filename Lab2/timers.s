@@ -27,6 +27,11 @@ TIMER0 		            EQU     2_00000001
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
 Timer0A_Addr             EQU     0x20010000
 
+GPIO_PORTA_AHB_DATA_R   	EQU    0x400583FC
+GPIO_PORTP_DATA_R           EQU    0x400653FC
+GPIO_PORTQ_DATA_R           EQU    0x400663FC
+
+
 ; -------------------------------------------------------------------------------
 ; Area de Codigo - Tudo abaixo da diretiva a seguir sera armazenado na memoria de 
 ;                  codigo
@@ -68,7 +73,7 @@ EsperaTIMER
             STR     R1, [R0]
 
             LDR     R0, =TIMER0_TAILR_R           ; Tempo calculado para 20ms
-            LDR     R1, =1599999                    
+            LDR     R1, =1600000                    
             STR     R1, [R0]
 
             LDR     R0, =TIMER0_TAPR_R            ; Configura o Prescaler 
@@ -109,6 +114,23 @@ Timer0A_Handler
             MOV     R1, #1
             STR     R1, [R0]
 
+            LDR     R1, =GPIO_PORTA_AHB_DATA_R 		                                ; Teste para setar leds
+            MOV     R0, #2_11110000
+            STR     R0, [R1]
+
+            LDR     R1, =GPIO_PORTQ_DATA_R 		                                
+            MOV     R0, #2_00001111
+            STR     R0, [R1]                                
+
+            LDR     R1, =GPIO_PORTP_DATA_R 			
+            LDR     R2, [R1]
+            CMP     R2, #2_00000000
+            ITE     EQ
+            MOVEQ   R0, #2_00100000					
+            MOVNE   R0, #2_00000000					    
+            STR     R0, [R1]				              
+
+            
             BX LR
 
             ALIGN                        ;Garante que o fim da secao esta alinhada 
