@@ -12,7 +12,7 @@
 ;<NOME>         EQU <VALOR>
 ; ========================
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
-Timer0A_Addr             EQU     0x60010000
+Timer0A_Addr             EQU     0x20010000
 
 ; -------------------------------------------------------------------------------
 ; Area de Dados - Declaracoes de variaveis
@@ -67,11 +67,20 @@ Start
 ; R3 = resultado da multiplicacao
 
 MainLoop
-	BL 		TecladoM_Poll
+	
 	;PUSH 	{R1}
 	;BL 		multi_table
 	;POP 	{R1}
 	;MULS 	R3, R1, R2 	; oq q é isso aqui?
+
+	LDR     R0, =Timer0A_Addr
+	LDR     R1, [R0]
+	CMP     R1, #1
+	IT     	EQ
+	BLEQ	TecladoM_Poll
+	MOV 	R2, #0
+	STR     R2, [R0]
+
 	ADD 	R1, R1, #2_00110000		 ;Adiciona valor para escrever no display LCD (se nenhuma tecla for pressionada o simbolo @:01000000 sera mostrado)
 	BL 		LCD_Display_Character
 

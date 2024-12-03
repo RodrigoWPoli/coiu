@@ -24,9 +24,9 @@ ARM Macro Assembler    Page 1
    12 00000000         ;<NOME>         EQU <VALOR>
    13 00000000         ; ========================
    14 00000000         ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
-   15 00000000 60010000 
+   15 00000000 20010000 
                        Timer0A_Addr
-                               EQU              0x60010000
+                               EQU              0x20010000
    16 00000000         
    17 00000000         ; ------------------------------------------------------
                        -------------------------
@@ -109,36 +109,46 @@ ARM Macro Assembler    Page 2
    67 00000014         ; R3 = resultado da multiplicacao
    68 00000014         
    69 00000014         MainLoop
-   70 00000014 F7FF FFFE       BL               TecladoM_Poll
-   71 00000018         ;PUSH  {R1}
-   72 00000018         ;BL   multi_table
-   73 00000018         ;POP  {R1}
-   74 00000018         ;MULS  R3, R1, R2  ; oq q é isso aqui?
-   75 00000018 F101 0130       ADD              R1, R1, #2_00110000 ;Adiciona v
+   70 00000014         
+   71 00000014         ;PUSH  {R1}
+   72 00000014         ;BL   multi_table
+   73 00000014         ;POP  {R1}
+   74 00000014         ;MULS  R3, R1, R2  ; oq q é isso aqui?
+   75 00000014         
+   76 00000014 4806            LDR              R0, =Timer0A_Addr
+   77 00000016 6801            LDR              R1, [R0]
+   78 00000018 2901            CMP              R1, #1
+   79 0000001A BF08            IT               EQ
+   80 0000001C F7FF FFFE       BLEQ             TecladoM_Poll
+   81 00000020 F04F 0200       MOV              R2, #0
+   82 00000024 6002            STR              R2, [R0]
+   83 00000026         
+   84 00000026 F101 0130       ADD              R1, R1, #2_00110000 ;Adiciona v
                                                             alor para escrever 
                                                             no display LCD (se 
                                                             nenhuma tecla for p
                                                             ressionada o simbol
-                                                            o @:01000000 sera m
-                                                            ostrado)
-   76 0000001C F7FF FFFE       BL               LCD_Display_Character
-   77 00000020         
-   78 00000020         
-   79 00000020         
-   80 00000020 E7F8            B                MainLoop    ;Volta para o laco 
-                                                            principal
-   81 00000022         
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-   82 00000022         
-   83 00000022 00 00           ALIGN                        ;Garante que o fim 
+                                                            o @:01000000 sera m
+                                                            ostrado)
+   85 0000002A F7FF FFFE       BL               LCD_Display_Character
+   86 0000002E         
+   87 0000002E         
+   88 0000002E         
+   89 0000002E E7F1            B                MainLoop    ;Volta para o laco 
+                                                            principal
+   90 00000030         
+   91 00000030         
+   92 00000030                 ALIGN                        ;Garante que o fim 
                                                             da secao esta alinh
                                                             ada 
-   84 00000024                 END                          ;Fim do arquivo
+   93 00000030                 END                          ;Fim do arquivo
+              20010000 
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\jhony\AppData\Local\Arm
 \Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1" -
@@ -179,7 +189,7 @@ Symbol: MainLoop
    Definitions
       At line 69 in file main.s
    Uses
-      At line 80 in file main.s
+      At line 89 in file main.s
 Comment: MainLoop used once
 Start 00000000
 
@@ -196,14 +206,14 @@ Comment: Start used once
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Absolute symbols
 
-Timer0A_Addr 60010000
+Timer0A_Addr 20010000
 
 Symbol: Timer0A_Addr
    Definitions
       At line 15 in file main.s
    Uses
-      None
-Comment: Timer0A_Addr unused
+      At line 76 in file main.s
+Comment: Timer0A_Addr used once
 1 symbol
 
 
@@ -225,7 +235,7 @@ Symbol: LCD_Display_Character
    Definitions
       At line 51 in file main.s
    Uses
-      At line 76 in file main.s
+      At line 85 in file main.s
 Comment: LCD_Display_Character used once
 LCD_Init 00000000
 
@@ -279,7 +289,7 @@ External symbols
    Definitions
       At line 47 in file main.s
    Uses
-      At line 70 in file main.s
+      At line 80 in file main.s
 Comment: TecladoM_Poll used once
 Timer0A_Handler 00000000
 
@@ -314,4 +324,4 @@ Symbol: multi_table
       None
 Comment: multi_table unused
 12 symbols
-351 symbols in table
+353 symbols in table

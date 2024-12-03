@@ -87,17 +87,17 @@ ARM Macro Assembler    Page 2
    40 00000000         ;-------------------------------------------------------
                        -------------------------
    41 00000000         Timer0A_Init
-   42 00000000 4828            LDR              R0, =SYSCTL_RCGCTIMER_R ; Seta 
+   42 00000000 4821            LDR              R0, =SYSCTL_RCGCTIMER_R ; Seta 
                                                             o timer 0 para ser 
                                                             usado
    43 00000002 F04F 0101       LDR              R1, =TIMER0
    44 00000006 6001            STR              R1, [R0]
    45 00000008         
-   46 00000008 4827            LDR              R0, =Timer0A_Addr
+   46 00000008 4820            LDR              R0, =Timer0A_Addr
    47 0000000A F04F 0100       MOV              R1, #0
    48 0000000E 6001            STR              R1, [R0]
    49 00000010         
-   50 00000010 4826            LDR              R0, =SYSCTL_PRTIMER_R
+   50 00000010 481F            LDR              R0, =SYSCTL_PRTIMER_R
    51 00000012         EsperaTIMER
    52 00000012 6801            LDR              R1, [R0]
    53 00000014 F04F 0201       LDR              R2, =TIMER0
@@ -105,28 +105,28 @@ ARM Macro Assembler    Page 2
    55 0000001A D0FA            BEQ              EsperaTIMER
    56 0000001C         
    57 0000001C         
-   58 0000001C 4824            LDR              R0, =TIMER0_CTL_R ; Desabilita 
+   58 0000001C 481D            LDR              R0, =TIMER0_CTL_R ; Desabilita 
                                                             o timer 0
    59 0000001E F04F 0100       MOV              R1, #0
    60 00000022 6001            STR              R1, [R0]
    61 00000024         
-   62 00000024 4823            LDR              R0, =TIMER0_CFG_R ; Configura o
+   62 00000024 481C            LDR              R0, =TIMER0_CFG_R ; Configura o
                                                              modo de 32 bits
    63 00000026 F04F 0100       MOV              R1, #0x0
    64 0000002A 6001            STR              R1, [R0]
    65 0000002C         
-   66 0000002C 4822            LDR              R0, =TIMER0_TAMR_R ; Define o m
+   66 0000002C 481B            LDR              R0, =TIMER0_TAMR_R ; Define o m
                                                             odo one-shot=0x01 o
                                                             u periódico=0x02
    67 0000002E F04F 0102       MOV              R1, #0x2
    68 00000032 6001            STR              R1, [R0]
    69 00000034         
-   70 00000034 4821            LDR              R0, =TIMER0_TAILR_R ; Tempo cal
+   70 00000034 481A            LDR              R0, =TIMER0_TAILR_R ; Tempo cal
                                                             culado para 20ms
-   71 00000036 4922            LDR              R1, =55999999
+   71 00000036 491B            LDR              R1, =1599999
    72 00000038 6001            STR              R1, [R0]
    73 0000003A         
-   74 0000003A 4822            LDR              R0, =TIMER0_TAPR_R ; Configura 
+   74 0000003A 481B            LDR              R0, =TIMER0_TAPR_R ; Configura 
                                                             o Prescaler 
 
 
@@ -138,14 +138,14 @@ ARM Macro Assembler    Page 3
                                                             do
    76 00000040 6001            STR              R1, [R0]
    77 00000042         
-   78 00000042 4821            LDR              R0, =TIMER0_ICR_R ; Garante que
+   78 00000042 481A            LDR              R0, =TIMER0_ICR_R ; Garante que
                                                              a primeira interru
                                                             pcao sera atendida 
                                                             (?)
    79 00000044 F04F 0101       MOV              R1, #1
    80 00000048 6001            STR              R1, [R0]
    81 0000004A         
-   82 0000004A 4820            LDR              R0, =TIMER0_IMR_R ; Utiliza a i
+   82 0000004A 4819            LDR              R0, =TIMER0_IMR_R ; Utiliza a i
                                                             nterrupcao para est
                                                             ouro do timer
    83 0000004C F04F 0101       MOV              R1, #1
@@ -155,7 +155,7 @@ ARM Macro Assembler    Page 3
                                                             idade da interrupca
                                                             o do timer
    87 00000056 EA4F 7040       LSL              R0, R0, #29
-   88 0000005A 491D            LDR              R1, =TIMER0_A_NVIC_PRIO_R
+   88 0000005A 4916            LDR              R1, =TIMER0_A_NVIC_PRIO_R
    89 0000005C 6008            STR              R0, [R1]
    90 0000005E         
    91 0000005E F04F 0001       MOV              R0, #1      ; Habilita a interr
@@ -163,10 +163,10 @@ ARM Macro Assembler    Page 3
                                                             o NVIC Enable Regis
                                                             ter
    92 00000062 EA4F 40C0       LSL              R0, R0, #TIMER0_A_NVIC_INT_NUM
-   93 00000066 491B            LDR              R1, =TIMER0_A_NVIC_EN_R
+   93 00000066 4914            LDR              R1, =TIMER0_A_NVIC_EN_R
    94 00000068 6008            STR              R0, [R1]
    95 0000006A         
-   96 0000006A 4811            LDR              R0, =TIMER0_CTL_R ; Habilita o 
+   96 0000006A 480A            LDR              R0, =TIMER0_CTL_R ; Habilita o 
                                                             timer 0
    97 0000006C F04F 0101       MOV              R1, #1
    98 00000070 6001            STR              R1, [R0]
@@ -175,71 +175,40 @@ ARM Macro Assembler    Page 3
   101 00000074         
   102 00000074         
   103 00000074         Timer0A_Handler
-  104 00000074 4814            LDR              R0, =TIMER0_ICR_R ; Limpa o bit
+  104 00000074 480D            LDR              R0, =TIMER0_ICR_R ; Limpa o bit
                                                              da interrupcao
   105 00000076 F04F 0101       MOV              R1, #1
   106 0000007A 6001            STR              R1, [R0]
   107 0000007C         
-  108 0000007C 4916            LDR              R1, =0x400583FC ; Le o endereç
-                                                            o do data
-  109 0000007E 680A            LDR              R2, [R1]
-  110 00000080 2AF0            CMP              R2, #2_11110000
-  111 00000082 BF0C            ITE              EQ
-  112 00000084 2000            MOVEQ            R0, #2_00000000 ; Seta todos os
-                                                             valores poss�vei
-                                                            s de led
-  113 00000086 20F0            MOVNE            R0, #2_11110000 ; Seta todos os
-                                                             valores poss�vei
-                                                            s de led
-  114 00000088 6008            STR              R0, [R1]    ; Escreve na porta 
-                                                            o novo valor
+  108 0000007C 4803            LDR              R0, =Timer0A_Addr
+  109 0000007E F04F 0101       MOV              R1, #1
+  110 00000082 6001            STR              R1, [R0]
+  111 00000084         
+  112 00000084 4770            BX               LR
+  113 00000086         
+  114 00000086 00 00           ALIGN                        ;Garante que o fim 
+                                                            da secao esta alinh
+                                                            ada 
+  115 00000088                 END                          ;Fim do arquivo
+              400FE604 
+              20010000 
+              400FEA04 
 
 
 
 ARM Macro Assembler    Page 4 
 
 
-  115 0000008A         
-  116 0000008A 4914            LDR              R1, =0x400663FC ; Le o endereç
-                                                            o do data
-  117 0000008C F04F 000F       MOV              R0, #2_00001111 ; Seta todos os
-                                                             valores poss�vei
-                                                            s de led
-  118 00000090 6008            STR              R0, [R1]    ; Escreve na porta 
-                                                            o novo valor
-  119 00000092         
-  120 00000092 4913            LDR              R1, =0x400653FC ; Le o endereç
-                                                            o do data
-  121 00000094 F04F 0320       MOV              R3, #2_00100000 ; Ativa o DS2
-  122 00000098 600B            STR              R3, [R1]    ; Escreve na porta 
-                                                            o novo valor
-  123 0000009A         
-  124 0000009A 4903            LDR              R1, =Timer0A_Addr
-  125 0000009C F04F 0001       MOV              R0, #1
-  126 000000A0 6008            STR              R0, [R1]
-  127 000000A2         
-  128 000000A2 4770            BX               LR
-  129 000000A4         
-  130 000000A4                 ALIGN                        ;Garante que o fim 
-                                                            da secao esta alinh
-                                                            ada 
-  131 000000A4                 END                          ;Fim do arquivo
-              400FE604 
-              20010000 
-              400FEA04 
               4003000C 
               40030000 
               40030004 
               40030028 
-              03567DFF 
+              001869FF 
               40030038 
               40030024 
               40030018 
               E000E410 
               E000E100 
-              400583FC 
-              400663FC 
-              400653FC 
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\timers.d -o.\objects\timers.o -IC:\Users\jhony\AppData\Local
 \Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 
@@ -410,7 +379,7 @@ Symbol: Timer0A_Addr
       At line 28 in file timers.s
    Uses
       At line 46 in file timers.s
-      At line 124 in file timers.s
+      At line 108 in file timers.s
 
 14 symbols
 354 symbols in table

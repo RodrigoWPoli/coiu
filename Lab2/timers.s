@@ -68,7 +68,7 @@ EsperaTIMER
             STR     R1, [R0]
 
             LDR     R0, =TIMER0_TAILR_R           ; Tempo calculado para 20ms
-            LDR     R1, =55999999                    
+            LDR     R1, =1599999                    
             STR     R1, [R0]
 
             LDR     R0, =TIMER0_TAPR_R            ; Configura o Prescaler 
@@ -105,25 +105,9 @@ Timer0A_Handler
             MOV     R1, #1
             STR     R1, [R0]
 
-            LDR     R1, =0x400583FC 		        ; Le o endereço do data
-            LDR     R2, [R1]
-            CMP     R2, #2_11110000
-            ITE     EQ
-            MOVEQ   R0, #2_00000000					; Seta todos os valores poss�veis de led
-            MOVNE   R0, #2_11110000					; Seta todos os valores poss�veis de led
-            STR     R0, [R1]						; Escreve na porta o novo valor
-       
-            LDR     R1, =0x400663FC 		        ; Le o endereço do data
-            MOV     R0, #2_00001111					; Seta todos os valores poss�veis de led
-            STR     R0, [R1]						; Escreve na porta o novo valor
-
-            LDR     R1, =0x400653FC 			    ; Le o endereço do data
-            MOV     R3, #2_00100000					; Ativa o DS2
-            STR     R3, [R1]						; Escreve na porta o novo valor
-
-            LDR     R1, =Timer0A_Addr
-            MOV     R0, #1
-            STR     R0, [R1]
+            LDR     R0, =Timer0A_Addr
+            MOV     R1, #1
+            STR     R1, [R0]
 
             BX LR
 
