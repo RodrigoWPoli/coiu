@@ -25,7 +25,7 @@ TIMER0_TAPR_R           EQU     0x40030038
 TIMER0 		            EQU     2_00000001
 
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
-Timer0A_Addr             EQU     0x60010000
+Timer0A_Addr             EQU     0x20010000
 
 ; -------------------------------------------------------------------------------
 ; Area de Codigo - Tudo abaixo da diretiva a seguir sera armazenado na memoria de 
@@ -42,6 +42,10 @@ Timer0A_Init
             LDR     R0, =SYSCTL_RCGCTIMER_R             ; Seta o timer 0 para ser usado
             LDR     R1, =TIMER0
             STR     R1, [R0]
+            
+            LDR     R0, =Timer0A_Addr
+            MOV     R1, #0
+            STR     R1, [R0]
 
             LDR     R0, =SYSCTL_PRTIMER_R
 EsperaTIMER
@@ -55,16 +59,16 @@ EsperaTIMER
             MOV     R1, #0
             STR     R1, [R0]
 
-            LDR     R0, =TIMER0_CFG_R             ; Configura o modo de 16 bits
+            LDR     R0, =TIMER0_CFG_R             ; Configura o modo de 32 bits
             MOV     R1, #0x0
             STR     R1, [R0]
 
-            LDR     R0, =TIMER0_TAMR_R            ; Define o modo periodico
+            LDR     R0, =TIMER0_TAMR_R            ; Define o modo one-shot=0x01 ou periódico=0x02
             MOV     R1, #0x2
             STR     R1, [R0]
 
             LDR     R0, =TIMER0_TAILR_R           ; Tempo calculado para 20ms
-            LDR     R1, =1599999                    
+            LDR     R1, =55999999                    
             STR     R1, [R0]
 
             LDR     R0, =TIMER0_TAPR_R            ; Configura o Prescaler 
@@ -101,12 +105,27 @@ Timer0A_Handler
             MOV     R1, #1
             STR     R1, [R0]
 
-            ; LDR     R0, =Timer0A_Addr
-            ; MOV     R1, #1
-            ; STR     R1, [R0]
+            LDR     R1, =0x400583FC 		        ; Le o endereço do data
+            LDR     R2, [R1]
+            CMP     R2, #2_11110000
+            ITE     EQ
+            MOVEQ   R0, #2_00000000					; Seta todos os valores poss�veis de led
+            MOVNE   R0, #2_11110000					; Seta todos os valores poss�veis de led
+            STR     R0, [R1]						; Escreve na porta o novo valor
+       
+            LDR     R1, =0x400663FC 		        ; Le o endereço do data
+            MOV     R0, #2_00001111					; Seta todos os valores poss�veis de led
+            STR     R0, [R1]						; Escreve na porta o novo valor
+
+            LDR     R1, =0x400653FC 			    ; Le o endereço do data
+            MOV     R3, #2_00100000					; Ativa o DS2
+            STR     R3, [R1]						; Escreve na porta o novo valor
+
+            LDR     R1, =Timer0A_Addr
+            MOV     R0, #1
+            STR     R0, [R1]
 
             BX LR
-
 
             ALIGN                        ;Garante que o fim da secao esta alinhada 
             END                          ;Fim do arquivo

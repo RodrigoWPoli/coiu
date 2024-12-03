@@ -468,14 +468,14 @@ LCD_Display_Character
             MOV     R1, #2_101
             STR     R1, [R0]
 
-            LDR     R0, =10
+            LDR     R0, =1
             BL      SysTick_Wait1us
             
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]
 
-            LDR     R0, =40
+            LDR     R0, =4
             BL      SysTick_Wait1us
 
             POP {LR}
@@ -486,7 +486,7 @@ LCD_Display_Character
 ; Retorna o digito da 1a tecla pressionada. Pinos L0-L3 sao entrada e M4-M7 sao saida.
 ; Saida: R1 -> Valor da tecla pressionada (0xF se nenhuma for pressionada)
 TecladoM_Poll
-            PUSH    {LR}
+            ; PUSH    {LR}
             MOV     R2, #2_10000000
             ;
 loop_columns
@@ -608,7 +608,7 @@ decode_coluna_4
 
 teclado_retorno
 
-            POP     {LR}
+            ; POP     {LR}
             BX      LR       ; Retorno
 
 

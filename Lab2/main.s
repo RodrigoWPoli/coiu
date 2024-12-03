@@ -72,8 +72,8 @@ MainLoop
 	;BL 		multi_table
 	;POP 	{R1}
 	;MULS 	R3, R1, R2 	; oq q é isso aqui?
-	;ADD 	R1, R1, #2_00110000		 ;Adiciona valor para escrever no display LCD (se nenhuma tecla for pressionada o simbolo @:01000000 sera mostrado)
-	;BL 		LCD_Display_Character
+	ADD 	R1, R1, #2_00110000		 ;Adiciona valor para escrever no display LCD (se nenhuma tecla for pressionada o simbolo @:01000000 sera mostrado)
+	BL 		LCD_Display_Character
 
 
 

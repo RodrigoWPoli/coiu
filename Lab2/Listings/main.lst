@@ -114,27 +114,31 @@ ARM Macro Assembler    Page 2
    72 00000018         ;BL   multi_table
    73 00000018         ;POP  {R1}
    74 00000018         ;MULS  R3, R1, R2  ; oq q é isso aqui?
-   75 00000018         ;ADD  R1, R1, #2_00110000   ;Adiciona valor para escreve
-                       r no display LCD (se nenhuma tecla for pressionada o sim
-                       bolo @:01000000 sera mostrado)
-   76 00000018         ;BL   LCD_Display_Character
-   77 00000018         
-   78 00000018         
-   79 00000018         
-   80 00000018 E7FC            B                MainLoop    ;Volta para o laco 
+   75 00000018 F101 0130       ADD              R1, R1, #2_00110000 ;Adiciona v
+                                                            alor para escrever 
+                                                            no display LCD (se 
+                                                            nenhuma tecla for p
+                                                            ressionada o simbol
+                                                            o @:01000000 sera m
+                                                            ostrado)
+   76 0000001C F7FF FFFE       BL               LCD_Display_Character
+   77 00000020         
+   78 00000020         
+   79 00000020         
+   80 00000020 E7F8            B                MainLoop    ;Volta para o laco 
                                                             principal
-   81 0000001A         
-   82 0000001A         
-   83 0000001A 00 00           ALIGN                        ;Garante que o fim 
-                                                            da secao esta alinh
-                                                            ada 
+   81 00000022         
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-   84 0000001C                 END                          ;Fim do arquivo
+   82 00000022         
+   83 00000022 00 00           ALIGN                        ;Garante que o fim 
+                                                            da secao esta alinh
+                                                            ada 
+   84 00000024                 END                          ;Fim do arquivo
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\jhony\AppData\Local\Arm
 \Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1" -
@@ -221,8 +225,8 @@ Symbol: LCD_Display_Character
    Definitions
       At line 51 in file main.s
    Uses
-      None
-Comment: LCD_Display_Character unused
+      At line 76 in file main.s
+Comment: LCD_Display_Character used once
 LCD_Init 00000000
 
 Symbol: LCD_Init
