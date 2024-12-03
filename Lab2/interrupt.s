@@ -264,6 +264,8 @@ Interrupt_Init
         LSL     R1, #29                                                                 ;Deslocar 29 bits para ir pro ultimo byte do PRI12
         LDR     R0, =NVIC_PRI12_R                                                       ;Carrega o endereco do PRI12
         STR     R1, [R0]                                                                ;Seta no registrador
+		
+		BX LR
 ;=========================================
 ; ******************************************************
 
@@ -282,15 +284,17 @@ GPIOPortJ_Handler
         MOV     R0, #2_00001111
         STR     R0, [R1]                                
         LDR     R1, =GPIO_PORTP_DATA_R 			
-	MOV     R0, #2_00100000					
-	STR     R0, [R1]				
+		MOV     R0, #2_00100000					
+		STR     R0, [R1]				
         MOV R2, #200
         BL SysTick_Wait1ms
         LDR     R1, =GPIO_PORTP_DATA_R 			
-	MOV     R0, #2_00000000					
-	STR     R0, [R1]                  
+		MOV     R0, #2_00000000					
+		STR     R0, [R1]                  
         MOV R2, #100
         BL SysTick_Wait1ms
+		
+		BX LR
 
 ;=========================================
 ; ******************************************************

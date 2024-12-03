@@ -123,7 +123,7 @@ ARM Macro Assembler    Page 2
    69 00000034         
    70 00000034 481A            LDR              R0, =TIMER0_TAILR_R ; Tempo cal
                                                             culado para 20ms
-   71 00000036 491B            LDR              R1, =159999999
+   71 00000036 491B            LDR              R1, =1599999
    72 00000038 6001            STR              R1, [R0]
    73 0000003A         
    74 0000003A 481B            LDR              R0, =TIMER0_TAPR_R ; Configura 
@@ -203,7 +203,7 @@ ARM Macro Assembler    Page 4
               40030000 
               40030004 
               40030028 
-              098967FF 
+              001869FF 
               40030038 
               40030024 
               40030018 

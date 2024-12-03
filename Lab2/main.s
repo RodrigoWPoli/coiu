@@ -43,11 +43,12 @@ Timer0A_Addr             EQU     0x20010000
 		IMPORT	GPIO_Init
 		IMPORT	LCD_Init
 		IMPORT  Timer0A_Init
+		IMPORT	Interrupt_Init
 
 		IMPORT	TecladoM_Poll
 		IMPORT  create_table
 		IMPORT  multi_table
-        IMPORT Timer0A_Handler
+        IMPORT 	Timer0A_Handler
 		IMPORT	LCD_Display_Character
 
 ; -------------------------------------------------------------------------------
@@ -58,6 +59,7 @@ Start
 	BL 	GPIO_Init                 	 ;Chama a subrotina que inicializa os GPIO
 	BL 	LCD_Init                  	 ;Chama a subrotina que inicializa o LCD
 	BL 	Timer0A_Init              	 ;Chama a subrotina que inicializa o Timer0A
+	BL	Interrupt_Init
 	;BL 	create_table			 ;Chama a subrotina que cria a tabela de multiplicacao
 
 ; -------------------------------------------------------------------------------
