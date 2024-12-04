@@ -9,15 +9,12 @@
 ; -------------------------------------------------------------------------------
 ; Declaracoes EQU - Defines
 ; ========================
+GPIO_PORTK_DATA_R           EQU     0x400613FC
+GPIO_PORTM_DATA_R           EQU     0x400633FC
+
 
 ; ================== DEFINICAO DA TABELA ===================
 
-char_T              EQU 2_01010100
-char_a              EQU 2_01100001
-char_b              EQU 2_01100010
-char_u              EQU 2_01110101
-char_d              EQU 2_01100100
-char_o              EQU 2_01101111
 char_0              EQU 2_00110000
 char_1              EQU 2_00110001
 char_2              EQU 2_00110010
@@ -29,16 +26,31 @@ char_7              EQU 2_00110111
 char_8              EQU 2_00111000
 char_9              EQU 2_00111001
 char_equal          EQU 2_00111101
+char_T              EQU 2_01010100
 char_X              EQU 2_01011000
 char_x              EQU 2_01111000
 char_cdot           EQU 2_10100101
+char_P              EQU 2_01010000
 char_R              EQU 2_01010010
 char_e              EQU 2_01100101
+char_i              EQU 2_01101001
+char_r              EQU 2_01110010
 char_s              EQU 2_01110011
 char_t              EQU 2_01110100
 char_n              EQU 2_01101110
+char_o              EQU 2_01101111
+char_u              EQU 2_01110101
+char_m              EQU 2_01101101
+char_a              EQU 2_01100001
+char_b              EQU 2_01100010
+char_d              EQU 2_01100100
+char_c              EQU 2_01100011
+char_l              EQU 2_01101100
 char_dot            EQU 2_00101110
 char_space          EQU 2_00100000
+char_dois_pontos    EQU 2_00111010
+char_parenteses_dir EQU 2_00101001
+
 	
 CURR_KEY	    	EQU	0x20020004
 MULTI_HEAD	    	EQU 0x20000A00
@@ -54,6 +66,9 @@ MULTI_HEAD	    	EQU 0x20000A00
 
         IMPORT LCD_Display_Character
         IMPORT LCD_Reset
+		IMPORT SysTick_Wait1ms
+		IMPORT SysTick_Wait1us
+		IMPORT LCD_go_to_second_line
 
 ; ------------------------------------------------------------------------------
 ; Funcao create_first_row
@@ -193,19 +208,12 @@ create_reset_row
         LDR     R1, =char_d
         BL      LCD_Display_Character 
         LDR     R1, =char_o
-        BL      LCD_Display_Character 
-;        LDR     R1, =char_dot
-;        BL      LCD_Display_Character
-;        LDR     R1, =char_dot
-;        BL      LCD_Display_Character
-;        LDR     R1, =char_dot
-;        BL      LCD_Display_Character
-    
+        BL      LCD_Display_Character     
 
         ; ... piscando
         MOV    R9, #0                               ;quantidade de iteracoes geral
 blink_loop  
-        CMP    R9, #3                               ;Enquanto nao fizer x vezes, nao finaliza
+        CMP    R9, #5                               ;Enquanto nao fizer x vezes, nao finaliza
         BEQ    display_resetado
 
 display_dots
@@ -213,76 +221,144 @@ display_dots
 
         LDR    R1, =char_dot
         BL     LCD_Display_Character                
-        MOV    R2, #100
+        MOV    R2, #150
         BL     SysTick_Wait1ms                      ;Mostra primeiro ponto e espera um pouco
         LDR    R1, =char_dot
         BL     LCD_Display_Character                
-        MOV    R2, #100
+        MOV    R2, #150
         BL     SysTick_Wait1ms                      ;Mostra segundo ponto e espera um pouco
         LDR    R1, =char_dot
         BL     LCD_Display_Character                
-        MOV    R2, #100
+        MOV    R2, #150
         BL     SysTick_Wait1ms                      ;Mostra terceiro ponto e espera um pouco
 
 
 LCD_Clear_Tail                                      ;limpa os 3 pontos finais
 
-            MOV     R8, #0                          ;contador de iteracoes de espacos
-            MOV     R7, #0                          ;contador de iteracoes de left shift
+		MOV     R8, #0                          ;contador de iteracoes de espacos
+		MOV     R7, #0                          ;contador de iteracoes de left shift
+
 cursor_shift_left                                   ;Volta os 3 dígitos para esquerda
-            LDR     R0, =GPIO_PORTK_DATA_R          
-            MOV     R1, #2_10000
-            STR     R1, [R0]
+		LDR     R0, =GPIO_PORTK_DATA_R          
+		MOV     R1, #2_10000
+		STR     R1, [R0]
 
-            LDR     R0, =GPIO_PORTM_DATA_R
-            MOV     R1, #2_100
-            STR     R1, [R0]
+		LDR     R0, =GPIO_PORTM_DATA_R
+		MOV     R1, #2_100
+		STR     R1, [R0]
 
-            MOV     R0, #2
-            BL      SysTick_Wait1us
+		MOV     R0, #2
+		BL      SysTick_Wait1us
 
-            LDR     R0, =GPIO_PORTM_DATA_R
-            MOV     R1, #0x00
-            STR     R1, [R0]
+		LDR     R0, =GPIO_PORTM_DATA_R
+		MOV     R1, #0x00
+		STR     R1, [R0]
+		
+		MOV     R0, #2
+		BL      SysTick_Wait1us
 
-            ADD     R8, #1
-            CMP     R8, #3
-            BNE     cursor_shift_left
+		ADD     R8, #1
+		CMP     R8, #3
+		BNE     cursor_shift_left
+		
 
 display_spaces                                      ;Mostra 3 espaços caso ja nao tenha mostrado
-            CMP     R7, #1
-            BEQ     blink_loop                      ;Se nao voltou depois do espaco, volta. Se voltou, printa pontos dnv ou sai do loop
+		LDR    R1, =char_space
+		BL     LCD_Display_Character                
+		LDR    R1, =char_space
+		BL     LCD_Display_Character                
+		LDR    R1, =char_space
+		BL     LCD_Display_Character
 
-            LDR    R1, =char_space
-            BL     LCD_Display_Character                
-            LDR    R1, =char_space
-            BL     LCD_Display_Character                
-            LDR    R1, =char_space
-            BL     LCD_Display_Character                
-            
-            ADD    R7, #1                           ;Se for primeira vez mostrando espaços, seta a flag
+		MOV    R2, #150
+		BL     SysTick_Wait1ms 
+		
+		MOV     R8, #0
+cursor_shift_left2
+		LDR     R0, =GPIO_PORTK_DATA_R          
+		MOV     R1, #2_10000
+		STR     R1, [R0]
+
+		LDR     R0, =GPIO_PORTM_DATA_R
+		MOV     R1, #2_100
+		STR     R1, [R0]
+
+		MOV     R0, #2
+		BL      SysTick_Wait1us
+
+		LDR     R0, =GPIO_PORTM_DATA_R
+		MOV     R1, #0x00
+		STR     R1, [R0]
+		
+		MOV     R0, #2
+		BL      SysTick_Wait1us
+
+		ADD     R8, #1
+		CMP     R8, #3
+		BNE     cursor_shift_left2
+		
+		B     blink_loop                      ;Se nao voltou depois do espaco, volta. Se voltou, printa pontos dnv ou sai do loop
+			
 display_resetado
 
         BL      LCD_Reset
 
         ; Resetado
-        LDR     R1, =char_R
+        LDR     R1, =char_P
+        BL      LCD_Display_Character 
+        LDR     R1, =char_r
         BL      LCD_Display_Character 
         LDR     R1, =char_e
         BL      LCD_Display_Character 
         LDR     R1, =char_s
         BL      LCD_Display_Character 
-        LDR     R1, =char_e
+        LDR     R1, =char_s
         BL      LCD_Display_Character 
-        LDR     R1, =char_t
-        BL      LCD_Display_Character 
-        LDR     R1, =char_a
-        BL      LCD_Display_Character 
-        LDR     R1, =char_d
+        LDR     R1, =char_i
         BL      LCD_Display_Character 
         LDR     R1, =char_o
         BL      LCD_Display_Character 
+        LDR     R1, =char_n
+        BL      LCD_Display_Character 
+		LDR     R1, =char_e
+        BL      LCD_Display_Character
+		
+		LDR     R1, =char_space
+        BL      LCD_Display_Character 
+		
+		LDR     R1, =char_u
+        BL      LCD_Display_Character 
+		LDR     R1, =char_m
+        BL      LCD_Display_Character 
+		LDR     R1, =char_a
+        BL      LCD_Display_Character 
         
+		BL 		LCD_go_to_second_line
+		
+		LDR     R1, =char_t
+        BL      LCD_Display_Character 
+		LDR     R1, =char_e
+        BL      LCD_Display_Character 
+		LDR     R1, =char_c
+        BL      LCD_Display_Character 
+		LDR     R1, =char_l
+        BL      LCD_Display_Character 
+		LDR     R1, =char_a
+        BL      LCD_Display_Character 
+		LDR     R1, =char_dot
+        BL      LCD_Display_Character 
+		
+		LDR     R1, =char_space
+        BL      LCD_Display_Character 
+		
+		LDR     R1, =char_dois_pontos
+        BL      LCD_Display_Character
+
+		LDR     R1, =char_parenteses_dir
+        BL      LCD_Display_Character 
+		
+		
+		
         POP     {LR} 
         BX      LR
 
