@@ -30,6 +30,8 @@ char_8              EQU 2_00111000
 char_9              EQU 2_00111001
 char_equal          EQU 2_00111101
 char_X              EQU 2_01011000
+char_x              EQU 2_01111000
+char_cdot           EQU 2_10100101
 char_R              EQU 2_01010010
 char_e              EQU 2_01100101
 char_s              EQU 2_01110011
@@ -102,13 +104,14 @@ create_first_row
 create_second_row
         PUSH    {LR}
 
-        LDR 	R0, =CURR_KEY
+        LDR 	R0, =CURR_KEY		; Recupera o valor da tecla atual
         LDR 	R1, [R0]
         ORR     R1, R1, #0x30
+		
         BL      LCD_Display_Character
         LDR     R1, =char_space
         BL      LCD_Display_Character
-        LDR     R1, =char_X
+        LDR     R1, =char_x
         BL      LCD_Display_Character
         LDR     R1, =char_space
         BL      LCD_Display_Character
@@ -116,10 +119,13 @@ create_second_row
 		LDR 	R0, =CURR_KEY
         LDR 	R1, [R0]
 		
-        LDR 	R0, =MULTI_HEAD
+        LDR 	R0, =MULTI_HEAD			; Recupera o fator multiplicativo da memória
 		ADD     R0, R0, R1
-        LDR 	R1, [R0]
-        ORR     R1, R1, #0x30
+        LDR 	R2, [R0]
+		
+		MUL 	R3, R2, R1
+		
+        ORR     R1, R2, #0x30
         BL      LCD_Display_Character
         LDR     R1, =char_space
         BL      LCD_Display_Character
@@ -128,8 +134,31 @@ create_second_row
         LDR     R1, =char_space
         BL      LCD_Display_Character
         
-		MOV     R1, R3
-        ORR     R1, R1, #0x30
+		MOV 	R1, R3
+		AND 	R1, R1, #0xFF
+		CMP 	R1, #10
+		BLO 	single_dig
+		
+		MOV 	R4, #1
+		MOV		R2, #10
+loop_2nd_dig
+		ADD 	R4, R4, #1
+		MUL 	R5, R4, R2
+		CMP 	R1, R5
+		BHS 	loop_2nd_dig
+		
+		SUB 	R1, R4, #1
+		PUSH 	{R1}
+		ORR     R1, R1, #0x30
+        BL      LCD_Display_Character
+		POP 	{R1}
+		MOV		R2, #10
+		MUL 	R4, R1, R2
+		MOV 	R1, R3
+		SUB 	R1, R1, R4
+
+single_dig
+		ORR     R1, R1, #0x30
         BL      LCD_Display_Character
 
         POP     {LR}

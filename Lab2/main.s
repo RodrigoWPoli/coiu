@@ -136,11 +136,6 @@ update_data_timer0
 
 	; R2 = fator da multiplicacao
 	BL 		multi_table
-
-	LDR 	R0, =CURR_KEY
-    LDR 	R1, [R0]
-	
-	MUL 	R3, R2, R1
 	BL		create_second_row
 
 	B 		skip

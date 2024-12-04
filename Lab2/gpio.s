@@ -482,6 +482,9 @@ LCD_Display_Character
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]
+			
+			LDR     R2, =1
+            BL      SysTick_Wait1ms
 
             POP     {LR}
             BX      LR
@@ -550,10 +553,16 @@ LCD_Reset
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #2_100
             STR     R1, [R0]
+			
+			MOV     R2, #1
+            BL      SysTick_Wait1ms
 
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]
+			
+			MOV     R2, #1
+            BL      SysTick_Wait1ms
 
             LDR     R0, =GPIO_PORTK_DATA_R          ;Retorna para home
             MOV     R1, #2_10
@@ -563,13 +572,16 @@ LCD_Reset
             MOV     R1, #2_100
             STR     R1, [R0]
 
-            MOV     R2, #2
+            MOV     R2, #1
             BL      SysTick_Wait1ms
 
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]                        ;Retornou para home
 
+			MOV     R2, #1
+            BL      SysTick_Wait1ms
+			
             POP     {LR}
             BX      LR
 
