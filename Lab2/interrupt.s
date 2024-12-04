@@ -203,6 +203,7 @@ NVIC_PRI28_R                    EQU     0xE000E470
 									
         IMPORT SysTick_Wait1ms
         IMPORT create_table
+        IMPORT LCD_Reset
 ;--------------------------------------------------------------------------------
 ;=========================================
 ; Funcao Timer_Init
@@ -279,8 +280,9 @@ GPIOPortJ_Handler
         MOV     R1, #2_00000001                                                         ;Seta o bit 0 para ack
         STR     R1, [R0]                                                                ;Salva no registrador
 
+        BL      LCD_Reset
         BL      create_table
-        
+
         POP     {LR}
         BX      LR
 

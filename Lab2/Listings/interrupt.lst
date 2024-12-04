@@ -551,174 +551,176 @@ ARM Macro Assembler    Page 9
   203 00000000         
   204 00000000                 IMPORT           SysTick_Wait1ms
   205 00000000                 IMPORT           create_table
-  206 00000000         ;-------------------------------------------------------
+  206 00000000                 IMPORT           LCD_Reset
+  207 00000000         ;-------------------------------------------------------
                        -------------------------
-  207 00000000         ;=========================================
-  208 00000000         ; Funcao Timer_Init
-  209 00000000         ; Parametro de entrada: Nao tem
-  210 00000000         ; Parametro de saida: Nao tem
-  211 00000000         Interrupt_Init
-  212 00000000         
-  213 00000000         ; 1. Desabilitar a interrupcao no registradore IM
-  214 00000000 F04F 0100       MOV              R1, #0x00   ;Desabilitar as int
+  208 00000000         ;=========================================
+  209 00000000         ; Funcao Timer_Init
+  210 00000000         ; Parametro de entrada: Nao tem
+  211 00000000         ; Parametro de saida: Nao tem
+  212 00000000         Interrupt_Init
+  213 00000000         
+  214 00000000         ; 1. Desabilitar a interrupcao no registradore IM
+  215 00000000 F04F 0100       MOV              R1, #0x00   ;Desabilitar as int
                                                             errupcoes
-  215 00000004 4816            LDR              R0, =GPIO_PORTJ_AHB_IM_R ;Carre
+  216 00000004 4817            LDR              R0, =GPIO_PORTJ_AHB_IM_R ;Carre
                                                             ga o endereco do IM
                                                              para a porta gener
                                                             ica
-  216 00000006 6001            STR              R1, [R0]    ;Escreve no registr
+  217 00000006 6001            STR              R1, [R0]    ;Escreve no registr
                                                             ador
-  217 00000008         
-  218 00000008         ;       LDR     R0, =GPIO_PORTM_IM_R                    
+  218 00000008         
+  219 00000008         ;       LDR     R0, =GPIO_PORTM_IM_R                    
                                                        ;Carrega o endereco do I
                        M para a porta generica
-  219 00000008         ;       STR     R1, [R0]                      ;Escreve n
+  220 00000008         ;       STR     R1, [R0]                      ;Escreve n
                        o registrador
-  220 00000008         
-  221 00000008         ;       LDR     R0, =GPIO_PORTL_IM_R                    
+  221 00000008         
+  222 00000008         ;       LDR     R0, =GPIO_PORTL_IM_R                    
                                                        ;Carrega o endereco do I
                        M para a porta generica
-  222 00000008         ;       STR     R1, [R0]                      ;Escreve n
+  223 00000008         ;       STR     R1, [R0]                      ;Escreve n
                        o registrador
-  223 00000008         
-  224 00000008         ; 2. Configurar o tipo de interrupcao (borda = 0 , nivel
-                        = 1) no IS
+  224 00000008         
+  225 00000008         ; 2. Configurar o tipo de interrupcao (borda = 0 , nivel
 
 
 
 ARM Macro Assembler    Page 10 
 
 
-  225 00000008         
-  226 00000008 F04F 0100       MOV              R1, #2_00   ;Por borda
-  227 0000000C 4815            LDR              R0, =GPIO_PORTJ_AHB_IS_R ;Carre
+                        = 1) no IS
+  226 00000008         
+  227 00000008 F04F 0100       MOV              R1, #2_00   ;Por borda
+  228 0000000C 4816            LDR              R0, =GPIO_PORTJ_AHB_IS_R ;Carre
                                                             ga o endereco IS pa
                                                             ra a porta generica
                                                             
-  228 0000000E 6001            STR              R1, [R0]    ;Seta o valor no re
+  229 0000000E 6001            STR              R1, [R0]    ;Seta o valor no re
                                                             gistrador
-  229 00000010         
-  230 00000010         ; 3. Configurar tipo de borda (unica = 0, dupla = 1) no 
+  230 00000010         
+  231 00000010         ; 3. Configurar tipo de borda (unica = 0, dupla = 1) no 
                        IBE
-  231 00000010         
-  232 00000010 F04F 0100       MOV              R1, #2_00   ;Por borda unica
-  233 00000014 4814            LDR              R0, =GPIO_PORTJ_AHB_IBE_R ;Carr
+  232 00000010         
+  233 00000010 F04F 0100       MOV              R1, #2_00   ;Por borda unica
+  234 00000014 4815            LDR              R0, =GPIO_PORTJ_AHB_IBE_R ;Carr
                                                             ega o endereco IBE 
                                                             para a porta generi
                                                             ca
-  234 00000016 6001            STR              R1, [R0]    ;Seta o valor no re
+  235 00000016 6001            STR              R1, [R0]    ;Seta o valor no re
                                                             gistrador
-  235 00000018         
-  236 00000018         ; 4. Configurar modo da borda (descida = 0, subida = 1) 
+  236 00000018         
+  237 00000018         ; 4. Configurar modo da borda (descida = 0, subida = 1) 
                        no IEV                          
-  237 00000018         
-  238 00000018 F04F 0100       MOV              R1, #2_00   ;Por borda de desci
+  238 00000018         
+  239 00000018 F04F 0100       MOV              R1, #2_00   ;Por borda de desci
                                                             da
-  239 0000001C 4813            LDR              R0, =GPIO_PORTJ_AHB_IEV_R ;Carr
+  240 0000001C 4814            LDR              R0, =GPIO_PORTJ_AHB_IEV_R ;Carr
                                                             ega o endereco IEV 
                                                             para a porta generi
                                                             ca
-  240 0000001E 6001            STR              R1, [R0]    ;Seta o valor no re
+  241 0000001E 6001            STR              R1, [R0]    ;Seta o valor no re
                                                             gistrador
-  241 00000020         
-  242 00000020         ; 5. Realizar o ack para garantir que a interrupcao ira 
+  242 00000020         
+  243 00000020         ; 5. Realizar o ack para garantir que a interrupcao ira 
                        ocorrer no ICR
-  243 00000020         
-  244 00000020 F04F 0101       MOV              R1, #2_01   ;Seta o bit de ackn
+  244 00000020         
+  245 00000020 F04F 0101       MOV              R1, #2_01   ;Seta o bit de ackn
                                                             owledge
-  245 00000024 4812            LDR              R0, =GPIO_PORTJ_AHB_ICR_R ;Pega
+  246 00000024 4813            LDR              R0, =GPIO_PORTJ_AHB_ICR_R ;Pega
                                                              o endereco do ICR
-  246 00000026 6001            STR              R1, [R0]    ;Seta o valor no re
+  247 00000026 6001            STR              R1, [R0]    ;Seta o valor no re
                                                             gistrador
-  247 00000028         
-  248 00000028         ; 6. Habilitar a interrupcao no registrador IM
-  249 00000028         
-  250 00000028 F04F 0101       MOV              R1, #2_01   ;Habilitar as inter
+  248 00000028         
+  249 00000028         ; 6. Habilitar a interrupcao no registrador IM
+  250 00000028         
+  251 00000028 F04F 0101       MOV              R1, #2_01   ;Habilitar as inter
                                                             rupcoes
-  251 0000002C 480C            LDR              R0, =GPIO_PORTJ_AHB_IM_R ;Carre
+  252 0000002C 480D            LDR              R0, =GPIO_PORTJ_AHB_IM_R ;Carre
                                                             ga o endereco do IM
                                                              para a porta gener
                                                             ica
-  252 0000002E 6001            STR              R1, [R0]    ;Escreve no registr
+  253 0000002E 6001            STR              R1, [R0]    ;Escreve no registr
                                                             ador
-  253 00000030         
-  254 00000030         ; 7. Habilitar fonte de interrupcao no NVIC (Portj = int
+  254 00000030         
+  255 00000030         ; 7. Habilitar fonte de interrupcao no NVIC (Portj = int
                        errupcao 51 - Tabela 3-8, pagina 146)
-  255 00000030         ; Achar qual o ENX, pag 154
-  256 00000030         
-  257 00000030 F04F 0101       MOV              R1, #1      ;Seta 1
-  258 00000034 EA4F 41C1       LSL              R1, #19     ;Desloca 19 bits, j
+  256 00000030         ; Achar qual o ENX, pag 154
+  257 00000030         
+  258 00000030 F04F 0101       MOV              R1, #1      ;Seta 1
 
 
 
 ARM Macro Assembler    Page 11 
 
 
+  259 00000034 EA4F 41C1       LSL              R1, #19     ;Desloca 19 bits, j
                                                             a que 51-32=19 (int
                                                             ervalo entre inicio
                                                              do EN que contem o
                                                              51)
-  259 00000038 480E            LDR              R0, =NVIC_EN1_R ;Carrega o ende
+  260 00000038 480F            LDR              R0, =NVIC_EN1_R ;Carrega o ende
                                                             reco do EN1
-  260 0000003A 6001            STR              R1, [R0]    ;Seta no registrado
+  261 0000003A 6001            STR              R1, [R0]    ;Seta no registrado
                                                             r
-  261 0000003C         
-  262 0000003C         ; 8. Setar prioridade no NVIC, achar qual PRIX, pag 159
-  263 0000003C         
-  264 0000003C F04F 0102       MOV              R1, #2      ;Prioridade 2
-  265 00000040 EA4F 7141       LSL              R1, #29     ;Deslocar 29 bits p
+  262 0000003C         
+  263 0000003C         ; 8. Setar prioridade no NVIC, achar qual PRIX, pag 159
+  264 0000003C         
+  265 0000003C F04F 0102       MOV              R1, #2      ;Prioridade 2
+  266 00000040 EA4F 7141       LSL              R1, #29     ;Deslocar 29 bits p
                                                             ara ir pro ultimo b
                                                             yte do PRI12
-  266 00000044 480C            LDR              R0, =NVIC_PRI12_R ;Carrega o en
+  267 00000044 480D            LDR              R0, =NVIC_PRI12_R ;Carrega o en
                                                             dereco do PRI12
-  267 00000046 6001            STR              R1, [R0]    ;Seta no registrado
+  268 00000046 6001            STR              R1, [R0]    ;Seta no registrado
                                                             r
-  268 00000048         
-  269 00000048 4770            BX               LR
-  270 0000004A         ;=========================================
-  271 0000004A         ; ******************************************************
+  269 00000048         
+  270 00000048 4770            BX               LR
+  271 0000004A         ;=========================================
+  272 0000004A         ; ******************************************************
                        
-  272 0000004A         
-  273 0000004A         ;Funcao GPIOPortJ_Handler ISR, tratamento de interrupcao
+  273 0000004A         
+  274 0000004A         ;Funcao GPIOPortJ_Handler ISR, tratamento de interrupcao
                        
-  274 0000004A         ;Parametro de entrada: nao tem
-  275 0000004A         ;Parametro de saida: nao tem
-  276 0000004A         GPIOPortJ_Handler
-  277 0000004A B500            PUSH             {LR}
-  278 0000004C 4808            LDR              R0, =GPIO_PORTJ_AHB_ICR_R ;Carr
+  275 0000004A         ;Parametro de entrada: nao tem
+  276 0000004A         ;Parametro de saida: nao tem
+  277 0000004A         GPIOPortJ_Handler
+  278 0000004A B500            PUSH             {LR}
+  279 0000004C 4809            LDR              R0, =GPIO_PORTJ_AHB_ICR_R ;Carr
                                                             ega o endereco do I
                                                             CR para o ack
-  279 0000004E F04F 0101       MOV              R1, #2_00000001 ;Seta o bit 0 p
+  280 0000004E F04F 0101       MOV              R1, #2_00000001 ;Seta o bit 0 p
                                                             ara ack
-  280 00000052 6001            STR              R1, [R0]    ;Salva no registrad
+  281 00000052 6001            STR              R1, [R0]    ;Salva no registrad
                                                             or
-  281 00000054         
-  282 00000054 F7FF FFFE       BL               create_table
-  283 00000058         
-  284 00000058 F85D EB04       POP              {LR}
-  285 0000005C 4770            BX               LR
-  286 0000005E         
-  287 0000005E         ;=========================================
-  288 0000005E         ; ******************************************************
+  282 00000054         
+  283 00000054 F7FF FFFE       BL               LCD_Reset
+  284 00000058 F7FF FFFE       BL               create_table
+  285 0000005C         
+  286 0000005C F85D EB04       POP              {LR}
+  287 00000060 4770            BX               LR
+  288 00000062         
+  289 00000062         ;=========================================
+  290 00000062         ; ******************************************************
                        
-  289 0000005E         
-  290 0000005E 00 00           ALIGN                        ;Garante que o fim 
+  291 00000062         
+  292 00000062 00 00           ALIGN                        ;Garante que o fim 
                                                             da secao esta alinh
                                                             ada 
-  291 00000060                 END                          ;Fim do arquivo
+  293 00000064                 END                          ;Fim do arquivo
               40060410 
               40060404 
               40060408 
               4006040C 
               4006041C 
-              E000E104 
-              E000E430 
 
 
 
 ARM Macro Assembler    Page 12 
 
 
+              E000E104 
+              E000E430 
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\interrupt.d -o.\objects\interrupt.o -IC:\Users\jhony\AppData
 \Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL
@@ -742,7 +744,7 @@ GPIOPortJ_Handler 0000004A
 
 Symbol: GPIOPortJ_Handler
    Definitions
-      At line 276 in file interrupt.s
+      At line 277 in file interrupt.s
    Uses
       At line 202 in file interrupt.s
 Comment: GPIOPortJ_Handler used once
@@ -750,7 +752,7 @@ Interrupt_Init 00000000
 
 Symbol: Interrupt_Init
    Definitions
-      At line 211 in file interrupt.s
+      At line 212 in file interrupt.s
    Uses
       At line 201 in file interrupt.s
 Comment: Interrupt_Init used once
@@ -1273,7 +1275,7 @@ Symbol: GPIO_PORTJ_AHB_IBE_R
    Definitions
       At line 90 in file interrupt.s
    Uses
-      At line 233 in file interrupt.s
+      At line 234 in file interrupt.s
 Comment: GPIO_PORTJ_AHB_IBE_R used once
 
 
@@ -1287,8 +1289,8 @@ Symbol: GPIO_PORTJ_AHB_ICR_R
    Definitions
       At line 92 in file interrupt.s
    Uses
-      At line 245 in file interrupt.s
-      At line 278 in file interrupt.s
+      At line 246 in file interrupt.s
+      At line 279 in file interrupt.s
 
 GPIO_PORTJ_AHB_IEV_R 4006040C
 
@@ -1296,7 +1298,7 @@ Symbol: GPIO_PORTJ_AHB_IEV_R
    Definitions
       At line 91 in file interrupt.s
    Uses
-      At line 239 in file interrupt.s
+      At line 240 in file interrupt.s
 Comment: GPIO_PORTJ_AHB_IEV_R used once
 GPIO_PORTJ_AHB_IM_R 40060410
 
@@ -1304,8 +1306,8 @@ Symbol: GPIO_PORTJ_AHB_IM_R
    Definitions
       At line 88 in file interrupt.s
    Uses
-      At line 215 in file interrupt.s
-      At line 251 in file interrupt.s
+      At line 216 in file interrupt.s
+      At line 252 in file interrupt.s
 
 GPIO_PORTJ_AHB_IS_R 40060404
 
@@ -1313,7 +1315,7 @@ Symbol: GPIO_PORTJ_AHB_IS_R
    Definitions
       At line 89 in file interrupt.s
    Uses
-      At line 227 in file interrupt.s
+      At line 228 in file interrupt.s
 Comment: GPIO_PORTJ_AHB_IS_R used once
 GPIO_PORTK 00000200
 
@@ -1739,7 +1741,7 @@ Absolute symbols
    Definitions
       At line 155 in file interrupt.s
    Uses
-      At line 259 in file interrupt.s
+      At line 260 in file interrupt.s
 Comment: NVIC_EN1_R used once
 NVIC_EN2_R E000E108
 
@@ -1787,7 +1789,7 @@ Symbol: NVIC_PRI12_R
    Definitions
       At line 178 in file interrupt.s
    Uses
-      At line 266 in file interrupt.s
+      At line 267 in file interrupt.s
 Comment: NVIC_PRI12_R used once
 NVIC_PRI13_R E000E434
 
@@ -2020,6 +2022,14 @@ Comment: NVIC_PRI9_R unused
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 External symbols
 
+LCD_Reset 00000000
+
+Symbol: LCD_Reset
+   Definitions
+      At line 206 in file interrupt.s
+   Uses
+      At line 283 in file interrupt.s
+Comment: LCD_Reset used once
 SysTick_Wait1ms 00000000
 
 Symbol: SysTick_Wait1ms
@@ -2034,7 +2044,7 @@ Symbol: create_table
    Definitions
       At line 205 in file interrupt.s
    Uses
-      At line 282 in file interrupt.s
+      At line 284 in file interrupt.s
 Comment: create_table used once
-2 symbols
-483 symbols in table
+3 symbols
+484 symbols in table

@@ -13,6 +13,7 @@
 ; ================== DEFINICAO DA TABELA ===================
 
 MULTI_HEAD	EQU 0x20000A00
+CURR_KEY	EQU	0x20020004
 
 ; -------------------------------------------------------------------------------
 ; Area de Codigo
@@ -38,9 +39,11 @@ store_loop
     BX      LR
 
 ; Funcao multi_table
-; input: R1 -> Valor da tecla pressionada
 ; Saida: R2 -> Fator multiplicativo atualizado do numero
 multi_table
+	LDR		R0, =CURR_KEY		; Recupera a tecla atual
+	LDR 	R1, [R0]
+	
     LDR     R0, =MULTI_HEAD     
     ADD     R0, R0, R1
     LDRB    R2, [R0]            ; Carrega o valor atual da tabuada do dígito em R2
@@ -52,8 +55,6 @@ multi_table
     MOVHI   R2, #0
 
     STRB    R2, [R0]            ; Armazena o valor atualizado na memória
-    
-    MUL     R2, R2, R1          ; Multiplica o dígito pelo contador para determinar o resultado
 
     BX      LR 
 

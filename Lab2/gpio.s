@@ -210,6 +210,8 @@ TECLADO_PRESS_ADDR          EQU     0x20000B00
 		EXPORT LCD_Init
         EXPORT LCD_Display_Character
         EXPORT TecladoM_Poll
+        EXPORT LCD_go_to_second_line
+        EXPORT LCD_Reset
 
         
         IMPORT SysTick_Wait1us
@@ -463,9 +465,10 @@ LCD_Init
 ; -------------------------------------------------------------------------------
 ; Funcao LCD_Display_Character
 ; Input: R1 -> Dado a ser mostrado no display
+
 LCD_Display_Character
             PUSH    {LR}
-            ; 
+            
             LDR     R0, =GPIO_PORTK_DATA_R                  ; Dado a ser mostrado
             STR     R1, [R0]
 
@@ -480,8 +483,80 @@ LCD_Display_Character
             MOV     R1, #0x00
             STR     R1, [R0]
 
-            POP {LR}
-            BX LR
+            POP     {LR}
+            BX      LR
+
+
+; -------------------------------------------------------------------------------
+; Funcao LCD_go_to_second_line
+; Faz com que o cursor va para a segunda linha do display
+; Parametro de entrada: nenhum
+; Parametro de saida: nenhum
+
+LCD_go_to_second_line
+            PUSH    {LR}
+
+            LDR     R0, =GPIO_PORTK_DATA_R          ;Retorna para home
+            MOV     R1, #2_10
+            STR     R1, [R0]
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #2_100
+            STR     R1, [R0]
+
+            MOV     R2, #2
+            BL      SysTick_Wait1ms
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #0x00
+            STR     R1, [R0]                        ;Retornou para home
+			
+			MOV     R3, #0
+cursor_shift_right                                  ;Pula os 40 digitos
+            LDR     R0, =GPIO_PORTK_DATA_R          
+            MOV     R1, #2_10100
+            STR     R1, [R0]
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #2_100
+            STR     R1, [R0]
+
+            MOV     R0, #2
+            BL      SysTick_Wait1us
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #0x00
+            STR     R1, [R0]
+
+            ADD     R3, #1
+            CMP     R3, #40
+            BNE     cursor_shift_right
+
+            POP     {LR}
+            BX      LR
+
+; -------------------------------------------------------------------------------
+; Funcao LCD_Reset
+; Reseta os valores de DDRAM do LCD
+; Parametro de entrada: nenhum
+; Parametro de saida: nenhum
+LCD_Reset
+            PUSH    {LR}
+
+            LDR     R0, =GPIO_PORTK_DATA_R          
+            MOV     R1, #2_1                        
+            STR     R1, [R0]
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #2_100
+            STR     R1, [R0]
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #0x00
+            STR     R1, [R0]
+
+            POP     {LR}
+            BX      LR
 
 ; -------------------------------------------------------------------------------
 ; Funcao TecladoM_Poll

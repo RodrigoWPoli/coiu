@@ -134,7 +134,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGTARM</Key>
-          <Name>(1010=71,-703,521,-146,0)(1007=105,137,292,412,0)(1008=90,121,466,357,0)(1009=582,-707,840,-119,0)(1012=-1,-1,-1,-1,0)</Name>
+          <Name>(1010=499,-788,949,-231,0)(1007=105,137,292,412,0)(1008=90,121,466,357,0)(1009=582,-707,840,-119,0)(1012=-1,-1,-1,-1,0)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -156,34 +156,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>514</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>1170</Address>
+          <LineNumber>83</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>594</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\gpio.s</Filename>
+          <Filename>.\main.s</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\gpio\gpio.s\514</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>492</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>.\gpio.s</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\gpio\main.s\83</Expression>
         </Bp>
       </Breakpoint>
       <MemoryWindow1>
@@ -332,6 +316,30 @@
       <bDave2>0</bDave2>
       <PathWithFileName>.\timers.s</PathWithFileName>
       <FilenameWithoutPath>timers.s</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>8</FileNumber>
+      <FileType>2</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\lcd_char.s</PathWithFileName>
+      <FilenameWithoutPath>lcd_char.s</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>9</FileNumber>
+      <FileType>2</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\led_blinking.s</PathWithFileName>
+      <FilenameWithoutPath>led_blinking.s</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
