@@ -543,7 +543,7 @@ cursor_shift_right                                  ;Pula os 40 digitos
 LCD_Reset
             PUSH    {LR}
 
-            LDR     R0, =GPIO_PORTK_DATA_R          
+            LDR     R0, =GPIO_PORTK_DATA_R          ;Clear no display     
             MOV     R1, #2_1                        
             STR     R1, [R0]
 
@@ -554,6 +554,21 @@ LCD_Reset
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]
+
+            LDR     R0, =GPIO_PORTK_DATA_R          ;Retorna para home
+            MOV     R1, #2_10
+            STR     R1, [R0]
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #2_100
+            STR     R1, [R0]
+
+            MOV     R2, #2
+            BL      SysTick_Wait1ms
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #0x00
+            STR     R1, [R0]                        ;Retornou para home
 
             POP     {LR}
             BX      LR

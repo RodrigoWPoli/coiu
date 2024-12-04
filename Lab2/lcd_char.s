@@ -38,7 +38,8 @@ char_n              EQU 2_01101110
 char_dot            EQU 2_00101110
 char_space          EQU 2_00100000
 	
-CURR_KEY	    EQU	0x20020004
+CURR_KEY	    	EQU	0x20020004
+MULTI_HEAD	    	EQU 0x20000A00
 
 
 ; -------------------------------------------------------------------------------
@@ -59,7 +60,7 @@ CURR_KEY	    EQU	0x20020004
 create_first_row
         PUSH    {LR}
 
-        ;BL      LCD_Reset
+        BL      LCD_Reset
 
         LDR     R1, =char_T
         BL      LCD_Display_Character 
@@ -111,7 +112,13 @@ create_second_row
         BL      LCD_Display_Character
         LDR     R1, =char_space
         BL      LCD_Display_Character
-        MOV     R1, R2
+		
+		LDR 	R0, =CURR_KEY
+        LDR 	R1, [R0]
+		
+        LDR 	R0, =MULTI_HEAD
+		ADD     R0, R0, R1
+        LDR 	R1, [R0]
         ORR     R1, R1, #0x30
         BL      LCD_Display_Character
         LDR     R1, =char_space
@@ -120,7 +127,8 @@ create_second_row
         BL      LCD_Display_Character
         LDR     R1, =char_space
         BL      LCD_Display_Character
-        MOV     R1, R3
+        
+		MOV     R1, R3
         ORR     R1, R1, #0x30
         BL      LCD_Display_Character
 
