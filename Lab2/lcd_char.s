@@ -50,6 +50,7 @@ MULTI_HEAD	    	EQU 0x20000A00
 
         EXPORT create_first_row
         EXPORT create_second_row
+        EXPORT create_reset_row
 
         IMPORT LCD_Display_Character
         IMPORT LCD_Reset
@@ -119,7 +120,7 @@ create_second_row
 		LDR 	R0, =CURR_KEY
         LDR 	R1, [R0]
 		
-        LDR 	R0, =MULTI_HEAD			; Recupera o fator multiplicativo da mem�ria
+        LDR 	R0, =MULTI_HEAD			; Recupera o fator multiplicativo da memoria
 		ADD     R0, R0, R1
         LDR 	R2, [R0]
 		
@@ -162,6 +163,127 @@ single_dig
         BL      LCD_Display_Character
 
         POP     {LR}
+        BX      LR
+
+; ------------------------------------------------------------------------------
+; Funcao create_reset_row
+; Seta hardcode no LCD para apresentar "Resetando..."
+; Parametro de entrada: nenhum
+; Parametro de saida: nenhum
+create_reset_row
+        PUSH    {LR}
+
+        BL      LCD_Reset
+
+        ; Resetando
+        LDR     R1, =char_R
+        BL      LCD_Display_Character 
+        LDR     R1, =char_e
+        BL      LCD_Display_Character 
+        LDR     R1, =char_s
+        BL      LCD_Display_Character 
+        LDR     R1, =char_e
+        BL      LCD_Display_Character 
+        LDR     R1, =char_t
+        BL      LCD_Display_Character 
+        LDR     R1, =char_a
+        BL      LCD_Display_Character 
+        LDR     R1, =char_n
+        BL      LCD_Display_Character 
+        LDR     R1, =char_d
+        BL      LCD_Display_Character 
+        LDR     R1, =char_o
+        BL      LCD_Display_Character 
+;        LDR     R1, =char_dot
+;        BL      LCD_Display_Character
+;        LDR     R1, =char_dot
+;        BL      LCD_Display_Character
+;        LDR     R1, =char_dot
+;        BL      LCD_Display_Character
+    
+
+        ; ... piscando
+        MOV    R9, #0                               ;quantidade de iteracoes geral
+blink_loop  
+        CMP    R9, #3                               ;Enquanto nao fizer x vezes, nao finaliza
+        BEQ    display_resetado
+
+display_dots
+        ADD    R9, #1                               ;Soma 1 no iterador
+
+        LDR    R1, =char_dot
+        BL     LCD_Display_Character                
+        MOV    R2, #100
+        BL     SysTick_Wait1ms                      ;Mostra primeiro ponto e espera um pouco
+        LDR    R1, =char_dot
+        BL     LCD_Display_Character                
+        MOV    R2, #100
+        BL     SysTick_Wait1ms                      ;Mostra segundo ponto e espera um pouco
+        LDR    R1, =char_dot
+        BL     LCD_Display_Character                
+        MOV    R2, #100
+        BL     SysTick_Wait1ms                      ;Mostra terceiro ponto e espera um pouco
+
+
+LCD_Clear_Tail                                      ;limpa os 3 pontos finais
+
+            MOV     R8, #0                          ;contador de iteracoes de espacos
+            MOV     R7, #0                          ;contador de iteracoes de left shift
+cursor_shift_left                                   ;Volta os 3 dígitos para esquerda
+            LDR     R0, =GPIO_PORTK_DATA_R          
+            MOV     R1, #2_10000
+            STR     R1, [R0]
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #2_100
+            STR     R1, [R0]
+
+            MOV     R0, #2
+            BL      SysTick_Wait1us
+
+            LDR     R0, =GPIO_PORTM_DATA_R
+            MOV     R1, #0x00
+            STR     R1, [R0]
+
+            ADD     R8, #1
+            CMP     R8, #3
+            BNE     cursor_shift_left
+
+display_spaces                                      ;Mostra 3 espaços caso ja nao tenha mostrado
+            CMP     R7, #1
+            BEQ     blink_loop                      ;Se nao voltou depois do espaco, volta. Se voltou, printa pontos dnv ou sai do loop
+
+            LDR    R1, =char_space
+            BL     LCD_Display_Character                
+            LDR    R1, =char_space
+            BL     LCD_Display_Character                
+            LDR    R1, =char_space
+            BL     LCD_Display_Character                
+            
+            ADD    R7, #1                           ;Se for primeira vez mostrando espaços, seta a flag
+display_resetado
+
+        BL      LCD_Reset
+
+        ; Resetado
+        LDR     R1, =char_R
+        BL      LCD_Display_Character 
+        LDR     R1, =char_e
+        BL      LCD_Display_Character 
+        LDR     R1, =char_s
+        BL      LCD_Display_Character 
+        LDR     R1, =char_e
+        BL      LCD_Display_Character 
+        LDR     R1, =char_t
+        BL      LCD_Display_Character 
+        LDR     R1, =char_a
+        BL      LCD_Display_Character 
+        LDR     R1, =char_d
+        BL      LCD_Display_Character 
+        LDR     R1, =char_o
+        BL      LCD_Display_Character 
+        
+        POP     {LR} 
         BX      LR
 
 

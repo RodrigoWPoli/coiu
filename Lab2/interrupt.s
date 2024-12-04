@@ -203,6 +203,7 @@ NVIC_PRI28_R                    EQU     0xE000E470
 									
         IMPORT SysTick_Wait1ms
         IMPORT create_table
+        IMPORT create_reset_row
         IMPORT LCD_Reset
 ;--------------------------------------------------------------------------------
 ;=========================================
@@ -215,12 +216,6 @@ Interrupt_Init
         MOV     R1, #0x00						                ;Desabilitar as interrupcoes
         LDR     R0, =GPIO_PORTJ_AHB_IM_R                                                ;Carrega o endereco do IM para a porta generica
         STR     R1, [R0]                                                                ;Escreve no registrador
-        
-;       LDR     R0, =GPIO_PORTM_IM_R                                                    ;Carrega o endereco do IM para a porta generica
-;       STR     R1, [R0]						                ;Escreve no registrador
-
-;       LDR     R0, =GPIO_PORTL_IM_R                                                    ;Carrega o endereco do IM para a porta generica
-;       STR     R1, [R0]						                ;Escreve no registrador
 
 ; 2. Configurar o tipo de interrupcao (borda = 0 , nivel = 1) no IS
 
@@ -280,8 +275,8 @@ GPIOPortJ_Handler
         MOV     R1, #2_00000001                                                         ;Seta o bit 0 para ack
         STR     R1, [R0]                                                                ;Salva no registrador
 
-        BL      LCD_Reset
         BL      create_table
+        BL      create_reset_row   
 
         POP     {LR}
         BX      LR
