@@ -275,9 +275,22 @@ GPIOPortJ_Handler
         MOV     R1, #2_00000001                                                         ;Seta o bit 0 para ack
         STR     R1, [R0]                                                                ;Salva no registrador
 
+		LDR		R0, =GPIO_PORTJ_AHB_DATA_R
+		LDR 	R1, [R0]
+		
+		MOV 	R2, #20
+		BL 		SysTick_Wait1ms
+	
+		LDR		R0, =GPIO_PORTJ_AHB_DATA_R
+		LDR 	R2, [R0]
+		
+		CMP 	R1, R2								; Ignora variações de freq. > 50Hz
+		BNE 	debounce_skip
+		
         BL      create_table
         BL      create_reset_row   
 
+debounce_skip
         POP     {LR}
         BX      LR
 

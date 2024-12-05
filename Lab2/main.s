@@ -141,6 +141,10 @@ update_data_timer0
 	B 		skip
 
 update_data_timer1
+	LDR     R0, =Timer1A_Addr       ; Zera o bit do endereço do interrupt do timer 1
+	MOV     R1, #0
+	STR     R1, [R0]
+
 	BL 		blink_leds
 	B 		skip
 

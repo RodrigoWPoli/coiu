@@ -29,9 +29,6 @@ BLINKING_COUNTER            EQU    0x20010008
 ; Funcao blink_leds
 ; Checa se tem q ligar ou desligar os LEDs. Calcula quais LEDs tem que ligar.
 blink_leds
-			LDR     R0, =Timer1A_Addr       ; Zera o bit do endereço do interrupt do timer 1
-            MOV     R1, #0
-            STR     R1, [R0]
 
             LDR		R0, =CURR_KEY		; Recupera a tecla atual
 			LDR 	R1, [R0]
