@@ -12,6 +12,31 @@
 ; ========================
 TECLADO_PRESS_ADDR          EQU     0x20000B00
 
+; ~~~~~~~~~~~~~~~~ PORT L ~~~~~~~~~~~~~~~~~~
+GPIO_PORTL_DATA_R           EQU     0x400623FC
+GPIO_PORTL_DIR_R            EQU     0x40062400
+GPIO_PORTL_AFSEL_R          EQU     0x40062420
+GPIO_PORTL_PUR_R            EQU     0x40062510
+GPIO_PORTL_PDR_R            EQU     0x40062514
+GPIO_PORTL_DEN_R            EQU     0x4006251C
+GPIO_PORTL_LOCK_R           EQU     0x40062520
+GPIO_PORTL_CR_R             EQU     0x40062524
+GPIO_PORTL_AMSEL_R          EQU     0x40062528
+GPIO_PORTL_PCTL_R           EQU     0x4006252C
+GPIO_PORTL               	EQU    2_000010000000000
+
+; ~~~~~~~~~~~~~~~~ PORT M ~~~~~~~~~~~~~~~~~~
+GPIO_PORTM_DATA_R           EQU     0x400633FC
+GPIO_PORTM_DIR_R            EQU     0x40063400
+GPIO_PORTM_AFSEL_R          EQU     0x40063420
+GPIO_PORTM_PUR_R            EQU     0x40063510
+GPIO_PORTM_DEN_R            EQU     0x4006351C
+GPIO_PORTM_LOCK_R           EQU     0x40063520
+GPIO_PORTM_CR_R             EQU     0x40063524
+GPIO_PORTM_AMSEL_R          EQU     0x40063528
+GPIO_PORTM_PCTL_R           EQU     0x4006352C
+GPIO_PORTM               	EQU    2_000100000000000
+
 ; -------------------------------------------------------------------------------
 ; Area de Codigo - Tudo abaixo da diretiva a seguir sera armazenado na memoria de 
 ;                  codigo
@@ -150,3 +175,6 @@ teclado_retorno
             STR     R2, [R0]
 
             BX      LR       ; Retorno
+
+            ALIGN                        ;Garante que o fim da secao esta alinhada 
+            END                          ;Fim do arquivo

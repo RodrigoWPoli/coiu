@@ -6,7 +6,8 @@
 
 
 ; -------------------------------------------------------------------------------
-        THUMB                        ; Instrucoes do tipo Thumb-2
+		PRESERVE8 {TRUE}
+		THUMB                        ; Instrucoes do tipo Thumb-2
 ; -------------------------------------------------------------------------------
 ; Declaracoes EQU - Defines
 ; ========================
@@ -58,7 +59,9 @@ char_u              EQU 2_01110101
 char_x              EQU 2_01111000
 
 	
-CURR_KEY	    	EQU	0x20020004
+CURR_KEY	    EQU	0x20020004
+ANGLE               EQU 0x20030000
+TURN	            EQU	0x20030004
 
 ; -------------------------------------------------------------------------------
 ; Area de Codigo
@@ -72,40 +75,36 @@ CURR_KEY	    	EQU	0x20020004
         EXPORT LCD_Reset
 
 
-		IMPORT SysTick_Wait1ms
-		IMPORT SysTick_Wait1us
-        IMPORT ANGLE
-        IMPORT TURN
-        IMPORT MODE
+        IMPORT SysTick_Wait1ms
+        IMPORT SysTick_Wait1us
 
-
+        IMPORT LCD_Display_Number
 ; -------------------------------------------------------------------------------
 ; Funcao LCD_Display_Character
-; Input: R1 -> Dado a ser mostrado no display
+; Input: R0 -> Dado a ser mostrado no display
 
 LCD_Display_Character
             PUSH    {LR}
             
-            LDR     R0, =GPIO_PORTK_DATA_R                  ; Dado a ser mostrado
-            STR     R1, [R0]
+            LDR     R1, =GPIO_PORTK_DATA_R                  ; Dado a ser mostrado
+            STR     R0, [R1]
 
-            LDR     R0, =GPIO_PORTM_DATA_R
-            MOV     R1, #2_101
-            STR     R1, [R0]
+            LDR     R1, =GPIO_PORTM_DATA_R
+            MOV     R0, #2_101
+            STR     R0, [R1]
 
             LDR     R2, =1
             BL      SysTick_Wait1ms
             
-            LDR     R0, =GPIO_PORTM_DATA_R
-            MOV     R1, #0x00
-            STR     R1, [R0]
+            LDR     R1, =GPIO_PORTM_DATA_R
+            MOV     R0, #0x00
+            STR     R0, [R1]
 			
 			LDR     R2, =1
             BL      SysTick_Wait1ms
 
             POP     {LR}
             BX      LR
-
 
 ; -------------------------------------------------------------------------------
 ; Funcao LCD_go_to_second_line
@@ -211,43 +210,62 @@ create_data_row
 
         BL      LCD_Reset
 
-        LDR     R1, =char_A
+        LDR     R0, =char_A
         BL      LCD_Display_Character 
-        LDR     R1, =char_n
+        LDR     R0, =char_n
         BL      LCD_Display_Character 
-        LDR     R1, =char_g
+        LDR     R0, =char_g
         BL      LCD_Display_Character 
-        LDR     R1, =char_u
+        LDR     R0, =char_u
         BL      LCD_Display_Character 
-        LDR     R1, =char_l
+        LDR     R0, =char_l
         BL      LCD_Display_Character 
-        LDR     R1, =char_o
+        LDR     R0, =char_o
         BL      LCD_Display_Character 
-        LDR     R1, =char_dois_pontos
+        LDR     R0, =char_dois_pontos
         BL      LCD_Display_Character 
-        LDR     R1, =char_space
+        LDR     R0, =char_space
         BL      LCD_Display_Character 
         ;Aqui fazer receber o valor de ang, separar ele em até 3 digitos e mostrar
-        ;BL    LCD_Display_Angle
+        
+        LDR     R1, =ANGLE
+        LDR     R0, [R1]
+        MOV     R2, #0
+        CMP     R0, R2
+        BHI     positive
 
-        LDR     R1, =char_space
+        LDR     R0, =char_minus
         BL      LCD_Display_Character
-        LDR     R1, =char_V
+positive       
+
+        LDR     R1, =ANGLE
+        LDR     R0, [R1]
+		
+		SUB 	SP, SP, #4
+        BL      LCD_Display_Number      ; Chama função C
+		ADD		SP, SP, #4
+		
+        LDR     R0, =char_angle
+        BL      LCD_Display_Character
+
+        BL      LCD_go_to_second_line
+
+        LDR     R0, =char_V
         BL      LCD_Display_Character 
-        LDR     R1, =char_o
+        LDR     R0, =char_o
         BL      LCD_Display_Character 
-        LDR     R1, =char_l
+        LDR     R0, =char_l
         BL      LCD_Display_Character	
-        LDR     R1, =char_t
+        LDR     R0, =char_t
         BL      LCD_Display_Character
-        LDR     R1, =char_a
+        LDR     R0, =char_a
         BL      LCD_Display_Character
-        LDR     R1, =char_dois_pontos
+        LDR     R0, =char_dois_pontos
         BL      LCD_Display_Character
-        LDR     R1, =char_space
+        LDR     R0, =char_space
         BL      LCD_Display_Character
         ;Aqui fazer receber o valor de turn, separar ele em até 3 digitos e mostrar, lembrar que pode ser negativo
-        ;BL    LCD_Display_Turn
+        ;BL    LCD_Display_Number
     
         POP     {LR} 
         BX      LR
@@ -260,29 +278,67 @@ create_data_row
 create_increment_row
         PUSH    {LR}
 		
-        LDR     R1, =char_I
+        LDR     R0, =char_I
         BL      LCD_Display_Character
-        LDR     R1, =char_n
+        LDR     R0, =char_n
         BL      LCD_Display_Character
-        LDR     R1, =char_c
+        LDR     R0, =char_c
         BL      LCD_Display_Character
-        LDR     R1, =char_r
+        LDR     R0, =char_r
         BL      LCD_Display_Character
-        LDR     R1, =char_e
+        LDR     R0, =char_e
         BL      LCD_Display_Character
-        LDR     R1, =char_m
+        LDR     R0, =char_m
         BL      LCD_Display_Character
-        LDR     R1, =char_e
+        LDR     R0, =char_e
         BL      LCD_Display_Character
-        LDR     R1, =char_n
+        LDR     R0, =char_n
         BL      LCD_Display_Character
-        LDR     R1, =char_t
+        LDR     R0, =char_t
         BL      LCD_Display_Character
-        LDR     R1, =char_o
+        LDR     R0, =char_o
         BL      LCD_Display_Character
-        LDR     R1, =char_dois_pontos
+        LDR     R0, =char_dois_pontos
         BL      LCD_Display_Character
-        LDR     R1, =char_space
+        LDR     R0, =char_space
+        BL      LCD_Display_Character
+        ;Aqui fazer receber o valor de inc, separar ele em até 3 digitos e mostrar
+        ;BL    LCD_Display_Increment
+        
+        POP     {LR}
+        BX      LR
+
+; ------------------------------------------------------------------------------
+; Funcao create_mode_row
+; Seta hardcode no LCD para apresentar "Modo de passo: mode"
+; Parametro de entrada: nenhum
+; Parametro de saida: nenhum
+create_mode_row
+        PUSH    {LR}
+		
+        LDR     R0, =char_I
+        BL      LCD_Display_Character
+        LDR     R0, =char_n
+        BL      LCD_Display_Character
+        LDR     R0, =char_c
+        BL      LCD_Display_Character
+        LDR     R0, =char_r
+        BL      LCD_Display_Character
+        LDR     R0, =char_e
+        BL      LCD_Display_Character
+        LDR     R0, =char_m
+        BL      LCD_Display_Character
+        LDR     R0, =char_e
+        BL      LCD_Display_Character
+        LDR     R0, =char_n
+        BL      LCD_Display_Character
+        LDR     R0, =char_t
+        BL      LCD_Display_Character
+        LDR     R0, =char_o
+        BL      LCD_Display_Character
+        LDR     R0, =char_dois_pontos
+        BL      LCD_Display_Character
+        LDR     R0, =char_space
         BL      LCD_Display_Character
         ;Aqui fazer receber o valor de inc, separar ele em até 3 digitos e mostrar
         ;BL    LCD_Display_Increment
@@ -301,23 +357,23 @@ create_reset_row
         BL      LCD_Reset
 
         ; Resetando
-        LDR     R1, =char_R
+        LDR     R0, =char_R
         BL      LCD_Display_Character 
-        LDR     R1, =char_e
+        LDR     R0, =char_e
         BL      LCD_Display_Character 
-        LDR     R1, =char_s
+        LDR     R0, =char_s
         BL      LCD_Display_Character 
-        LDR     R1, =char_e
+        LDR     R0, =char_e
         BL      LCD_Display_Character 
-        LDR     R1, =char_t
+        LDR     R0, =char_t
         BL      LCD_Display_Character 
-        LDR     R1, =char_a
+        LDR     R0, =char_a
         BL      LCD_Display_Character 
-        LDR     R1, =char_n
+        LDR     R0, =char_n
         BL      LCD_Display_Character 
-        LDR     R1, =char_d
+        LDR     R0, =char_d
         BL      LCD_Display_Character 
-        LDR     R1, =char_o
+        LDR     R0, =char_o
         BL      LCD_Display_Character     
 
         ; ... piscando
@@ -329,15 +385,15 @@ blink_loop
 display_dots
         ADD    R9, #1                               ;Soma 1 no iterador
 
-        LDR    R1, =char_dot
+        LDR    R0 , =char_dot
         BL     LCD_Display_Character                
         MOV    R2, #150
         BL     SysTick_Wait1ms                      ;Mostra primeiro ponto e espera um pouco
-        LDR    R1, =char_dot
+        LDR    R0, =char_dot
         BL     LCD_Display_Character                
         MOV    R2, #150
         BL     SysTick_Wait1ms                      ;Mostra segundo ponto e espera um pouco
-        LDR    R1, =char_dot
+        LDR    R0, =char_dot
         BL     LCD_Display_Character                
         MOV    R2, #150
         BL     SysTick_Wait1ms                      ;Mostra terceiro ponto e espera um pouco
@@ -373,11 +429,11 @@ cursor_shift_left                                   ;Volta os 3 dígitos para es
 		
 
 display_spaces                                      ;Mostra 3 espaços caso ja nao tenha mostrado
-		LDR    R1, =char_space
+		LDR    R0, =char_space
 		BL     LCD_Display_Character                
-		LDR    R1, =char_space
+		LDR    R0, =char_space
 		BL     LCD_Display_Character                
-		LDR    R1, =char_space
+		LDR    R0, =char_space
 		BL     LCD_Display_Character
 
 		MOV    R2, #150

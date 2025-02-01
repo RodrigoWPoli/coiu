@@ -186,7 +186,6 @@
             <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
-            <nBranchProt>0</nBranchProt>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -474,9 +473,29 @@
               <FilePath>.\utils.s</FilePath>
             </File>
             <File>
-              <FileName>DefineLeds.s</FileName>
+              <FileName>interrupt.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\DefineLeds.s</FilePath>
+              <FilePath>.\interrupt.s</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\lcd.s</FilePath>
+            </File>
+            <File>
+              <FileName>teclado.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\teclado.s</FilePath>
+            </File>
+            <File>
+              <FileName>timers.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\timers.s</FilePath>
+            </File>
+            <File>
+              <FileName>angle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\angle.c</FilePath>
             </File>
           </Files>
         </Group>

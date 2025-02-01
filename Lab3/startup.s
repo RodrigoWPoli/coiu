@@ -62,7 +62,7 @@ __heap_limit
 ; Indicate that the code in this file preserves 8-byte alignment of the stack.
 ;
 ;******************************************************************************
-        PRESERVE8
+		PRESERVE8
 
 ;******************************************************************************
 ;

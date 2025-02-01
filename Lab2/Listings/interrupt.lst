@@ -693,8 +693,7 @@ ARM Macro Assembler    Page 11
   285 00000062 6802            LDR              R2, [R0]
   286 00000064         
   287 00000064 4291            CMP              R1, R2      ; Ignora variações 
-                                                            de menos de freq. >
-                                                             50Hz
+                                                            de freq. > 50Hz
   288 00000066 D103            BNE              debounce_skip
   289 00000068         
   290 00000068 F7FF FFFE       BL               create_table
@@ -713,24 +712,24 @@ ARM Macro Assembler    Page 11
                                                             ada 
   301 00000078                 END                          ;Fim do arquivo
               40060410 
+              40060404 
 
 
 
 ARM Macro Assembler    Page 12 
 
 
-              40060404 
               40060408 
               4006040C 
               4006041C 
               E000E104 
               E000E430 
               400603FC 
-Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
---depend=.\objects\interrupt.d -o.\objects\interrupt.o -IC:\Users\jhony\AppData
-\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL
- SETA 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SE
-TA 1" --list=.\listings\interrupt.lst interrupt.s
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
+interwork --depend=.\objects\interrupt.d -o.\objects\interrupt.o -IC:\Users\Ric
+ar\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefi
+ne="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C12
+94NCPDT SETA 1" --list=.\listings\interrupt.lst interrupt.s
 
 
 

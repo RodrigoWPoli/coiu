@@ -11,12 +11,14 @@
 ; Declaracoes EQU - Defines
 ;<NOME>         EQU <VALOR>
 ; ========================
-; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
+; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~F
 Timer0A_Addr             EQU     0x20010000
 Timer1A_Addr             EQU     0x20010004
-ANGLE            		 EQU     0x20020000
-TURN				 	 EQU	 0x20020004
-MODE         			 EQU     0x20010008
+PREV_KEYPRESS			 EQU     0x20020000
+CURR_KEY	    		 EQU	 0x20020004
+ANGLE            		 EQU     0x20030000
+TURN				 	 EQU	 0x20030004
+MODE         			 EQU     0x20030008
 
 ; -------------------------------------------------------------------------------
 ; Area de Dados - Declaracoes de variaveis
@@ -27,9 +29,7 @@ MODE         			 EQU     0x20010008
 ;<var>	SPACE <tam>                        ; Declara uma variavel de nome <var>
                                            ; de <tam> bytes a partir da primeira 
                                            ; posicao da RAM		
-EXPORT ANGLE
-EXPORT TURN
-EXPORT MODE
+
 ; -------------------------------------------------------------------------------
 ; Area de Codigo - Tudo abaixo da diretiva a seguir sera armazenado na memoria de 
 ;                  codigo
@@ -53,10 +53,11 @@ EXPORT MODE
 		
 		IMPORT	TecladoM_Poll
         IMPORT 	Timer0A_Handler
-		IMPORT	LCD_Display_Character
 		IMPORT  create_data_row
-		IMPORT  create_increment_row
-		IMPORT  LCD_go_to_second_line
+			
+		IMPORT LCD_Display_Number
+
+		IMPORT angle_decoder
 
 ; -------------------------------------------------------------------------------
 ; Funcao main()
@@ -67,7 +68,20 @@ Start
 	BL 	LCD_Init                  	 ;Subrotina que inicializa o LCD
 	BL 	Timers_Init              	 ;Subrotina que inicializa o Timer0A
 	BL	Interrupt_Init				 ;Subrotina que inicializa os Interrupts de GPIO
-	BL 	create_table				 ;Subrotina que cria a tabela de multiplicacao
+
+	MOV R1, #0						 ;Inicialização do angulo, das voltas e do modo
+	LDR R0, =ANGLE
+	STR R1, [R0]
+	LDR R0, =TURN
+	STR R1, [R0]
+	LDR R0, =MODE
+	STR R1, [R0]
+
+	BL  create_data_row
+
+
+	MOV R2, #300
+	BL SysTick_Wait1ms
 	
 	LDR	R0, =PREV_KEYPRESS
 	MOV R1, #0x10
@@ -77,9 +91,6 @@ Start
 	MOV R1, #0
 	STR R1, [R0]
 	
-	LDR	R0, =BLINKING_COUNTER
-	MOV R1, #0
-	STR R1, [R0]
 ; -------------------------------------------------------------------------------
 ; Laco principal
 ; R1 = valor da tecla pressionada
@@ -118,24 +129,25 @@ update_data_timer0
 	BNE 	skip  
 
 	AND 	R1, R2, #0x0F		 ; Filtra os 4 LSB de R1
-	CMP 	R1, #0x1			 ; Verifica se a tecla pressionada esta entre 1 e 9
+	CMP 	R1, #0x1			 ; Verifica se a tecla pressionada esta entre 1 e C
 	BLO		skip
 	
-	CMP 	R1, #0x9
+	CMP 	R1, #0xC
 	BHI		skip
 	
 	LDR		R0, =CURR_KEY		; Atualiza a tecla atual
 	STR		R1, [R0]
 	
-	LDR 	R0, =CURR_KEY
-    LDR 	R1, [R0]
+	LDR 	R1, =CURR_KEY
+    LDR 	R0, [R1]
+
+	;BL 	create_increment_row
+
+	BL		angle_decoder
+	
+	;BL 	increment_angle
+	
 	BL		create_data_row
-
-	BL		LCD_go_to_second_line
-
-	; R2 = fator da multiplicacao
-	BL 		multi_table
-	BL		create_increment_row
 
 	B 		skip
 
@@ -144,7 +156,6 @@ update_data_timer1
 	MOV     R1, #0
 	STR     R1, [R0]
 
-	BL 		blink_leds
 	B 		skip
 
 skip
