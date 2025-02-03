@@ -168,18 +168,18 @@ ARM Macro Assembler    Page 3
    86 00000000         LCD_Display_Character
    87 00000000 B500            PUSH             {LR}
    88 00000002         
-   89 00000002 49DF            LDR              R1, =GPIO_PORTK_DATA_R ; Dado a
+   89 00000002 49E6            LDR              R1, =GPIO_PORTK_DATA_R ; Dado a
                                                              ser mostrado
    90 00000004 6008            STR              R0, [R1]
    91 00000006         
-   92 00000006 49DF            LDR              R1, =GPIO_PORTM_DATA_R
+   92 00000006 49E6            LDR              R1, =GPIO_PORTM_DATA_R
    93 00000008 F04F 0005       MOV              R0, #2_101
    94 0000000C 6008            STR              R0, [R1]
    95 0000000E         
    96 0000000E F04F 0201       LDR              R2, =1
    97 00000012 F7FF FFFE       BL               SysTick_Wait1ms
    98 00000016         
-   99 00000016 49DB            LDR              R1, =GPIO_PORTM_DATA_R
+   99 00000016 49E2            LDR              R1, =GPIO_PORTM_DATA_R
   100 00000018 F04F 0000       MOV              R0, #0x00
   101 0000001C 6008            STR              R0, [R1]
   102 0000001E         
@@ -206,19 +206,19 @@ ARM Macro Assembler    Page 4
   115 0000002C         LCD_go_to_second_line
   116 0000002C B500            PUSH             {LR}
   117 0000002E         
-  118 0000002E 48D4            LDR              R0, =GPIO_PORTK_DATA_R 
+  118 0000002E 48DB            LDR              R0, =GPIO_PORTK_DATA_R 
                                                             ;Retorna para home
   119 00000030 F04F 0102       MOV              R1, #2_10
   120 00000034 6001            STR              R1, [R0]
   121 00000036         
-  122 00000036 48D3            LDR              R0, =GPIO_PORTM_DATA_R
+  122 00000036 48DA            LDR              R0, =GPIO_PORTM_DATA_R
   123 00000038 F04F 0104       MOV              R1, #2_100
   124 0000003C 6001            STR              R1, [R0]
   125 0000003E         
   126 0000003E F04F 0202       MOV              R2, #2
   127 00000042 F7FF FFFE       BL               SysTick_Wait1ms
   128 00000046         
-  129 00000046 48CF            LDR              R0, =GPIO_PORTM_DATA_R
+  129 00000046 48D6            LDR              R0, =GPIO_PORTM_DATA_R
   130 00000048 F04F 0100       MOV              R1, #0x00
   131 0000004C 6001            STR              R1, [R0]    ;Retornou para home
                                                             
@@ -226,18 +226,18 @@ ARM Macro Assembler    Page 4
   133 0000004E F04F 0300       MOV              R3, #0
   134 00000052         cursor_shift_right                   ;Pula os 40 digitos
                                                             
-  135 00000052 48CB            LDR              R0, =GPIO_PORTK_DATA_R
+  135 00000052 48D2            LDR              R0, =GPIO_PORTK_DATA_R
   136 00000054 F04F 0114       MOV              R1, #2_10100
   137 00000058 6001            STR              R1, [R0]
   138 0000005A         
-  139 0000005A 48CA            LDR              R0, =GPIO_PORTM_DATA_R
+  139 0000005A 48D1            LDR              R0, =GPIO_PORTM_DATA_R
   140 0000005C F04F 0104       MOV              R1, #2_100
   141 00000060 6001            STR              R1, [R0]
   142 00000062         
   143 00000062 F04F 0002       MOV              R0, #2
   144 00000066 F7FF FFFE       BL               SysTick_Wait1us
   145 0000006A         
-  146 0000006A 48C6            LDR              R0, =GPIO_PORTM_DATA_R
+  146 0000006A 48CD            LDR              R0, =GPIO_PORTM_DATA_R
   147 0000006C F04F 0100       MOV              R1, #0x00
   148 00000070 6001            STR              R1, [R0]
   149 00000072         
@@ -257,7 +257,7 @@ ARM Macro Assembler    Page 4
   162 00000080         LCD_Reset
   163 00000080 B500            PUSH             {LR}
   164 00000082         
-  165 00000082 48BF            LDR              R0, =GPIO_PORTK_DATA_R ;Clear n
+  165 00000082 48C6            LDR              R0, =GPIO_PORTK_DATA_R ;Clear n
 
 
 
@@ -268,33 +268,33 @@ ARM Macro Assembler    Page 5
   166 00000084 F04F 0101       MOV              R1, #2_1
   167 00000088 6001            STR              R1, [R0]
   168 0000008A         
-  169 0000008A 48BE            LDR              R0, =GPIO_PORTM_DATA_R
+  169 0000008A 48C5            LDR              R0, =GPIO_PORTM_DATA_R
   170 0000008C F04F 0104       MOV              R1, #2_100
   171 00000090 6001            STR              R1, [R0]
   172 00000092         
   173 00000092 F04F 0201       MOV              R2, #1
   174 00000096 F7FF FFFE       BL               SysTick_Wait1ms
   175 0000009A         
-  176 0000009A 48BA            LDR              R0, =GPIO_PORTM_DATA_R
+  176 0000009A 48C1            LDR              R0, =GPIO_PORTM_DATA_R
   177 0000009C F04F 0100       MOV              R1, #0x00
   178 000000A0 6001            STR              R1, [R0]
   179 000000A2         
   180 000000A2 F04F 0201       MOV              R2, #1
   181 000000A6 F7FF FFFE       BL               SysTick_Wait1ms
   182 000000AA         
-  183 000000AA 48B5            LDR              R0, =GPIO_PORTK_DATA_R 
+  183 000000AA 48BC            LDR              R0, =GPIO_PORTK_DATA_R 
                                                             ;Retorna para home
   184 000000AC F04F 0102       MOV              R1, #2_10
   185 000000B0 6001            STR              R1, [R0]
   186 000000B2         
-  187 000000B2 48B4            LDR              R0, =GPIO_PORTM_DATA_R
+  187 000000B2 48BB            LDR              R0, =GPIO_PORTM_DATA_R
   188 000000B4 F04F 0104       MOV              R1, #2_100
   189 000000B8 6001            STR              R1, [R0]
   190 000000BA         
   191 000000BA F04F 0201       MOV              R2, #1
   192 000000BE F7FF FFFE       BL               SysTick_Wait1ms
   193 000000C2         
-  194 000000C2 48B0            LDR              R0, =GPIO_PORTM_DATA_R
+  194 000000C2 48B7            LDR              R0, =GPIO_PORTM_DATA_R
   195 000000C4 F04F 0100       MOV              R1, #0x00
   196 000000C8 6001            STR              R1, [R0]    ;Retornou para home
                                                             
@@ -341,319 +341,331 @@ ARM Macro Assembler    Page 6
   229 0000011E         ;Aqui fazer receber o valor de ang, separar ele em até 
                        3 digitos e mostrar
   230 0000011E         
-  231 0000011E 499A            LDR              R1, =ANGLE
+  231 0000011E 49A1            LDR              R1, =ANGLE
   232 00000120 6808            LDR              R0, [R1]
   233 00000122 F04F 0200       MOV              R2, #0
   234 00000126 4290            CMP              R0, R2
-  235 00000128 D803            BHI              positive
+  235 00000128 D203            BHS              positive
   236 0000012A         
   237 0000012A F04F 002D       LDR              R0, =char_minus
   238 0000012E F7FF FFFE       BL               LCD_Display_Character
   239 00000132         positive
   240 00000132         
-  241 00000132 4995            LDR              R1, =ANGLE
+  241 00000132 499C            LDR              R1, =ANGLE
   242 00000134 6808            LDR              R0, [R1]
-  243 00000136         
-  244 00000136 B081            SUB              SP, SP, #4
-  245 00000138 F7FF FFFE       BL               LCD_Display_Number 
+  243 00000136 F7FF FFFE       BL               LCD_Display_Number 
                                                             ; Chama função C
-  246 0000013C B001            ADD              SP, SP, #4
-  247 0000013E         
-  248 0000013E F04F 00DF       LDR              R0, =char_angle
-  249 00000142 F7FF FFFE       BL               LCD_Display_Character
-  250 00000146         
-  251 00000146 F7FF FFFE       BL               LCD_go_to_second_line
-  252 0000014A         
-  253 0000014A F04F 0056       LDR              R0, =char_V
-  254 0000014E F7FF FFFE       BL               LCD_Display_Character
-  255 00000152 F04F 006F       LDR              R0, =char_o
-  256 00000156 F7FF FFFE       BL               LCD_Display_Character
-  257 0000015A F04F 006C       LDR              R0, =char_l
-  258 0000015E F7FF FFFE       BL               LCD_Display_Character
-  259 00000162 F04F 0074       LDR              R0, =char_t
-  260 00000166 F7FF FFFE       BL               LCD_Display_Character
-  261 0000016A F04F 0061       LDR              R0, =char_a
-  262 0000016E F7FF FFFE       BL               LCD_Display_Character
-  263 00000172 F04F 003A       LDR              R0, =char_dois_pontos
-  264 00000176 F7FF FFFE       BL               LCD_Display_Character
-  265 0000017A F04F 0020       LDR              R0, =char_space
-  266 0000017E F7FF FFFE       BL               LCD_Display_Character
-  267 00000182         ;Aqui fazer receber o valor de turn, separar ele em até
+  244 0000013A         
+  245 0000013A F04F 00DF       LDR              R0, =char_angle
+  246 0000013E F7FF FFFE       BL               LCD_Display_Character
+  247 00000142         
+  248 00000142 F7FF FFFE       BL               LCD_go_to_second_line
+  249 00000146         
+  250 00000146 F04F 0056       LDR              R0, =char_V
+  251 0000014A F7FF FFFE       BL               LCD_Display_Character
+  252 0000014E F04F 006F       LDR              R0, =char_o
+  253 00000152 F7FF FFFE       BL               LCD_Display_Character
+  254 00000156 F04F 006C       LDR              R0, =char_l
+  255 0000015A F7FF FFFE       BL               LCD_Display_Character
+  256 0000015E F04F 0074       LDR              R0, =char_t
+  257 00000162 F7FF FFFE       BL               LCD_Display_Character
+  258 00000166 F04F 0061       LDR              R0, =char_a
+  259 0000016A F7FF FFFE       BL               LCD_Display_Character
+  260 0000016E F04F 003A       LDR              R0, =char_dois_pontos
+  261 00000172 F7FF FFFE       BL               LCD_Display_Character
+  262 00000176 F04F 0020       LDR              R0, =char_space
+  263 0000017A F7FF FFFE       BL               LCD_Display_Character
+  264 0000017E         ;Aqui fazer receber o valor de turn, separar ele em até
                         3 digitos e mostrar, lembrar que pode ser negativo
-  268 00000182         ;BL    LCD_Display_Number
-  269 00000182         
-  270 00000182 F85D EB04       POP              {LR}
-  271 00000186 4770            BX               LR
-  272 00000188         
-  273 00000188         ; ------------------------------------------------------
-                       ------------------------
-  274 00000188         ; Funcao create_increment_row
+  265 0000017E         
+  266 0000017E 498A            LDR              R1, =TURN
+  267 00000180 6808            LDR              R0, [R1]
+  268 00000182 F04F 0200       MOV              R2, #0
+  269 00000186 4290            CMP              R0, R2
+  270 00000188 D203            BHS              positive2
+  271 0000018A         
+  272 0000018A F04F 002D       LDR              R0, =char_minus
+  273 0000018E F7FF FFFE       BL               LCD_Display_Character
+  274 00000192         positive2
+  275 00000192         
 
 
 
 ARM Macro Assembler    Page 7 
 
 
-  275 00000188         ; Seta hardcode no LCD para apresentar "Incremento: inc"
-                       
-  276 00000188         ; Parametro de entrada: nenhum
-  277 00000188         ; Parametro de saida: nenhum
-  278 00000188         create_increment_row
-  279 00000188 B500            PUSH             {LR}
-  280 0000018A         
-  281 0000018A F04F 0049       LDR              R0, =char_I
-  282 0000018E F7FF FFFE       BL               LCD_Display_Character
-  283 00000192 F04F 006E       LDR              R0, =char_n
-  284 00000196 F7FF FFFE       BL               LCD_Display_Character
-  285 0000019A F04F 0063       LDR              R0, =char_c
-  286 0000019E F7FF FFFE       BL               LCD_Display_Character
-  287 000001A2 F04F 0072       LDR              R0, =char_r
-  288 000001A6 F7FF FFFE       BL               LCD_Display_Character
-  289 000001AA F04F 0065       LDR              R0, =char_e
-  290 000001AE F7FF FFFE       BL               LCD_Display_Character
-  291 000001B2 F04F 006D       LDR              R0, =char_m
-  292 000001B6 F7FF FFFE       BL               LCD_Display_Character
-  293 000001BA F04F 0065       LDR              R0, =char_e
-  294 000001BE F7FF FFFE       BL               LCD_Display_Character
-  295 000001C2 F04F 006E       LDR              R0, =char_n
-  296 000001C6 F7FF FFFE       BL               LCD_Display_Character
-  297 000001CA F04F 0074       LDR              R0, =char_t
-  298 000001CE F7FF FFFE       BL               LCD_Display_Character
-  299 000001D2 F04F 006F       LDR              R0, =char_o
-  300 000001D6 F7FF FFFE       BL               LCD_Display_Character
-  301 000001DA F04F 003A       LDR              R0, =char_dois_pontos
-  302 000001DE F7FF FFFE       BL               LCD_Display_Character
-  303 000001E2 F04F 0020       LDR              R0, =char_space
-  304 000001E6 F7FF FFFE       BL               LCD_Display_Character
-  305 000001EA         ;Aqui fazer receber o valor de inc, separar ele em até 
-                       3 digitos e mostrar
-  306 000001EA         ;BL    LCD_Display_Increment
-  307 000001EA         
-  308 000001EA F85D EB04       POP              {LR}
-  309 000001EE 4770            BX               LR
-  310 000001F0         
-  311 000001F0         ; ------------------------------------------------------
+  276 00000192 4985            LDR              R1, =TURN
+  277 00000194 6808            LDR              R0, [R1]
+  278 00000196 F7FF FFFE       BL               LCD_Display_Number 
+                                                            ; Chama função C
+  279 0000019A         
+  280 0000019A F85D EB04       POP              {LR}
+  281 0000019E 4770            BX               LR
+  282 000001A0         
+  283 000001A0         ; ------------------------------------------------------
                        ------------------------
-  312 000001F0         ; Funcao create_mode_row
-  313 000001F0         ; Seta hardcode no LCD para apresentar "Modo de passo: m
+  284 000001A0         ; Funcao create_increment_row
+  285 000001A0         ; Seta hardcode no LCD para apresentar "Incremento: inc"
+                       
+  286 000001A0         ; Parametro de entrada: nenhum
+  287 000001A0         ; Parametro de saida: nenhum
+  288 000001A0         create_increment_row
+  289 000001A0 B500            PUSH             {LR}
+  290 000001A2         
+  291 000001A2 F7FF FFFE       BL               LCD_Reset
+  292 000001A6         
+  293 000001A6 F04F 0049       LDR              R0, =char_I
+  294 000001AA F7FF FFFE       BL               LCD_Display_Character
+  295 000001AE F04F 006E       LDR              R0, =char_n
+  296 000001B2 F7FF FFFE       BL               LCD_Display_Character
+  297 000001B6 F04F 0063       LDR              R0, =char_c
+  298 000001BA F7FF FFFE       BL               LCD_Display_Character
+  299 000001BE F04F 0072       LDR              R0, =char_r
+  300 000001C2 F7FF FFFE       BL               LCD_Display_Character
+  301 000001C6 F04F 0065       LDR              R0, =char_e
+  302 000001CA F7FF FFFE       BL               LCD_Display_Character
+  303 000001CE F04F 006D       LDR              R0, =char_m
+  304 000001D2 F7FF FFFE       BL               LCD_Display_Character
+  305 000001D6 F04F 0065       LDR              R0, =char_e
+  306 000001DA F7FF FFFE       BL               LCD_Display_Character
+  307 000001DE F04F 006E       LDR              R0, =char_n
+  308 000001E2 F7FF FFFE       BL               LCD_Display_Character
+  309 000001E6 F04F 0074       LDR              R0, =char_t
+  310 000001EA F7FF FFFE       BL               LCD_Display_Character
+  311 000001EE F04F 006F       LDR              R0, =char_o
+  312 000001F2 F7FF FFFE       BL               LCD_Display_Character
+  313 000001F6 F04F 003A       LDR              R0, =char_dois_pontos
+  314 000001FA F7FF FFFE       BL               LCD_Display_Character
+  315 000001FE F04F 0020       LDR              R0, =char_space
+  316 00000202 F7FF FFFE       BL               LCD_Display_Character
+  317 00000206         
+  318 00000206         
+  319 00000206 F85D EB04       POP              {LR}
+  320 0000020A 4770            BX               LR
+  321 0000020C         
+  322 0000020C         ; ------------------------------------------------------
+                       ------------------------
+  323 0000020C         ; Funcao create_mode_row
+  324 0000020C         ; Seta hardcode no LCD para apresentar "Modo de passo: m
                        ode"
-  314 000001F0         ; Parametro de entrada: nenhum
-  315 000001F0         ; Parametro de saida: nenhum
-  316 000001F0         create_mode_row
-  317 000001F0 B500            PUSH             {LR}
-  318 000001F2         
-  319 000001F2 F04F 0049       LDR              R0, =char_I
-  320 000001F6 F7FF FFFE       BL               LCD_Display_Character
-  321 000001FA F04F 006E       LDR              R0, =char_n
-  322 000001FE F7FF FFFE       BL               LCD_Display_Character
-  323 00000202 F04F 0063       LDR              R0, =char_c
-  324 00000206 F7FF FFFE       BL               LCD_Display_Character
-  325 0000020A F04F 0072       LDR              R0, =char_r
-  326 0000020E F7FF FFFE       BL               LCD_Display_Character
-  327 00000212 F04F 0065       LDR              R0, =char_e
-  328 00000216 F7FF FFFE       BL               LCD_Display_Character
-  329 0000021A F04F 006D       LDR              R0, =char_m
+  325 0000020C         ; Parametro de entrada: nenhum
+  326 0000020C         ; Parametro de saida: nenhum
+  327 0000020C         create_mode_row
+  328 0000020C B500            PUSH             {LR}
+  329 0000020E         
 
 
 
 ARM Macro Assembler    Page 8 
 
 
-  330 0000021E F7FF FFFE       BL               LCD_Display_Character
-  331 00000222 F04F 0065       LDR              R0, =char_e
-  332 00000226 F7FF FFFE       BL               LCD_Display_Character
-  333 0000022A F04F 006E       LDR              R0, =char_n
-  334 0000022E F7FF FFFE       BL               LCD_Display_Character
-  335 00000232 F04F 0074       LDR              R0, =char_t
-  336 00000236 F7FF FFFE       BL               LCD_Display_Character
-  337 0000023A F04F 006F       LDR              R0, =char_o
-  338 0000023E F7FF FFFE       BL               LCD_Display_Character
-  339 00000242 F04F 003A       LDR              R0, =char_dois_pontos
-  340 00000246 F7FF FFFE       BL               LCD_Display_Character
-  341 0000024A F04F 0020       LDR              R0, =char_space
-  342 0000024E F7FF FFFE       BL               LCD_Display_Character
-  343 00000252         ;Aqui fazer receber o valor de inc, separar ele em até 
+  330 0000020E F04F 0049       LDR              R0, =char_I
+  331 00000212 F7FF FFFE       BL               LCD_Display_Character
+  332 00000216 F04F 006E       LDR              R0, =char_n
+  333 0000021A F7FF FFFE       BL               LCD_Display_Character
+  334 0000021E F04F 0063       LDR              R0, =char_c
+  335 00000222 F7FF FFFE       BL               LCD_Display_Character
+  336 00000226 F04F 0072       LDR              R0, =char_r
+  337 0000022A F7FF FFFE       BL               LCD_Display_Character
+  338 0000022E F04F 0065       LDR              R0, =char_e
+  339 00000232 F7FF FFFE       BL               LCD_Display_Character
+  340 00000236 F04F 006D       LDR              R0, =char_m
+  341 0000023A F7FF FFFE       BL               LCD_Display_Character
+  342 0000023E F04F 0065       LDR              R0, =char_e
+  343 00000242 F7FF FFFE       BL               LCD_Display_Character
+  344 00000246 F04F 006E       LDR              R0, =char_n
+  345 0000024A F7FF FFFE       BL               LCD_Display_Character
+  346 0000024E F04F 0074       LDR              R0, =char_t
+  347 00000252 F7FF FFFE       BL               LCD_Display_Character
+  348 00000256 F04F 006F       LDR              R0, =char_o
+  349 0000025A F7FF FFFE       BL               LCD_Display_Character
+  350 0000025E F04F 003A       LDR              R0, =char_dois_pontos
+  351 00000262 F7FF FFFE       BL               LCD_Display_Character
+  352 00000266 F04F 0020       LDR              R0, =char_space
+  353 0000026A F7FF FFFE       BL               LCD_Display_Character
+  354 0000026E         ;Aqui fazer receber o valor de inc, separar ele em até 
                        3 digitos e mostrar
-  344 00000252         ;BL    LCD_Display_Increment
-  345 00000252         
-  346 00000252 F85D EB04       POP              {LR}
-  347 00000256 4770            BX               LR
-  348 00000258         
-  349 00000258         ; ------------------------------------------------------
+  355 0000026E         ;BL    LCD_Display_Increment
+  356 0000026E         
+  357 0000026E F85D EB04       POP              {LR}
+  358 00000272 4770            BX               LR
+  359 00000274         
+  360 00000274         ; ------------------------------------------------------
                        ------------------------
-  350 00000258         ; Funcao create_reset_row
-  351 00000258         ; Seta hardcode no LCD para apresentar "Resetando..."
-  352 00000258         ; Parametro de entrada: nenhum
-  353 00000258         ; Parametro de saida: nenhum
-  354 00000258         create_reset_row
-  355 00000258 B500            PUSH             {LR}
-  356 0000025A         
-  357 0000025A F7FF FFFE       BL               LCD_Reset
-  358 0000025E         
-  359 0000025E         ; Resetando
-  360 0000025E F04F 0052       LDR              R0, =char_R
-  361 00000262 F7FF FFFE       BL               LCD_Display_Character
-  362 00000266 F04F 0065       LDR              R0, =char_e
-  363 0000026A F7FF FFFE       BL               LCD_Display_Character
-  364 0000026E F04F 0073       LDR              R0, =char_s
-  365 00000272 F7FF FFFE       BL               LCD_Display_Character
-  366 00000276 F04F 0065       LDR              R0, =char_e
-  367 0000027A F7FF FFFE       BL               LCD_Display_Character
-  368 0000027E F04F 0074       LDR              R0, =char_t
-  369 00000282 F7FF FFFE       BL               LCD_Display_Character
-  370 00000286 F04F 0061       LDR              R0, =char_a
-  371 0000028A F7FF FFFE       BL               LCD_Display_Character
-  372 0000028E F04F 006E       LDR              R0, =char_n
-  373 00000292 F7FF FFFE       BL               LCD_Display_Character
-  374 00000296 F04F 0064       LDR              R0, =char_d
-  375 0000029A F7FF FFFE       BL               LCD_Display_Character
-  376 0000029E F04F 006F       LDR              R0, =char_o
-  377 000002A2 F7FF FFFE       BL               LCD_Display_Character
-  378 000002A6         
-  379 000002A6         ; ... piscando
-  380 000002A6 F04F 0900       MOV              R9, #0      ;quantidade de iter
-                                                            acoes geral
-  381 000002AA         blink_loop
-  382 000002AA F1B9 0F05       CMP              R9, #5      ;Enquanto nao fizer
-                                                             x vezes, nao final
-                                                            iza
-  383 000002AE D062            BEQ              display_resetado
+  361 00000274         ; Funcao create_reset_row
+  362 00000274         ; Seta hardcode no LCD para apresentar "Resetando..."
+  363 00000274         ; Parametro de entrada: nenhum
+  364 00000274         ; Parametro de saida: nenhum
+  365 00000274         create_reset_row
+  366 00000274 B500            PUSH             {LR}
+  367 00000276         
+  368 00000276 F7FF FFFE       BL               LCD_Reset
+  369 0000027A         
+  370 0000027A         ; Resetando
+  371 0000027A F04F 0052       LDR              R0, =char_R
+  372 0000027E F7FF FFFE       BL               LCD_Display_Character
+  373 00000282 F04F 0065       LDR              R0, =char_e
+  374 00000286 F7FF FFFE       BL               LCD_Display_Character
+  375 0000028A F04F 0073       LDR              R0, =char_s
+  376 0000028E F7FF FFFE       BL               LCD_Display_Character
+  377 00000292 F04F 0065       LDR              R0, =char_e
+  378 00000296 F7FF FFFE       BL               LCD_Display_Character
+  379 0000029A F04F 0074       LDR              R0, =char_t
+  380 0000029E F7FF FFFE       BL               LCD_Display_Character
+  381 000002A2 F04F 0061       LDR              R0, =char_a
+  382 000002A6 F7FF FFFE       BL               LCD_Display_Character
+  383 000002AA F04F 006E       LDR              R0, =char_n
+  384 000002AE F7FF FFFE       BL               LCD_Display_Character
+  385 000002B2 F04F 0064       LDR              R0, =char_d
+  386 000002B6 F7FF FFFE       BL               LCD_Display_Character
 
 
 
 ARM Macro Assembler    Page 9 
 
 
-  384 000002B0         
-  385 000002B0         display_dots
-  386 000002B0 F109 0901       ADD              R9, #1      ;Soma 1 no iterador
+  387 000002BA F04F 006F       LDR              R0, =char_o
+  388 000002BE F7FF FFFE       BL               LCD_Display_Character
+  389 000002C2         
+  390 000002C2         ; ... piscando
+  391 000002C2 F04F 0900       MOV              R9, #0      ;quantidade de iter
+                                                            acoes geral
+  392 000002C6         blink_loop
+  393 000002C6 F1B9 0F05       CMP              R9, #5      ;Enquanto nao fizer
+                                                             x vezes, nao final
+                                                            iza
+  394 000002CA D062            BEQ              display_resetado
+  395 000002CC         
+  396 000002CC         display_dots
+  397 000002CC F109 0901       ADD              R9, #1      ;Soma 1 no iterador
                                                             
-  387 000002B4         
-  388 000002B4 F04F 002E       LDR              R0 , =char_dot
-  389 000002B8 F7FF FFFE       BL               LCD_Display_Character
-  390 000002BC F04F 0296       MOV              R2, #150
-  391 000002C0 F7FF FFFE       BL               SysTick_Wait1ms ;Mostra primeir
+  398 000002D0         
+  399 000002D0 F04F 002E       LDR              R0 , =char_dot
+  400 000002D4 F7FF FFFE       BL               LCD_Display_Character
+  401 000002D8 F04F 0296       MOV              R2, #150
+  402 000002DC F7FF FFFE       BL               SysTick_Wait1ms ;Mostra primeir
                                                             o ponto e espera um
                                                              pouco
-  392 000002C4 F04F 002E       LDR              R0, =char_dot
-  393 000002C8 F7FF FFFE       BL               LCD_Display_Character
-  394 000002CC F04F 0296       MOV              R2, #150
-  395 000002D0 F7FF FFFE       BL               SysTick_Wait1ms ;Mostra segundo
+  403 000002E0 F04F 002E       LDR              R0, =char_dot
+  404 000002E4 F7FF FFFE       BL               LCD_Display_Character
+  405 000002E8 F04F 0296       MOV              R2, #150
+  406 000002EC F7FF FFFE       BL               SysTick_Wait1ms ;Mostra segundo
                                                              ponto e espera um 
                                                             pouco
-  396 000002D4 F04F 002E       LDR              R0, =char_dot
-  397 000002D8 F7FF FFFE       BL               LCD_Display_Character
-  398 000002DC F04F 0296       MOV              R2, #150
-  399 000002E0 F7FF FFFE       BL               SysTick_Wait1ms ;Mostra terceir
+  407 000002F0 F04F 002E       LDR              R0, =char_dot
+  408 000002F4 F7FF FFFE       BL               LCD_Display_Character
+  409 000002F8 F04F 0296       MOV              R2, #150
+  410 000002FC F7FF FFFE       BL               SysTick_Wait1ms ;Mostra terceir
                                                             o ponto e espera um
                                                              pouco
-  400 000002E4         
-  401 000002E4         
-  402 000002E4         LCD_Clear_Tail                       ;limpa os 3 pontos 
+  411 00000300         
+  412 00000300         
+  413 00000300         LCD_Clear_Tail                       ;limpa os 3 pontos 
                                                             finais
-  403 000002E4         
-  404 000002E4 F04F 0800       MOV              R8, #0      ;contador de iterac
+  414 00000300         
+  415 00000300 F04F 0800       MOV              R8, #0      ;contador de iterac
                                                             oes de espacos
-  405 000002E8 F04F 0700       MOV              R7, #0      ;contador de iterac
+  416 00000304 F04F 0700       MOV              R7, #0      ;contador de iterac
                                                             oes de left shift
-  406 000002EC         
-  407 000002EC         cursor_shift_left                    ;Volta os 3 dígito
+  417 00000308         
+  418 00000308         cursor_shift_left                    ;Volta os 3 dígito
                                                             s para esquerda
-  408 000002EC 4824            LDR              R0, =GPIO_PORTK_DATA_R
-  409 000002EE F04F 0110       MOV              R1, #2_10000
-  410 000002F2 6001            STR              R1, [R0]
-  411 000002F4         
-  412 000002F4 4823            LDR              R0, =GPIO_PORTM_DATA_R
-  413 000002F6 F04F 0104       MOV              R1, #2_100
-  414 000002FA 6001            STR              R1, [R0]
-  415 000002FC         
-  416 000002FC F04F 0002       MOV              R0, #2
-  417 00000300 F7FF FFFE       BL               SysTick_Wait1us
-  418 00000304         
-  419 00000304 481F            LDR              R0, =GPIO_PORTM_DATA_R
-  420 00000306 F04F 0100       MOV              R1, #0x00
-  421 0000030A 6001            STR              R1, [R0]
-  422 0000030C         
-  423 0000030C F04F 0002       MOV              R0, #2
-  424 00000310 F7FF FFFE       BL               SysTick_Wait1us
-  425 00000314         
-  426 00000314 F108 0801       ADD              R8, #1
-  427 00000318 F1B8 0F03       CMP              R8, #3
-  428 0000031C D1E6            BNE              cursor_shift_left
-  429 0000031E         
-  430 0000031E         
-  431 0000031E         display_spaces                       ;Mostra 3 espaços 
+  419 00000308 4824            LDR              R0, =GPIO_PORTK_DATA_R
+  420 0000030A F04F 0110       MOV              R1, #2_10000
+  421 0000030E 6001            STR              R1, [R0]
+  422 00000310         
+  423 00000310 4823            LDR              R0, =GPIO_PORTM_DATA_R
+  424 00000312 F04F 0104       MOV              R1, #2_100
+  425 00000316 6001            STR              R1, [R0]
+  426 00000318         
+  427 00000318 F04F 0002       MOV              R0, #2
+  428 0000031C F7FF FFFE       BL               SysTick_Wait1us
+  429 00000320         
+  430 00000320 481F            LDR              R0, =GPIO_PORTM_DATA_R
+  431 00000322 F04F 0100       MOV              R1, #0x00
 
 
 
 ARM Macro Assembler    Page 10 
 
 
+  432 00000326 6001            STR              R1, [R0]
+  433 00000328         
+  434 00000328 F04F 0002       MOV              R0, #2
+  435 0000032C F7FF FFFE       BL               SysTick_Wait1us
+  436 00000330         
+  437 00000330 F108 0801       ADD              R8, #1
+  438 00000334 F1B8 0F03       CMP              R8, #3
+  439 00000338 D1E6            BNE              cursor_shift_left
+  440 0000033A         
+  441 0000033A         
+  442 0000033A         display_spaces                       ;Mostra 3 espaços 
                                                             caso ja nao tenha m
                                                             ostrado
-  432 0000031E F04F 0020       LDR              R0, =char_space
-  433 00000322 F7FF FFFE       BL               LCD_Display_Character
-  434 00000326 F04F 0020       LDR              R0, =char_space
-  435 0000032A F7FF FFFE       BL               LCD_Display_Character
-  436 0000032E F04F 0020       LDR              R0, =char_space
-  437 00000332 F7FF FFFE       BL               LCD_Display_Character
-  438 00000336         
-  439 00000336 F04F 0296       MOV              R2, #150
-  440 0000033A F7FF FFFE       BL               SysTick_Wait1ms
-  441 0000033E         
-  442 0000033E F04F 0800       MOV              R8, #0
-  443 00000342         cursor_shift_left2
-  444 00000342 480F            LDR              R0, =GPIO_PORTK_DATA_R
-  445 00000344 F04F 0110       MOV              R1, #2_10000
-  446 00000348 6001            STR              R1, [R0]
-  447 0000034A         
-  448 0000034A 480E            LDR              R0, =GPIO_PORTM_DATA_R
-  449 0000034C F04F 0104       MOV              R1, #2_100
-  450 00000350 6001            STR              R1, [R0]
-  451 00000352         
-  452 00000352 F04F 0002       MOV              R0, #2
-  453 00000356 F7FF FFFE       BL               SysTick_Wait1us
-  454 0000035A         
-  455 0000035A 480A            LDR              R0, =GPIO_PORTM_DATA_R
-  456 0000035C F04F 0100       MOV              R1, #0x00
-  457 00000360 6001            STR              R1, [R0]
-  458 00000362         
-  459 00000362 F04F 0002       MOV              R0, #2
-  460 00000366 F7FF FFFE       BL               SysTick_Wait1us
-  461 0000036A         
-  462 0000036A F108 0801       ADD              R8, #1
-  463 0000036E F1B8 0F03       CMP              R8, #3
-  464 00000372 D1E6            BNE              cursor_shift_left2
-  465 00000374         
-  466 00000374 E799            B                blink_loop  ;Se nao voltou depo
+  443 0000033A F04F 0020       LDR              R0, =char_space
+  444 0000033E F7FF FFFE       BL               LCD_Display_Character
+  445 00000342 F04F 0020       LDR              R0, =char_space
+  446 00000346 F7FF FFFE       BL               LCD_Display_Character
+  447 0000034A F04F 0020       LDR              R0, =char_space
+  448 0000034E F7FF FFFE       BL               LCD_Display_Character
+  449 00000352         
+  450 00000352 F04F 0296       MOV              R2, #150
+  451 00000356 F7FF FFFE       BL               SysTick_Wait1ms
+  452 0000035A         
+  453 0000035A F04F 0800       MOV              R8, #0
+  454 0000035E         cursor_shift_left2
+  455 0000035E 480F            LDR              R0, =GPIO_PORTK_DATA_R
+  456 00000360 F04F 0110       MOV              R1, #2_10000
+  457 00000364 6001            STR              R1, [R0]
+  458 00000366         
+  459 00000366 480E            LDR              R0, =GPIO_PORTM_DATA_R
+  460 00000368 F04F 0104       MOV              R1, #2_100
+  461 0000036C 6001            STR              R1, [R0]
+  462 0000036E         
+  463 0000036E F04F 0002       MOV              R0, #2
+  464 00000372 F7FF FFFE       BL               SysTick_Wait1us
+  465 00000376         
+  466 00000376 480A            LDR              R0, =GPIO_PORTM_DATA_R
+  467 00000378 F04F 0100       MOV              R1, #0x00
+  468 0000037C 6001            STR              R1, [R0]
+  469 0000037E         
+  470 0000037E F04F 0002       MOV              R0, #2
+  471 00000382 F7FF FFFE       BL               SysTick_Wait1us
+  472 00000386         
+  473 00000386 F108 0801       ADD              R8, #1
+  474 0000038A F1B8 0F03       CMP              R8, #3
+  475 0000038E D1E6            BNE              cursor_shift_left2
+  476 00000390         
+  477 00000390 E799            B                blink_loop  ;Se nao voltou depo
                                                             is do espaco, volta
                                                             . Se voltou, printa
                                                              pontos dnv ou sai 
                                                             do loop
-  467 00000376         
-  468 00000376         display_resetado
-  469 00000376         ; Resetar os valores de ang e turn
-  470 00000376         
-  471 00000376         ;TO-DO
-  472 00000376         
-  473 00000376         ;Mostrar data novamente
-  474 00000376 F7FF FFFE       BL               create_data_row
-  475 0000037A         
-  476 0000037A F85D EB04       POP              {LR}
-  477 0000037E 4770            BX               LR
-  478 00000380         
-  479 00000380         
-  480 00000380                 ALIGN
-  481 00000380                 END
-              400613FC 
-              400633FC 
-              20030000 
+  478 00000392         
+  479 00000392         display_resetado
+  480 00000392         ; Resetar os valores de ang e turn
+  481 00000392         
+  482 00000392         ;TO-DO
+  483 00000392         
+  484 00000392         ;Mostrar data novamente
 
 
 
 ARM Macro Assembler    Page 11 
 
 
+  485 00000392 F7FF FFFE       BL               create_data_row
+  486 00000396         
+  487 00000396 F85D EB04       POP              {LR}
+  488 0000039A 4770            BX               LR
+  489 0000039C         
+  490 0000039C         
+  491 0000039C                 ALIGN
+  492 0000039C                 END
+              400613FC 
+              400633FC 
+              20030000 
+              20030004 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
 interwork --depend=.\objects\lcd.d -o.\objects\lcd.o -IC:\Users\Ricar\AppData\L
 ocal\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL S
@@ -673,11 +685,11 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-LCD_Clear_Tail 000002E4
+LCD_Clear_Tail 00000300
 
 Symbol: LCD_Clear_Tail
    Definitions
-      At line 402 in file lcd.s
+      At line 413 in file lcd.s
    Uses
       None
 Comment: LCD_Clear_Tail unused
@@ -697,59 +709,60 @@ Symbol: LCD_Display_Character
       At line 226 in file lcd.s
       At line 228 in file lcd.s
       At line 238 in file lcd.s
-      At line 249 in file lcd.s
-      At line 254 in file lcd.s
-      At line 256 in file lcd.s
-      At line 258 in file lcd.s
-      At line 260 in file lcd.s
-      At line 262 in file lcd.s
-      At line 264 in file lcd.s
-      At line 266 in file lcd.s
-      At line 282 in file lcd.s
-      At line 284 in file lcd.s
-      At line 286 in file lcd.s
-      At line 288 in file lcd.s
-      At line 290 in file lcd.s
-      At line 292 in file lcd.s
+      At line 246 in file lcd.s
+      At line 251 in file lcd.s
+      At line 253 in file lcd.s
+      At line 255 in file lcd.s
+      At line 257 in file lcd.s
+      At line 259 in file lcd.s
+      At line 261 in file lcd.s
+      At line 263 in file lcd.s
+      At line 273 in file lcd.s
       At line 294 in file lcd.s
       At line 296 in file lcd.s
       At line 298 in file lcd.s
       At line 300 in file lcd.s
       At line 302 in file lcd.s
       At line 304 in file lcd.s
-      At line 320 in file lcd.s
-      At line 322 in file lcd.s
-      At line 324 in file lcd.s
-      At line 326 in file lcd.s
-      At line 328 in file lcd.s
-      At line 330 in file lcd.s
-      At line 332 in file lcd.s
+      At line 306 in file lcd.s
+      At line 308 in file lcd.s
+      At line 310 in file lcd.s
+      At line 312 in file lcd.s
+      At line 314 in file lcd.s
+      At line 316 in file lcd.s
+      At line 331 in file lcd.s
+      At line 333 in file lcd.s
+      At line 335 in file lcd.s
+      At line 337 in file lcd.s
+      At line 339 in file lcd.s
+      At line 341 in file lcd.s
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Relocatable symbols
 
-      At line 334 in file lcd.s
-      At line 336 in file lcd.s
-      At line 338 in file lcd.s
-      At line 340 in file lcd.s
-      At line 342 in file lcd.s
-      At line 361 in file lcd.s
-      At line 363 in file lcd.s
-      At line 365 in file lcd.s
-      At line 367 in file lcd.s
-      At line 369 in file lcd.s
-      At line 371 in file lcd.s
-      At line 373 in file lcd.s
-      At line 375 in file lcd.s
-      At line 377 in file lcd.s
-      At line 389 in file lcd.s
-      At line 393 in file lcd.s
-      At line 397 in file lcd.s
-      At line 433 in file lcd.s
-      At line 435 in file lcd.s
-      At line 437 in file lcd.s
+      At line 343 in file lcd.s
+      At line 345 in file lcd.s
+      At line 347 in file lcd.s
+      At line 349 in file lcd.s
+      At line 351 in file lcd.s
+      At line 353 in file lcd.s
+      At line 372 in file lcd.s
+      At line 374 in file lcd.s
+      At line 376 in file lcd.s
+      At line 378 in file lcd.s
+      At line 380 in file lcd.s
+      At line 382 in file lcd.s
+      At line 384 in file lcd.s
+      At line 386 in file lcd.s
+      At line 388 in file lcd.s
+      At line 400 in file lcd.s
+      At line 404 in file lcd.s
+      At line 408 in file lcd.s
+      At line 444 in file lcd.s
+      At line 446 in file lcd.s
+      At line 448 in file lcd.s
 
 LCD_Reset 00000080
 
@@ -759,7 +772,8 @@ Symbol: LCD_Reset
    Uses
       At line 75 in file lcd.s
       At line 211 in file lcd.s
-      At line 357 in file lcd.s
+      At line 291 in file lcd.s
+      At line 368 in file lcd.s
 
 LCD_go_to_second_line 0000002C
 
@@ -768,15 +782,15 @@ Symbol: LCD_go_to_second_line
       At line 115 in file lcd.s
    Uses
       At line 74 in file lcd.s
-      At line 251 in file lcd.s
+      At line 248 in file lcd.s
 
-blink_loop 000002AA
+blink_loop 000002C6
 
 Symbol: blink_loop
    Definitions
-      At line 381 in file lcd.s
+      At line 392 in file lcd.s
    Uses
-      At line 466 in file lcd.s
+      At line 477 in file lcd.s
 Comment: blink_loop used once
 create_data_row 000000D8
 
@@ -785,9 +799,7 @@ Symbol: create_data_row
       At line 208 in file lcd.s
    Uses
       At line 70 in file lcd.s
-      At line 474 in file lcd.s
-
-create_increment_row 00000188
+      At line 485 in file lcd.s
 
 
 
@@ -795,43 +807,45 @@ create_increment_row 00000188
 ARM Macro Assembler    Page 3 Alphabetic symbol ordering
 Relocatable symbols
 
+create_increment_row 000001A0
+
 Symbol: create_increment_row
    Definitions
-      At line 278 in file lcd.s
+      At line 288 in file lcd.s
    Uses
       At line 71 in file lcd.s
 Comment: create_increment_row used once
-create_mode_row 000001F0
+create_mode_row 0000020C
 
 Symbol: create_mode_row
    Definitions
-      At line 316 in file lcd.s
+      At line 327 in file lcd.s
    Uses
       None
 Comment: create_mode_row unused
-create_reset_row 00000258
+create_reset_row 00000274
 
 Symbol: create_reset_row
    Definitions
-      At line 354 in file lcd.s
+      At line 365 in file lcd.s
    Uses
       At line 72 in file lcd.s
 Comment: create_reset_row used once
-cursor_shift_left 000002EC
+cursor_shift_left 00000308
 
 Symbol: cursor_shift_left
    Definitions
-      At line 407 in file lcd.s
+      At line 418 in file lcd.s
    Uses
-      At line 428 in file lcd.s
+      At line 439 in file lcd.s
 Comment: cursor_shift_left used once
-cursor_shift_left2 00000342
+cursor_shift_left2 0000035E
 
 Symbol: cursor_shift_left2
    Definitions
-      At line 443 in file lcd.s
+      At line 454 in file lcd.s
    Uses
-      At line 464 in file lcd.s
+      At line 475 in file lcd.s
 Comment: cursor_shift_left2 used once
 cursor_shift_right 00000052
 
@@ -841,33 +855,33 @@ Symbol: cursor_shift_right
    Uses
       At line 152 in file lcd.s
 Comment: cursor_shift_right used once
-display_dots 000002B0
+display_dots 000002CC
 
 Symbol: display_dots
    Definitions
-      At line 385 in file lcd.s
+      At line 396 in file lcd.s
    Uses
       None
 Comment: display_dots unused
-display_resetado 00000376
+display_resetado 00000392
 
 Symbol: display_resetado
-   Definitions
-      At line 468 in file lcd.s
 
 
 
 ARM Macro Assembler    Page 4 Alphabetic symbol ordering
 Relocatable symbols
 
+   Definitions
+      At line 479 in file lcd.s
    Uses
-      At line 383 in file lcd.s
+      At line 394 in file lcd.s
 Comment: display_resetado used once
-display_spaces 0000031E
+display_spaces 0000033A
 
 Symbol: display_spaces
    Definitions
-      At line 431 in file lcd.s
+      At line 442 in file lcd.s
    Uses
       None
 Comment: display_spaces unused
@@ -879,7 +893,15 @@ Symbol: positive
    Uses
       At line 235 in file lcd.s
 Comment: positive used once
-17 symbols
+positive2 00000192
+
+Symbol: positive2
+   Definitions
+      At line 274 in file lcd.s
+   Uses
+      At line 270 in file lcd.s
+Comment: positive2 used once
+18 symbols
 
 
 
@@ -914,8 +936,8 @@ Symbol: GPIO_PORTK_DATA_R
       At line 135 in file lcd.s
       At line 165 in file lcd.s
       At line 183 in file lcd.s
-      At line 408 in file lcd.s
-      At line 444 in file lcd.s
+      At line 419 in file lcd.s
+      At line 455 in file lcd.s
 
 GPIO_PORTM_DATA_R 400633FC
 
@@ -933,10 +955,10 @@ Symbol: GPIO_PORTM_DATA_R
       At line 176 in file lcd.s
       At line 187 in file lcd.s
       At line 194 in file lcd.s
-      At line 412 in file lcd.s
-      At line 419 in file lcd.s
-      At line 448 in file lcd.s
-      At line 455 in file lcd.s
+      At line 423 in file lcd.s
+      At line 430 in file lcd.s
+      At line 459 in file lcd.s
+      At line 466 in file lcd.s
 
 TURN 20030004
 
@@ -944,14 +966,15 @@ Symbol: TURN
    Definitions
       At line 64 in file lcd.s
    Uses
-      None
+      At line 266 in file lcd.s
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Absolute symbols
 
-Comment: TURN unused
+      At line 276 in file lcd.s
+
 char_0 00000030
 
 Symbol: char_0
@@ -1012,9 +1035,9 @@ char_7 00000037
 
 
 
-
 ARM Macro Assembler    Page 3 Alphabetic symbol ordering
 Absolute symbols
+
 
 Symbol: char_7
    Definitions
@@ -1060,8 +1083,8 @@ Symbol: char_I
    Definitions
       At line 40 in file lcd.s
    Uses
-      At line 281 in file lcd.s
-      At line 319 in file lcd.s
+      At line 293 in file lcd.s
+      At line 330 in file lcd.s
 
 char_P 00000050
 
@@ -1074,16 +1097,16 @@ Comment: char_P unused
 char_R 00000052
 
 Symbol: char_R
-   Definitions
 
 
 
 ARM Macro Assembler    Page 4 Alphabetic symbol ordering
 Absolute symbols
 
+   Definitions
       At line 42 in file lcd.s
    Uses
-      At line 360 in file lcd.s
+      At line 371 in file lcd.s
 Comment: char_R used once
 char_V 00000056
 
@@ -1091,7 +1114,7 @@ Symbol: char_V
    Definitions
       At line 43 in file lcd.s
    Uses
-      At line 253 in file lcd.s
+      At line 250 in file lcd.s
 Comment: char_V used once
 char_a 00000061
 
@@ -1099,8 +1122,8 @@ Symbol: char_a
    Definitions
       At line 44 in file lcd.s
    Uses
-      At line 261 in file lcd.s
-      At line 370 in file lcd.s
+      At line 258 in file lcd.s
+      At line 381 in file lcd.s
 
 char_angle 000000DF
 
@@ -1108,7 +1131,7 @@ Symbol: char_angle
    Definitions
       At line 32 in file lcd.s
    Uses
-      At line 248 in file lcd.s
+      At line 245 in file lcd.s
 Comment: char_angle used once
 char_b 00000062
 
@@ -1124,8 +1147,8 @@ Symbol: char_c
    Definitions
       At line 46 in file lcd.s
    Uses
-      At line 285 in file lcd.s
-      At line 323 in file lcd.s
+      At line 297 in file lcd.s
+      At line 334 in file lcd.s
 
 char_cdot 000000A5
 
@@ -1139,15 +1162,15 @@ char_d 00000064
 
 Symbol: char_d
    Definitions
-      At line 47 in file lcd.s
 
 
 
 ARM Macro Assembler    Page 5 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 47 in file lcd.s
    Uses
-      At line 374 in file lcd.s
+      At line 385 in file lcd.s
 Comment: char_d used once
 char_dois_pontos 0000003A
 
@@ -1156,9 +1179,9 @@ Symbol: char_dois_pontos
       At line 36 in file lcd.s
    Uses
       At line 225 in file lcd.s
-      At line 263 in file lcd.s
-      At line 301 in file lcd.s
-      At line 339 in file lcd.s
+      At line 260 in file lcd.s
+      At line 313 in file lcd.s
+      At line 350 in file lcd.s
 
 char_dot 0000002E
 
@@ -1166,9 +1189,9 @@ Symbol: char_dot
    Definitions
       At line 31 in file lcd.s
    Uses
-      At line 388 in file lcd.s
-      At line 392 in file lcd.s
-      At line 396 in file lcd.s
+      At line 399 in file lcd.s
+      At line 403 in file lcd.s
+      At line 407 in file lcd.s
 
 char_e 00000065
 
@@ -1176,12 +1199,12 @@ Symbol: char_e
    Definitions
       At line 48 in file lcd.s
    Uses
-      At line 289 in file lcd.s
-      At line 293 in file lcd.s
-      At line 327 in file lcd.s
-      At line 331 in file lcd.s
-      At line 362 in file lcd.s
-      At line 366 in file lcd.s
+      At line 301 in file lcd.s
+      At line 305 in file lcd.s
+      At line 338 in file lcd.s
+      At line 342 in file lcd.s
+      At line 373 in file lcd.s
+      At line 377 in file lcd.s
 
 char_g 00000067
 
@@ -1204,15 +1227,15 @@ char_l 0000006C
 Symbol: char_l
    Definitions
       At line 51 in file lcd.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 6 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
       At line 221 in file lcd.s
-      At line 257 in file lcd.s
+      At line 254 in file lcd.s
 
 char_m 0000006D
 
@@ -1220,8 +1243,8 @@ Symbol: char_m
    Definitions
       At line 52 in file lcd.s
    Uses
-      At line 291 in file lcd.s
-      At line 329 in file lcd.s
+      At line 303 in file lcd.s
+      At line 340 in file lcd.s
 
 char_minus 0000002D
 
@@ -1230,7 +1253,8 @@ Symbol: char_minus
       At line 34 in file lcd.s
    Uses
       At line 237 in file lcd.s
-Comment: char_minus used once
+      At line 272 in file lcd.s
+
 char_n 0000006E
 
 Symbol: char_n
@@ -1238,11 +1262,11 @@ Symbol: char_n
       At line 53 in file lcd.s
    Uses
       At line 215 in file lcd.s
-      At line 283 in file lcd.s
       At line 295 in file lcd.s
-      At line 321 in file lcd.s
-      At line 333 in file lcd.s
-      At line 372 in file lcd.s
+      At line 307 in file lcd.s
+      At line 332 in file lcd.s
+      At line 344 in file lcd.s
+      At line 383 in file lcd.s
 
 char_o 0000006F
 
@@ -1251,10 +1275,10 @@ Symbol: char_o
       At line 54 in file lcd.s
    Uses
       At line 223 in file lcd.s
-      At line 255 in file lcd.s
-      At line 299 in file lcd.s
-      At line 337 in file lcd.s
-      At line 376 in file lcd.s
+      At line 252 in file lcd.s
+      At line 311 in file lcd.s
+      At line 348 in file lcd.s
+      At line 387 in file lcd.s
 
 char_parenteses_dir 00000029
 
@@ -1268,14 +1292,14 @@ char_plus 0000002B
 
 Symbol: char_plus
    Definitions
-      At line 33 in file lcd.s
-   Uses
 
 
 
 ARM Macro Assembler    Page 7 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 33 in file lcd.s
+   Uses
       None
 Comment: char_plus unused
 char_r 00000072
@@ -1284,8 +1308,8 @@ Symbol: char_r
    Definitions
       At line 55 in file lcd.s
    Uses
-      At line 287 in file lcd.s
-      At line 325 in file lcd.s
+      At line 299 in file lcd.s
+      At line 336 in file lcd.s
 
 char_s 00000073
 
@@ -1293,7 +1317,7 @@ Symbol: char_s
    Definitions
       At line 56 in file lcd.s
    Uses
-      At line 364 in file lcd.s
+      At line 375 in file lcd.s
 Comment: char_s used once
 char_space 00000020
 
@@ -1302,12 +1326,12 @@ Symbol: char_space
       At line 35 in file lcd.s
    Uses
       At line 227 in file lcd.s
-      At line 265 in file lcd.s
-      At line 303 in file lcd.s
-      At line 341 in file lcd.s
-      At line 432 in file lcd.s
-      At line 434 in file lcd.s
-      At line 436 in file lcd.s
+      At line 262 in file lcd.s
+      At line 315 in file lcd.s
+      At line 352 in file lcd.s
+      At line 443 in file lcd.s
+      At line 445 in file lcd.s
+      At line 447 in file lcd.s
 
 char_t 00000074
 
@@ -1315,10 +1339,10 @@ Symbol: char_t
    Definitions
       At line 57 in file lcd.s
    Uses
-      At line 259 in file lcd.s
-      At line 297 in file lcd.s
-      At line 335 in file lcd.s
-      At line 368 in file lcd.s
+      At line 256 in file lcd.s
+      At line 309 in file lcd.s
+      At line 346 in file lcd.s
+      At line 379 in file lcd.s
 
 char_u 00000075
 
@@ -1333,14 +1357,14 @@ char_x 00000078
 Symbol: char_x
    Definitions
       At line 59 in file lcd.s
-   Uses
-      None
 
 
 
 ARM Macro Assembler    Page 8 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      None
 Comment: char_x unused
 45 symbols
 
@@ -1355,8 +1379,9 @@ Symbol: LCD_Display_Number
    Definitions
       At line 81 in file lcd.s
    Uses
-      At line 245 in file lcd.s
-Comment: LCD_Display_Number used once
+      At line 243 in file lcd.s
+      At line 278 in file lcd.s
+
 SysTick_Wait1ms 00000000
 
 Symbol: SysTick_Wait1ms
@@ -1370,10 +1395,10 @@ Symbol: SysTick_Wait1ms
       At line 181 in file lcd.s
       At line 192 in file lcd.s
       At line 199 in file lcd.s
-      At line 391 in file lcd.s
-      At line 395 in file lcd.s
-      At line 399 in file lcd.s
-      At line 440 in file lcd.s
+      At line 402 in file lcd.s
+      At line 406 in file lcd.s
+      At line 410 in file lcd.s
+      At line 451 in file lcd.s
 
 SysTick_Wait1us 00000000
 
@@ -1382,10 +1407,10 @@ Symbol: SysTick_Wait1us
       At line 79 in file lcd.s
    Uses
       At line 144 in file lcd.s
-      At line 417 in file lcd.s
-      At line 424 in file lcd.s
-      At line 453 in file lcd.s
-      At line 460 in file lcd.s
+      At line 428 in file lcd.s
+      At line 435 in file lcd.s
+      At line 464 in file lcd.s
+      At line 471 in file lcd.s
 
 3 symbols
-401 symbols in table
+402 symbols in table

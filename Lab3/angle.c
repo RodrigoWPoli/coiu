@@ -24,30 +24,30 @@ extern uint32_t LCD_Display_Character(uint32_t param);
 //Converte esse botão em um angulo que será somado ao angulo na memória
 int16_t angle_decoder (uint8_t key_pressed){
     switch (key_pressed){
-    case 1:
+    case 0x31:
         return 15;
-    case 2:
+    case 0x32:
         return 30;
-    case 3:
+    case 0x33:
         return 45;
-    case 4:
+    case 0x34:
         return 60;
-    case 5:
+    case 0x35:
         return 90;
-    case 6:
+    case 0x36:
         return 180;
-    case 7:
-        return -15;
-    case 8:
-        return -30;
-    case 9:
-        return -45;
-    case 10:
-        return -60;
-    case 11:
-        return -90;
-    case 12:
-        return -180;
+    case 0x37:
+        return 15;
+    case 0x38:
+        return 30;
+    case 0x39:
+        return 45;
+    case 0x41:
+        return 60;
+    case 0x42:
+        return 90;
+    case 0x43:
+        return 180;
     default:
          return 0;
     }
@@ -87,7 +87,7 @@ int32_t map_number(int32_t number){
 //LCD_Display_Number(int32_t param)
 //Recebe como parametro qual numero precisa ser separado 
 //Converte esse angulo em até 3 digitos separados e printa eles nos displays
-void __attribute__((aligned(8))) LCD_Display_Number (int32_t number){
+void LCD_Display_Number (int32_t number){
     int32_t digit;
 
     digit = (number / 100);

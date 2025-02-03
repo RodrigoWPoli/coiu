@@ -19,6 +19,10 @@ CURR_KEY	    		 EQU	 0x20020004
 ANGLE            		 EQU     0x20030000
 TURN				 	 EQU	 0x20030004
 MODE         			 EQU     0x20030008
+APOLARITY         	     EQU     0x2003000C
+TPOLARITY         	     EQU     0x20030010
+char_minus          	 EQU     2_00101101
+char_angle          	 EQU     2_11011111
 
 ; -------------------------------------------------------------------------------
 ; Area de Dados - Declaracoes de variaveis
@@ -54,8 +58,10 @@ MODE         			 EQU     0x20030008
 		IMPORT	TecladoM_Poll
         IMPORT 	Timer0A_Handler
 		IMPORT  create_data_row
+		IMPORT 	create_increment_row
 			
 		IMPORT LCD_Display_Number
+		IMPORT LCD_Display_Character
 
 		IMPORT angle_decoder
 
@@ -69,19 +75,19 @@ Start
 	BL 	Timers_Init              	 ;Subrotina que inicializa o Timer0A
 	BL	Interrupt_Init				 ;Subrotina que inicializa os Interrupts de GPIO
 
-	MOV R1, #0						 ;Inicialização do angulo, das voltas e do modo
+	MOV R1, #0						 ;Inicialização do angulo, das voltas, do modo e das polaridades
 	LDR R0, =ANGLE
 	STR R1, [R0]
 	LDR R0, =TURN
 	STR R1, [R0]
 	LDR R0, =MODE
 	STR R1, [R0]
+	LDR	R0, =APOLARITY
+	STR R1, [R0]
+	LDR	R0, =TPOLARITY
+	STR R1, [R0]
 
 	BL  create_data_row
-
-
-	MOV R2, #300
-	BL SysTick_Wait1ms
 	
 	LDR	R0, =PREV_KEYPRESS
 	MOV R1, #0x10
@@ -128,11 +134,11 @@ update_data_timer0
 	CMP 	R1, #0x10			; Detecta falling-edge da tecla
 	BNE 	skip  
 
-	AND 	R1, R2, #0x0F		 ; Filtra os 4 LSB de R1
-	CMP 	R1, #0x1			 ; Verifica se a tecla pressionada esta entre 1 e C
+	AND 	R1, R2, #0xFF		 ; Filtra os 8 LSB de R2
+	CMP 	R1, #0x31			 ; Verifica se a tecla pressionada esta entre 1 e C
 	BLO		skip
 	
-	CMP 	R1, #0xC
+	CMP 	R1, #0x43
 	BHI		skip
 	
 	LDR		R0, =CURR_KEY		; Atualiza a tecla atual
@@ -140,12 +146,46 @@ update_data_timer0
 	
 	LDR 	R1, =CURR_KEY
     LDR 	R0, [R1]
-
-	;BL 	create_increment_row
-
 	BL		angle_decoder
+	MOV 	R4, R0
+
+	BL 		create_increment_row
+
+	LDR 	R1, =CURR_KEY
+    LDR 	R0, [R1]
+    CMP     R0, #0x37
+    BLO     positive
+
+    LDR     R0, =char_minus				;Valor negativo de incremento, subtrair do angulo total
+    BL      LCD_Display_Character
 	
-	;BL 	increment_angle
+	LDR 	R1, =ANGLE
+	LDR 	R2, [R1]
+	MOV		R0, R4
+	SUB		R2, R0
+	STR		R2, [R1]
+	
+	B 		skip_positive_sum
+positive   
+
+	LDR 	R1, =ANGLE
+	LDR 	R2, [R1]
+	MOV		R0, R4
+	ADD		R2, R0
+	STR		R2, [R1]
+	
+skip_positive_sum
+	
+	MOV 	R0, R4
+    BL      LCD_Display_Number      ; Chama função C
+	LDR		R0, =char_angle
+	BL		LCD_Display_Character
+	
+	MOV 	R2, #1000
+	BL		SysTick_Wait1ms
+	
+	
+	
 	
 	BL		create_data_row
 

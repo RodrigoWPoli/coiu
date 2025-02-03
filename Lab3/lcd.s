@@ -232,7 +232,7 @@ create_data_row
         LDR     R0, [R1]
         MOV     R2, #0
         CMP     R0, R2
-        BHI     positive
+        BHS     positive
 
         LDR     R0, =char_minus
         BL      LCD_Display_Character
@@ -240,10 +240,7 @@ positive
 
         LDR     R1, =ANGLE
         LDR     R0, [R1]
-		
-		SUB 	SP, SP, #4
         BL      LCD_Display_Number      ; Chama função C
-		ADD		SP, SP, #4
 		
         LDR     R0, =char_angle
         BL      LCD_Display_Character
@@ -265,8 +262,21 @@ positive
         LDR     R0, =char_space
         BL      LCD_Display_Character
         ;Aqui fazer receber o valor de turn, separar ele em até 3 digitos e mostrar, lembrar que pode ser negativo
-        ;BL    LCD_Display_Number
-    
+
+        LDR     R1, =TURN
+        LDR     R0, [R1]
+        MOV     R2, #0
+        CMP     R0, R2
+        BHS     positive2
+
+        LDR     R0, =char_minus
+        BL      LCD_Display_Character
+positive2       
+
+        LDR     R1, =TURN
+        LDR     R0, [R1]
+        BL      LCD_Display_Number      ; Chama função C
+
         POP     {LR} 
         BX      LR
 
@@ -277,6 +287,8 @@ positive
 ; Parametro de saida: nenhum
 create_increment_row
         PUSH    {LR}
+		
+		BL      LCD_Reset
 		
         LDR     R0, =char_I
         BL      LCD_Display_Character
@@ -302,8 +314,7 @@ create_increment_row
         BL      LCD_Display_Character
         LDR     R0, =char_space
         BL      LCD_Display_Character
-        ;Aqui fazer receber o valor de inc, separar ele em até 3 digitos e mostrar
-        ;BL    LCD_Display_Increment
+
         
         POP     {LR}
         BX      LR
