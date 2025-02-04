@@ -149,7 +149,6 @@ update_data_timer0
 	BL		angle_decoder
 	MOV 	R4, R0
 
-	BL 		create_increment_row
 
 	LDR 	R1, =CURR_KEY
     LDR 	R0, [R1]
@@ -170,7 +169,7 @@ update_data_timer0
 	SUB		R2, R0
 	STR		R2, [R1]
 
-	B 		display_number
+	B 		display_increment
 
 negativeAngle
 	LDR 	R1, =ANGLE					;Faz a soma do angulo, porque o angulo é negativo e incremento negativo
@@ -179,7 +178,7 @@ negativeAngle
 	ADD		R2, R0
 	STR		R2, [R1]
 	
-	B 		display_number
+	B 		display_increment
 positive   
 
 										;Valor positivo de incremento, somar de angulo positivo ou subtrair de angulo negativo
@@ -195,7 +194,7 @@ positive
 	ADD		R2, R0
 	STR		R2, [R1]
 
-	B 		display_number
+	B 		display_increment
 
 negativeAngle2
 
@@ -205,18 +204,18 @@ negativeAngle2
 	SUB		R2, R0
 	STR		R2, [R1]
 
-	B 		display_number
+	B 		display_increment
 
 	;CMP 	R2, #360					;Verifica se o angulo ultrapassou 360 graus
-	;BLO     display_number
+	;BLO     display_increment
 	;LDR 	R1, =TURN					;Incrementa o numero de voltas
 	;LDR 	R3, [R1]
 	;ADD		R3, #1
 	;STR		R3, [R1]
 
 	
-display_number
-	
+display_increment
+	BL 		create_increment_row
 	MOV 	R0, R4
     BL      LCD_Display_Number      ; Chama função C
 	LDR		R0, =char_angle
