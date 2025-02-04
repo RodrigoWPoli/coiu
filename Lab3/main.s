@@ -144,7 +144,7 @@ update_data_timer0
 	LDR		R0, =CURR_KEY		; Atualiza a tecla atual
 	STR		R1, [R0]
 	
-	LDR 	R1, =CURR_KEY
+	LDR 	R1, =CURR_KEY		;Incremento do angulo
     LDR 	R0, [R1]
 	BL		angle_decoder
 	MOV 	R4, R0
@@ -156,33 +156,63 @@ update_data_timer0
     CMP     R0, #0x37
     BLO     positive
 
-    LDR     R0, =char_minus				;Valor negativo de incremento, subtrair do angulo total
+    LDR     R0, =char_minus				;Valor negativo de incremento, subtrair de angulo positivo ou somar de angulo negativo
     BL      LCD_Display_Character
+
+	LDR 	R1, =APOLARITY				;Verifica polaridade: 0 = positivo, 1 = negativo
+	LDR 	R2, [R1]
+	CMP		R2, #1
+	BEQ		negativeAngle
 	
-	LDR 	R1, =ANGLE					;Faz a subtração do angulo
+	LDR 	R1, =ANGLE					;Faz a subtração do angulo, porque o angulo é positivo e incremento negativo
 	LDR 	R2, [R1]
 	MOV		R0, R4
 	SUB		R2, R0
 	STR		R2, [R1]
+
+	B 		display_number
+
+negativeAngle
+	LDR 	R1, =ANGLE					;Faz a soma do angulo, porque o angulo é negativo e incremento negativo
+	LDR 	R2, [R1]
+	MOV		R0, R4
+	ADD		R2, R0
+	STR		R2, [R1]
 	
-	B 		skip_positive_sum
+	B 		display_number
 positive   
 
-	LDR 	R1, =ANGLE					;Faz a soma do angulo
+										;Valor positivo de incremento, somar de angulo positivo ou subtrair de angulo negativo
+
+	LDR 	R1, =APOLARITY				;Verifica polaridade: 0 = positivo, 1 = negativo
+	LDR 	R2, [R1]
+	CMP		R2, #1
+	BEQ		negativeAngle2
+
+	LDR 	R1, =ANGLE					;Faz a soma do angulo, porque o angulo é positivo e incremento positivo
 	LDR 	R2, [R1]
 	MOV		R0, R4
 	ADD		R2, R0
 	STR		R2, [R1]
 
-	CMP 	R2, #360					;Verifica se o angulo ultrapassou 360 graus
-	BLO     skip_positive_sum
-	LDR 	R1, =TURN					;Incrementa o numero de voltas
-	LDR 	R3, [R1]
-	ADD		R3, #1
-	STR		R3, [R1]
+negativeAngle2
+
+	LDR 	R1, =ANGLE					;Faz a subtração do angulo, porque o angulo é negativo e incremento positivo
+	LDR 	R2, [R1]
+	MOV		R0, R4
+	SUB		R2, R0
+	STR		R2, [R1]
+	
+
+	;CMP 	R2, #360					;Verifica se o angulo ultrapassou 360 graus
+	;BLO     display_number
+	;LDR 	R1, =TURN					;Incrementa o numero de voltas
+	;LDR 	R3, [R1]
+	;ADD		R3, #1
+	;STR		R3, [R1]
 
 	
-skip_positive_sum
+display_number
 	
 	MOV 	R0, R4
     BL      LCD_Display_Number      ; Chama função C
