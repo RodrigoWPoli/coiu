@@ -159,7 +159,7 @@ update_data_timer0
     LDR     R0, =char_minus				;Valor negativo de incremento, subtrair do angulo total
     BL      LCD_Display_Character
 	
-	LDR 	R1, =ANGLE
+	LDR 	R1, =ANGLE					;Faz a subtração do angulo
 	LDR 	R2, [R1]
 	MOV		R0, R4
 	SUB		R2, R0
@@ -168,11 +168,19 @@ update_data_timer0
 	B 		skip_positive_sum
 positive   
 
-	LDR 	R1, =ANGLE
+	LDR 	R1, =ANGLE					;Faz a soma do angulo
 	LDR 	R2, [R1]
 	MOV		R0, R4
 	ADD		R2, R0
 	STR		R2, [R1]
+
+	CMP 	R2, #360					;Verifica se o angulo ultrapassou 360 graus
+	BLO     skip_positive_sum
+	LDR 	R1, =TURN					;Incrementa o numero de voltas
+	LDR 	R3, [R1]
+	ADD		R3, #1
+	STR		R3, [R1]
+
 	
 skip_positive_sum
 	
@@ -184,9 +192,7 @@ skip_positive_sum
 	MOV 	R2, #1000
 	BL		SysTick_Wait1ms
 	
-	
-	
-	
+
 	BL		create_data_row
 
 	B 		skip

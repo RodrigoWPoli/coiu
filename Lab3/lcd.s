@@ -62,6 +62,8 @@ char_x              EQU 2_01111000
 CURR_KEY	    EQU	0x20020004
 ANGLE               EQU 0x20030000
 TURN	            EQU	0x20030004
+APOLARITY           EQU 0x2003000C
+TPOLARITY           EQU 0x20030010
 
 ; -------------------------------------------------------------------------------
 ; Area de Codigo
