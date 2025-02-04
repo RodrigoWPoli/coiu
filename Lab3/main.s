@@ -149,6 +149,7 @@ update_data_timer0
 	BL		angle_decoder
 	MOV 	R4, R0
 
+	BL 		create_increment_row	;Cria a linha de incremento
 
 	LDR 	R1, =CURR_KEY
     LDR 	R0, [R1]
@@ -156,7 +157,7 @@ update_data_timer0
     BLO     positive
 
     LDR     R0, =char_minus				;Valor negativo de incremento, subtrair de angulo positivo ou somar de angulo negativo
-    BL      LCD_Display_Character
+    BL      LCD_Display_Character		; printar - no display
 
 	LDR 	R1, =APOLARITY				;Verifica polaridade: 0 = positivo, 1 = negativo
 	LDR 	R2, [R1]
@@ -166,10 +167,23 @@ update_data_timer0
 	LDR 	R1, =ANGLE					;Faz a subtração do angulo, porque o angulo é positivo e incremento negativo
 	LDR 	R2, [R1]
 	MOV		R0, R4
-	SUB		R2, R0
+	SUB		R2, R0						;Verifica se houve mudança de sinal
+	CMP		R2, #0
+	BLO     skip_reverse_polarity1
+
+	LDR		R1, =APOLARITY				;Inverte a polaridade
+	MOV		R3, #1
+	STR		R3, [R1]
+
+	NEG 	R2, R2						;Inverte o sinal do angulo para sempre ser positivo
+
+skip_reverse_polarity1
+	LDR 	R1, =ANGLE
 	STR		R2, [R1]
 
-	B 		display_increment
+
+
+	B 		display_number
 
 negativeAngle
 	LDR 	R1, =ANGLE					;Faz a soma do angulo, porque o angulo é negativo e incremento negativo
@@ -178,7 +192,7 @@ negativeAngle
 	ADD		R2, R0
 	STR		R2, [R1]
 	
-	B 		display_increment
+	B 		display_number
 positive   
 
 										;Valor positivo de incremento, somar de angulo positivo ou subtrair de angulo negativo
@@ -194,7 +208,7 @@ positive
 	ADD		R2, R0
 	STR		R2, [R1]
 
-	B 		display_increment
+	B 		display_number
 
 negativeAngle2
 
@@ -204,18 +218,18 @@ negativeAngle2
 	SUB		R2, R0
 	STR		R2, [R1]
 
-	B 		display_increment
+	B 		display_number
 
 	;CMP 	R2, #360					;Verifica se o angulo ultrapassou 360 graus
-	;BLO     display_increment
+	;BLO     display_number
 	;LDR 	R1, =TURN					;Incrementa o numero de voltas
 	;LDR 	R3, [R1]
 	;ADD		R3, #1
 	;STR		R3, [R1]
 
 	
-display_increment
-	BL 		create_increment_row
+display_number
+	
 	MOV 	R0, R4
     BL      LCD_Display_Number      ; Chama função C
 	LDR		R0, =char_angle

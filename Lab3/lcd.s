@@ -230,10 +230,9 @@ create_data_row
         BL      LCD_Display_Character 
         ;Aqui fazer receber o valor de ang, separar ele em até 3 digitos e mostrar
         
-        LDR     R1, =ANGLE
+        LDR     R1, =APOLARITY
         LDR     R0, [R1]
-        MOV     R2, #0
-        CMP     R0, R2
+        CMP     R0, #0
         BHS     positive
 
         LDR     R0, =char_minus
@@ -479,12 +478,8 @@ cursor_shift_left2
 		B     blink_loop                      ;Se nao voltou depois do espaco, volta. Se voltou, printa pontos dnv ou sai do loop
 			
 display_resetado
-        ; Resetar os valores de ang e turn
 
-        ;TO-DO
-
-        ;Mostrar data novamente
-		BL      create_data_row
+	BL      create_data_row
 		
         POP     {LR} 
         BX      LR

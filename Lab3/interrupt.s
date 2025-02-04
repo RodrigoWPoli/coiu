@@ -9,7 +9,11 @@
 ; -------------------------------------------------------------------------------
 ; Declaracoes EQU - Defines
 ; ========================
-
+ANGLE            	     EQU     0x20030000
+TURN			     EQU     0x20030004
+MODE         		     EQU     0x20030008
+APOLARITY         	     EQU     0x2003000C
+TPOLARITY         	     EQU     0x20030010
 ; ================== DEFINICOES DOS PORTS ===================
 
 ; ~~~~~~~~~~~~~~~~ PORT A ~~~~~~~~~~~~~~~~~~
@@ -285,6 +289,16 @@ GPIOPortJ_Handler
 		
 		CMP 	R1, R2								; Ignora varia��es de freq. > 50Hz
 		BNE 	debounce_skip
+
+	MOV R1, #0						 ;Reset do angulo, das voltas e das polaridades
+	LDR R0, =ANGLE
+	STR R1, [R0]
+	LDR R0, =TURN
+	STR R1, [R0]
+	LDR R0, =APOLARITY
+	STR R1, [R0]
+	LDR R0, =TPOLARITY
+	STR R1, [R0]        
 		
         BL      create_reset_row   
 
