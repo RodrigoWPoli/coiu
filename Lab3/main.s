@@ -195,6 +195,8 @@ positive
 	ADD		R2, R0
 	STR		R2, [R1]
 
+	B 		display_number
+
 negativeAngle2
 
 	LDR 	R1, =ANGLE					;Faz a subtração do angulo, porque o angulo é negativo e incremento positivo
@@ -202,7 +204,8 @@ negativeAngle2
 	MOV		R0, R4
 	SUB		R2, R0
 	STR		R2, [R1]
-	
+
+	B 		display_number
 
 	;CMP 	R2, #360					;Verifica se o angulo ultrapassou 360 graus
 	;BLO     display_number
