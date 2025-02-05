@@ -151,7 +151,7 @@ update_data_timer0
 
 	BL 		create_increment_row	;Cria a linha de incremento
 
-	LDR 	R1, =CURR_KEY
+	LDR 	R1, =CURR_KEY			;Verifica se o incremento do angulo é negativo ou positivo
     LDR 	R0, [R1]
     CMP     R0, #0x37
     BLO     positive
@@ -169,15 +169,27 @@ update_data_timer0
 	MOV		R0, R4
 	SUB		R2, R0						;Verifica se houve mudança de sinal
 	CMP		R2, #0
-	BLO     skip_reverse_polarity1
+	BLO     skip_inverse_apolarity1
 
-	LDR		R1, =APOLARITY				;Inverte a polaridade
+	LDR		R1, =APOLARITY				;Transforma a polaridade em negativa porque houve mudança de sinal
 	MOV		R3, #1
 	STR		R3, [R1]
 
 	NEG 	R2, R2						;Inverte o sinal do angulo para sempre ser positivo
 
-skip_reverse_polarity1
+	LDR 	R1, =TPOLARITY				;Verifica polaridade: 0 = positivo, 1 = negativo
+	LDR 	R3, [R1]					;Se a polaridade for negativa, somar mais um, se for positiva, subtrair um
+	LDR 	R1, =TURN
+	LDR 	R5, [R1]
+	CMP		R3, #1
+	ITE		EQ
+	ADDEQ	R5, #1
+	SUBEQ	R5, #1
+	STR		R5, [R1]
+
+	
+
+skip_inverse_apolarity1
 	LDR 	R1, =ANGLE
 	STR		R2, [R1]
 
@@ -191,6 +203,8 @@ negativeAngle
 	MOV		R0, R4
 	ADD		R2, R0
 	STR		R2, [R1]
+
+;Verificar turns
 	
 	B 		display_number
 positive   
