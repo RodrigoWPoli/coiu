@@ -240,13 +240,13 @@ Interrupt_Init
 
 ; 5. Realizar o ack para garantir que a interrupcao ira ocorrer no ICR
 
-        MOV     R1, #2_01                                                               ;Seta o bit de acknowledge
+        MOV     R1, #2_11                                                               ;Seta o bit de acknowledge
         LDR     R0, =GPIO_PORTJ_AHB_ICR_R                                               ;Pega o endereco do ICR
         STR     R1, [R0]                                                                ;Seta o valor no registrador
         
 ; 6. Habilitar a interrupcao no registrador IM
 
-        MOV     R1, #2_01						                ;Habilitar as interrupcoes
+        MOV     R1, #2_11						                ;Habilitar as interrupcoes
         LDR     R0, =GPIO_PORTJ_AHB_IM_R                                                ;Carrega o endereco do IM para a porta generica
         STR     R1, [R0]                                                                ;Escreve no registrador
 
