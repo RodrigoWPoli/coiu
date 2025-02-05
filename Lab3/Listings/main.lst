@@ -141,24 +141,24 @@ ARM Macro Assembler    Page 3
                                                              angulo, das voltas
                                                             , do modo e das pol
                                                             aridades
-   79 0000001C 4844            LDR              R0, =ANGLE
+   79 0000001C 484B            LDR              R0, =ANGLE
    80 0000001E 6001            STR              R1, [R0]
-   81 00000020 4844            LDR              R0, =TURN
+   81 00000020 484B            LDR              R0, =TURN
    82 00000022 6001            STR              R1, [R0]
-   83 00000024 4844            LDR              R0, =MODE
+   83 00000024 484B            LDR              R0, =MODE
    84 00000026 6001            STR              R1, [R0]
-   85 00000028 4844            LDR              R0, =APOLARITY
+   85 00000028 484B            LDR              R0, =APOLARITY
    86 0000002A 6001            STR              R1, [R0]
-   87 0000002C 4844            LDR              R0, =TPOLARITY
+   87 0000002C 484B            LDR              R0, =TPOLARITY
    88 0000002E 6001            STR              R1, [R0]
    89 00000030         
    90 00000030 F7FF FFFE       BL               create_data_row
    91 00000034         
-   92 00000034 4843            LDR              R0, =PREV_KEYPRESS
+   92 00000034 484A            LDR              R0, =PREV_KEYPRESS
    93 00000036 F04F 0110       MOV              R1, #0x10
    94 0000003A 6001            STR              R1, [R0]
    95 0000003C         
-   96 0000003C 4842            LDR              R0, =CURR_KEY
+   96 0000003C 4849            LDR              R0, =CURR_KEY
    97 0000003E F04F 0100       MOV              R1, #0
    98 00000042 6001            STR              R1, [R0]
    99 00000044         
@@ -169,15 +169,15 @@ ARM Macro Assembler    Page 3
   103 00000044         
   104 00000044         
   105 00000044         MainLoop
-  106 00000044 4841            LDR              R0, =Timer0A_Addr
+  106 00000044 4848            LDR              R0, =Timer0A_Addr
   107 00000046 6801            LDR              R1, [R0]
   108 00000048 2901            CMP              R1, #1
   109 0000004A D004            BEQ              update_data_timer0
   110 0000004C         
-  111 0000004C 4840            LDR              R0, =Timer1A_Addr
+  111 0000004C 4847            LDR              R0, =Timer1A_Addr
   112 0000004E 6801            LDR              R1, [R0]
   113 00000050 2901            CMP              R1, #1
-  114 00000052 D066            BEQ              update_data_timer1
+  114 00000052 D074            BEQ              update_data_timer1
   115 00000054         
   116 00000054         
   117 00000054 E7F6            B                MainLoop    ;Volta para o laco 
@@ -185,13 +185,13 @@ ARM Macro Assembler    Page 3
   118 00000056         
   119 00000056         
   120 00000056         update_data_timer0
-  121 00000056 483D            LDR              R0, =Timer0A_Addr
+  121 00000056 4844            LDR              R0, =Timer0A_Addr
   122 00000058 F04F 0100       MOV              R1, #0
   123 0000005C 6001            STR              R1, [R0]
   124 0000005E         
   125 0000005E F7FF FFFE       BL               TecladoM_Poll
   126 00000062         
-  127 00000062 4838            LDR              R0, =PREV_KEYPRESS ; Recupera o
+  127 00000062 483F            LDR              R0, =PREV_KEYPRESS ; Recupera o
                                                              último click e ar
 
 
@@ -205,27 +205,27 @@ ARM Macro Assembler    Page 4
   130 00000068         
   131 00000068 2A10            CMP              R2, #0x10   ; Pula se a última
                                                              tecla for 0x10
-  132 0000006A D05F            BEQ              skip
+  132 0000006A D06D            BEQ              skip
   133 0000006C         
   134 0000006C 2910            CMP              R1, #0x10   ; Detecta falling-e
                                                             dge da tecla
-  135 0000006E D15D            BNE              skip
+  135 0000006E D16B            BNE              skip
   136 00000070         
   137 00000070 F002 01FF       AND              R1, R2, #0xFF ; Filtra os 8 LSB
                                                              de R2
   138 00000074 2931            CMP              R1, #0x31   ; Verifica se a tec
                                                             la pressionada esta
                                                              entre 1 e C
-  139 00000076 D359            BLO              skip
+  139 00000076 D367            BLO              skip
   140 00000078         
   141 00000078 2943            CMP              R1, #0x43
-  142 0000007A D857            BHI              skip
+  142 0000007A D865            BHI              skip
   143 0000007C         
-  144 0000007C 4832            LDR              R0, =CURR_KEY ; Atualiza a tecl
+  144 0000007C 4839            LDR              R0, =CURR_KEY ; Atualiza a tecl
                                                             a atual
   145 0000007E 6001            STR              R1, [R0]
   146 00000080         
-  147 00000080 4931            LDR              R1, =CURR_KEY ;Incremento do an
+  147 00000080 4938            LDR              R1, =CURR_KEY ;Incremento do an
                                                             gulo
   148 00000082 6808            LDR              R0, [R1]
   149 00000084 F7FF FFFE       BL               angle_decoder
@@ -234,13 +234,13 @@ ARM Macro Assembler    Page 4
   152 0000008A F7FF FFFE       BL               create_increment_row ;Cria a li
                                                             nha de incremento
   153 0000008E         
-  154 0000008E 492E            LDR              R1, =CURR_KEY ;Verifica se o in
+  154 0000008E 4935            LDR              R1, =CURR_KEY ;Verifica se o in
                                                             cremento do angulo 
                                                             é negativo ou posi
                                                             tivo
   155 00000090 6808            LDR              R0, [R1]
   156 00000092 2837            CMP              R0, #0x37
-  157 00000094 D326            BLO              positive
+  157 00000094 D334            BLO              positive
   158 00000096         
   159 00000096 F04F 002D       LDR              R0, =char_minus ;Valor negativo
                                                              de incremento, sub
@@ -250,14 +250,14 @@ ARM Macro Assembler    Page 4
   160 0000009A F7FF FFFE       BL               LCD_Display_Character ; printar
                                                              - no display
   161 0000009E         
-  162 0000009E 4927            LDR              R1, =APOLARITY ;Verifica polari
+  162 0000009E 492E            LDR              R1, =APOLARITY ;Verifica polari
                                                             dade: 0 = positivo,
                                                              1 = negativo
   163 000000A0 680A            LDR              R2, [R1]
   164 000000A2 2A01            CMP              R2, #1
-  165 000000A4 D018            BEQ              negativeAngle
+  165 000000A4 D00F            BEQ              negativeAngle
   166 000000A6         
-  167 000000A6 4922            LDR              R1, =ANGLE  ;Faz a subtração 
+  167 000000A6 4929            LDR              R1, =ANGLE  ;Faz a subtração 
 
 
 
@@ -273,9 +273,9 @@ ARM Macro Assembler    Page 5
   170 000000AC EBA2 0200       SUB              R2, R0      ;Verifica se houve 
                                                             mudança de sinal
   171 000000B0 2A00            CMP              R2, #0
-  172 000000B2 DA0E            BGE              skip_inverse_apolarity1
+  172 000000B2 DA05            BGE              skip_inverse_apolarity1
   173 000000B4         
-  174 000000B4 4921            LDR              R1, =APOLARITY ;Transforma a po
+  174 000000B4 4928            LDR              R1, =APOLARITY ;Transforma a po
                                                             laridade em negativ
                                                             a porque houve muda
                                                             nça de sinal
@@ -286,134 +286,145 @@ ARM Macro Assembler    Page 5
                                                              angulo para sempre
                                                              ser positivo
   179 000000C0         
-  180 000000C0 491F            LDR              R1, =TPOLARITY ;Verifica polari
-                                                            dade: 0 = positivo,
-                                                             1 = negativo
-  181 000000C2 680B            LDR              R3, [R1]    ;Se a polaridade fo
-                                                            r negativa, somar m
-                                                            ais um, se for posi
-                                                            tiva, subtrair um
-  182 000000C4 491B            LDR              R1, =TURN
-  183 000000C6 680D            LDR              R5, [R1]
-  184 000000C8 2B01            CMP              R3, #1
-  185 000000CA BF0C            ITE              EQ
-  186 000000CC 3501            ADDEQ            R5, #1
-  187 000000CE 3D01            SUBNE            R5, #1
-  188 000000D0 600D            STR              R5, [R1]
-  189 000000D2         
-  190 000000D2         
-  191 000000D2         
-  192 000000D2         skip_inverse_apolarity1
-  193 000000D2 4917            LDR              R1, =ANGLE
-  194 000000D4 600A            STR              R2, [R1]
-  195 000000D6         
-  196 000000D6         
-  197 000000D6         
-  198 000000D6 E016            B                display_number
-  199 000000D8         
-  200 000000D8         negativeAngle
-  201 000000D8 4915            LDR              R1, =ANGLE  ;Faz a soma do angu
+  180 000000C0         skip_inverse_apolarity1
+  181 000000C0 4922            LDR              R1, =ANGLE
+  182 000000C2 600A            STR              R2, [R1]
+  183 000000C4         
+  184 000000C4 E02D            B                display_number
+  185 000000C6         
+  186 000000C6         negativeAngle
+  187 000000C6 4921            LDR              R1, =ANGLE  ;Faz a soma do angu
                                                             lo, porque o angulo
                                                              é negativo e incr
                                                             emento negativo
-  202 000000DA 680A            LDR              R2, [R1]
-  203 000000DC 4620            MOV              R0, R4
-  204 000000DE 4402            ADD              R2, R0
-  205 000000E0 600A            STR              R2, [R1]
-  206 000000E2         
-  207 000000E2         ;Verificar turns
-  208 000000E2         
+  188 000000C8 680A            LDR              R2, [R1]
+  189 000000CA 4620            MOV              R0, R4
+  190 000000CC 4402            ADD              R2, R0
+  191 000000CE         
+  192 000000CE F5B2 7FB4       CMP              R2, #360    ;Verifica se bateu 
+                                                            uma volta
+  193 000000D2 D313            BLO              skip_add_turn
+  194 000000D4         
+  195 000000D4 4921            LDR              R1, =TPOLARITY ;Verifica polari
+                                                            dade: 0 = positivo,
+                                                             1 = negativo
+  196 000000D6 680B            LDR              R3, [R1]    ;Se a polaridade fo
+                                                            r negativa, somar m
+                                                            ais um, se for posi
+                                                            tiva, subtrair um
+  197 000000D8 491D            LDR              R1, =TURN
+  198 000000DA 680D            LDR              R5, [R1]
+  199 000000DC 2B01            CMP              R3, #1
+  200 000000DE BF0C            ITE              EQ
+  201 000000E0 3501            ADDEQ            R5, #1
+  202 000000E2 3D01            SUBNE            R5, #1      ;Verificar se as vo
+                                                            ltas caíram para u
+                                                            m valor negativo
+  203 000000E4         
+  204 000000E4 2D00            CMP              R5, #0
+  205 000000E6 491D            LDR              R1, =TPOLARITY
 
 
 
 ARM Macro Assembler    Page 6 
 
 
-  209 000000E2 E010            B                display_number
-  210 000000E4         positive
-  211 000000E4         
-  212 000000E4         ;Valor positivo de incremento, somar de angulo positivo 
+  206 000000E8 F04F 0601       MOV              R6, #1
+  207 000000EC BFBC            ITT              LT          ;Se caiu para valor
+                                                             negativo, coloco p
+                                                            ositivo a volta e m
+                                                            udo a polaridade
+  208 000000EE 426D            NEGLT            R5, R5
+  209 000000F0 600E            STRLT            R6, [R1]
+  210 000000F2         
+  211 000000F2 4917            LDR              R1, =TURN
+  212 000000F4 600D            STR              R5, [R1]
+  213 000000F6         
+  214 000000F6 F5A2 72B4       SUB              R2, #360
+  215 000000FA 4914            LDR              R1, =ANGLE
+  216 000000FC         
+  217 000000FC         skip_add_turn
+  218 000000FC 600A            STR              R2, [R1]
+  219 000000FE         
+  220 000000FE E010            B                display_number
+  221 00000100         positive
+  222 00000100         
+  223 00000100         ;Valor positivo de incremento, somar de angulo positivo 
                        ou subtrair de angulo negativo
-  213 000000E4         
-  214 000000E4 4915            LDR              R1, =APOLARITY ;Verifica polari
+  224 00000100         
+  225 00000100 4915            LDR              R1, =APOLARITY ;Verifica polari
                                                             dade: 0 = positivo,
                                                              1 = negativo
-  215 000000E6 680A            LDR              R2, [R1]
-  216 000000E8 2A01            CMP              R2, #1
-  217 000000EA D005            BEQ              negativeAngle2
-  218 000000EC         
-  219 000000EC 4910            LDR              R1, =ANGLE  ;Faz a soma do angu
+  226 00000102 680A            LDR              R2, [R1]
+  227 00000104 2A01            CMP              R2, #1
+  228 00000106 D005            BEQ              negativeAngle2
+  229 00000108         
+  230 00000108 4910            LDR              R1, =ANGLE  ;Faz a soma do angu
                                                             lo, porque o angulo
                                                              é positivo e incr
                                                             emento positivo
-  220 000000EE 680A            LDR              R2, [R1]
-  221 000000F0 4620            MOV              R0, R4
-  222 000000F2 4402            ADD              R2, R0
-  223 000000F4 600A            STR              R2, [R1]
-  224 000000F6         
-  225 000000F6 E006            B                display_number
-  226 000000F8         
-  227 000000F8         negativeAngle2
-  228 000000F8         
-  229 000000F8 490D            LDR              R1, =ANGLE  ;Faz a subtração 
+  231 0000010A 680A            LDR              R2, [R1]
+  232 0000010C 4620            MOV              R0, R4
+  233 0000010E 4402            ADD              R2, R0
+  234 00000110 600A            STR              R2, [R1]
+  235 00000112         
+  236 00000112 E006            B                display_number
+  237 00000114         
+  238 00000114         negativeAngle2
+  239 00000114         
+  240 00000114 490D            LDR              R1, =ANGLE  ;Faz a subtração 
                                                             do angulo, porque o
                                                              angulo é negativo
                                                              e incremento posit
                                                             ivo
-  230 000000FA 680A            LDR              R2, [R1]
-  231 000000FC 4620            MOV              R0, R4
-  232 000000FE EBA2 0200       SUB              R2, R0
-  233 00000102 600A            STR              R2, [R1]
-  234 00000104         
-  235 00000104 E7FF            B                display_number
-  236 00000106         
-  237 00000106         ;CMP  R2, #360     ;Verifica se o angulo ultrapassou 360
-                        graus
-  238 00000106         ;BLO     display_number
-  239 00000106         ;LDR  R1, =TURN     ;Incrementa o numero de voltas
-  240 00000106         ;LDR  R3, [R1]
-  241 00000106         ;ADD  R3, #1
-  242 00000106         ;STR  R3, [R1]
-  243 00000106         
-  244 00000106         
-  245 00000106         display_number
-  246 00000106         
-  247 00000106 4620            MOV              R0, R4
-  248 00000108 F7FF FFFE       BL               LCD_Display_Number 
-                                                            ; Chama função C
-  249 0000010C F04F 00DF       LDR              R0, =char_angle
-  250 00000110 F7FF FFFE       BL               LCD_Display_Character
-  251 00000114         
-  252 00000114 F44F 727A       MOV              R2, #1000
-  253 00000118 F7FF FFFE       BL               SysTick_Wait1ms
-  254 0000011C         
-  255 0000011C         
+  241 00000116 680A            LDR              R2, [R1]
+  242 00000118 4620            MOV              R0, R4
+  243 0000011A EBA2 0200       SUB              R2, R0
+  244 0000011E 600A            STR              R2, [R1]
+  245 00000120         
+  246 00000120 E7FF            B                display_number
+  247 00000122         
+  248 00000122         
+  249 00000122         
+  250 00000122         
+  251 00000122         display_number
 
 
 
 ARM Macro Assembler    Page 7 
 
 
-  256 0000011C F7FF FFFE       BL               create_data_row
-  257 00000120         
-  258 00000120 E004            B                skip
-  259 00000122         
-  260 00000122         update_data_timer1
-  261 00000122 480B            LDR              R0, =Timer1A_Addr ; Zera o bit 
+  252 00000122         
+  253 00000122 4620            MOV              R0, R4
+  254 00000124 F7FF FFFE       BL               LCD_Display_Number 
+                                                            ; Chama função C
+  255 00000128 F04F 00DF       LDR              R0, =char_angle
+  256 0000012C F7FF FFFE       BL               LCD_Display_Character
+  257 00000130         
+  258 00000130 F44F 727A       MOV              R2, #1000
+  259 00000134 F7FF FFFE       BL               SysTick_Wait1ms
+  260 00000138         
+  261 00000138         
+  262 00000138 F7FF FFFE       BL               create_data_row
+  263 0000013C         
+  264 0000013C E004            B                skip
+  265 0000013E         
+  266 0000013E         update_data_timer1
+  267 0000013E 480B            LDR              R0, =Timer1A_Addr ; Zera o bit 
                                                             do endereço do int
                                                             errupt do timer 1
-  262 00000124 F04F 0100       MOV              R1, #0
-  263 00000128 6001            STR              R1, [R0]
-  264 0000012A         
-  265 0000012A E7FF            B                skip
-  266 0000012C         
-  267 0000012C         skip
-  268 0000012C E78A            B                MainLoop
-  269 0000012E         
-  270 0000012E 00 00           ALIGN                        ;Garante que o fim 
+  268 00000140 F04F 0100       MOV              R1, #0
+  269 00000144 6001            STR              R1, [R0]
+  270 00000146         
+  271 00000146 E7FF            B                skip
+  272 00000148         
+  273 00000148         skip
+  274 00000148 E77C            B                MainLoop
+  275 0000014A         
+  276 0000014A 00 00           ALIGN                        ;Garante que o fim 
                                                             da secao esta alinh
                                                             ada 
-  271 00000130                 END                          ;Fim do arquivo
+  277 0000014C                 END                          ;Fim do arquivo
               20030000 
               20030004 
               20030008 
@@ -464,7 +475,7 @@ Symbol: MainLoop
       At line 105 in file main.s
    Uses
       At line 117 in file main.s
-      At line 268 in file main.s
+      At line 274 in file main.s
 
 Start 00000000
 
@@ -474,38 +485,38 @@ Symbol: Start
    Uses
       At line 43 in file main.s
 Comment: Start used once
-display_number 00000106
+display_number 00000122
 
 Symbol: display_number
    Definitions
-      At line 245 in file main.s
+      At line 251 in file main.s
    Uses
-      At line 198 in file main.s
-      At line 209 in file main.s
-      At line 225 in file main.s
-      At line 235 in file main.s
+      At line 184 in file main.s
+      At line 220 in file main.s
+      At line 236 in file main.s
+      At line 246 in file main.s
 
-negativeAngle 000000D8
+negativeAngle 000000C6
 
 Symbol: negativeAngle
    Definitions
-      At line 200 in file main.s
+      At line 186 in file main.s
    Uses
       At line 165 in file main.s
 Comment: negativeAngle used once
-negativeAngle2 000000F8
+negativeAngle2 00000114
 
 Symbol: negativeAngle2
    Definitions
-      At line 227 in file main.s
+      At line 238 in file main.s
    Uses
-      At line 217 in file main.s
+      At line 228 in file main.s
 Comment: negativeAngle2 used once
-positive 000000E4
+positive 00000100
 
 Symbol: positive
    Definitions
-      At line 210 in file main.s
+      At line 221 in file main.s
    Uses
       At line 157 in file main.s
 
@@ -515,24 +526,32 @@ ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Relocatable symbols
 
 Comment: positive used once
-skip 0000012C
+skip 00000148
 
 Symbol: skip
    Definitions
-      At line 267 in file main.s
+      At line 273 in file main.s
    Uses
       At line 132 in file main.s
       At line 135 in file main.s
       At line 139 in file main.s
       At line 142 in file main.s
-      At line 258 in file main.s
-      At line 265 in file main.s
+      At line 264 in file main.s
+      At line 271 in file main.s
 
-skip_inverse_apolarity1 000000D2
+skip_add_turn 000000FC
+
+Symbol: skip_add_turn
+   Definitions
+      At line 217 in file main.s
+   Uses
+      At line 193 in file main.s
+Comment: skip_add_turn used once
+skip_inverse_apolarity1 000000C0
 
 Symbol: skip_inverse_apolarity1
    Definitions
-      At line 192 in file main.s
+      At line 180 in file main.s
    Uses
       At line 172 in file main.s
 Comment: skip_inverse_apolarity1 used once
@@ -544,15 +563,15 @@ Symbol: update_data_timer0
    Uses
       At line 109 in file main.s
 Comment: update_data_timer0 used once
-update_data_timer1 00000122
+update_data_timer1 0000013E
 
 Symbol: update_data_timer1
    Definitions
-      At line 260 in file main.s
+      At line 266 in file main.s
    Uses
       At line 114 in file main.s
 Comment: update_data_timer1 used once
-11 symbols
+12 symbols
 
 
 
@@ -567,10 +586,11 @@ Symbol: ANGLE
    Uses
       At line 79 in file main.s
       At line 167 in file main.s
-      At line 193 in file main.s
-      At line 201 in file main.s
-      At line 219 in file main.s
-      At line 229 in file main.s
+      At line 181 in file main.s
+      At line 187 in file main.s
+      At line 215 in file main.s
+      At line 230 in file main.s
+      At line 240 in file main.s
 
 APOLARITY 2003000C
 
@@ -581,7 +601,7 @@ Symbol: APOLARITY
       At line 85 in file main.s
       At line 162 in file main.s
       At line 174 in file main.s
-      At line 214 in file main.s
+      At line 225 in file main.s
 
 CURR_KEY 20020004
 
@@ -617,14 +637,15 @@ Symbol: TPOLARITY
    Definitions
       At line 23 in file main.s
    Uses
-      At line 87 in file main.s
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Absolute symbols
 
-      At line 180 in file main.s
+      At line 87 in file main.s
+      At line 195 in file main.s
+      At line 205 in file main.s
 
 TURN 20030004
 
@@ -633,7 +654,8 @@ Symbol: TURN
       At line 20 in file main.s
    Uses
       At line 81 in file main.s
-      At line 182 in file main.s
+      At line 197 in file main.s
+      At line 211 in file main.s
 
 Timer0A_Addr 20010000
 
@@ -651,7 +673,7 @@ Symbol: Timer1A_Addr
       At line 16 in file main.s
    Uses
       At line 111 in file main.s
-      At line 261 in file main.s
+      At line 267 in file main.s
 
 char_angle 000000DF
 
@@ -659,7 +681,7 @@ Symbol: char_angle
    Definitions
       At line 25 in file main.s
    Uses
-      At line 249 in file main.s
+      At line 255 in file main.s
 Comment: char_angle used once
 char_minus 0000002D
 
@@ -699,7 +721,7 @@ Symbol: LCD_Display_Character
       At line 64 in file main.s
    Uses
       At line 160 in file main.s
-      At line 250 in file main.s
+      At line 256 in file main.s
 
 LCD_Display_Number 00000000
 
@@ -707,7 +729,7 @@ Symbol: LCD_Display_Number
    Definitions
       At line 63 in file main.s
    Uses
-      At line 248 in file main.s
+      At line 254 in file main.s
 Comment: LCD_Display_Number used once
 LCD_Init 00000000
 
@@ -745,7 +767,7 @@ Symbol: SysTick_Wait1ms
    Definitions
       At line 52 in file main.s
    Uses
-      At line 253 in file main.s
+      At line 259 in file main.s
 Comment: SysTick_Wait1ms used once
 SysTick_Wait1us 00000000
 
@@ -794,7 +816,7 @@ Symbol: create_data_row
       At line 60 in file main.s
    Uses
       At line 90 in file main.s
-      At line 256 in file main.s
+      At line 262 in file main.s
 
 create_increment_row 00000000
 
@@ -811,4 +833,4 @@ External symbols
       At line 152 in file main.s
 Comment: create_increment_row used once
 15 symbols
-374 symbols in table
+375 symbols in table

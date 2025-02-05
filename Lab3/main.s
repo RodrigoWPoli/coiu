@@ -177,23 +177,9 @@ update_data_timer0
 
 	NEG 	R2, R2						;Inverte o sinal do angulo para sempre ser positivo
 
-	LDR 	R1, =TPOLARITY				;Verifica polaridade: 0 = positivo, 1 = negativo
-	LDR 	R3, [R1]					;Se a polaridade for negativa, somar mais um, se for positiva, subtrair um
-	LDR 	R1, =TURN
-	LDR 	R5, [R1]
-	CMP		R3, #1
-	ITE		EQ
-	ADDEQ	R5, #1
-	SUBNE	R5, #1
-	STR		R5, [R1]
-
-	
-
 skip_inverse_apolarity1
 	LDR 	R1, =ANGLE
 	STR		R2, [R1]
-
-
 
 	B 		display_number
 
@@ -202,10 +188,35 @@ negativeAngle
 	LDR 	R2, [R1]
 	MOV		R0, R4
 	ADD		R2, R0
+
+	CMP		R2, #360					;Verifica se bateu uma volta
+	BLO		skip_add_turn
+
+	LDR     R1, =TPOLARITY              ;Verifica polaridade: 0 = positivo, 1 = negativo
+    LDR     R3, [R1]                    ;Se a polaridade for negativa, somar mais um, se for positiva, subtrair um
+    LDR     R1, =TURN
+    LDR     R5, [R1]
+    CMP     R3, #1
+    ITE     EQ
+    ADDEQ   R5, #1
+    SUBNE   R5, #1                        ;Verificar se as voltas caíram para um valor negativo
+
+    CMP     R5, #0
+    LDR     R1, =TPOLARITY
+    MOV     R6, #1
+    ITT     LT							;Se caiu para valor negativo, coloco positivo a volta e mudo a polaridade
+    NEGLT   R5, R5
+    STRLT   R6, [R1]
+
+	LDR 	R1, =TURN
+    STR     R5, [R1]
+
+	SUB 	R2, #360
+	LDR		R1, =ANGLE
+	
+skip_add_turn
 	STR		R2, [R1]
 
-;Verificar turns
-	
 	B 		display_number
 positive   
 
@@ -234,12 +245,7 @@ negativeAngle2
 
 	B 		display_number
 
-	;CMP 	R2, #360					;Verifica se o angulo ultrapassou 360 graus
-	;BLO     display_number
-	;LDR 	R1, =TURN					;Incrementa o numero de voltas
-	;LDR 	R3, [R1]
-	;ADD		R3, #1
-	;STR		R3, [R1]
+
 
 	
 display_number

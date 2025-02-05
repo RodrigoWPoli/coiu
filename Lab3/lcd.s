@@ -233,7 +233,7 @@ create_data_row
         LDR     R1, =APOLARITY
         LDR     R0, [R1]
         CMP     R0, #0
-        BHS     positive
+        BEQ     positive
 
         LDR     R0, =char_minus
         BL      LCD_Display_Character
@@ -264,11 +264,10 @@ positive
         BL      LCD_Display_Character
         ;Aqui fazer receber o valor de turn, separar ele em até 3 digitos e mostrar, lembrar que pode ser negativo
 
-        LDR     R1, =TURN
+        LDR     R1, =TPOLARITY
         LDR     R0, [R1]
-        MOV     R2, #0
-        CMP     R0, R2
-        BHS     positive2
+        CMP     R0, #0
+        BEQ     positive2
 
         LDR     R0, =char_minus
         BL      LCD_Display_Character
@@ -352,8 +351,7 @@ create_mode_row
         BL      LCD_Display_Character
         LDR     R0, =char_space
         BL      LCD_Display_Character
-        ;Aqui fazer receber o valor de inc, separar ele em até 3 digitos e mostrar
-        ;BL    LCD_Display_Increment
+        
         
         POP     {LR}
         BX      LR
