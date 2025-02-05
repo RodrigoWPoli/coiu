@@ -169,7 +169,7 @@ update_data_timer0
 	MOV		R0, R4
 	SUB		R2, R0						;Verifica se houve mudança de sinal
 	CMP		R2, #0
-	BLO     skip_inverse_apolarity1
+	BGE     skip_inverse_apolarity1
 
 	LDR		R1, =APOLARITY				;Transforma a polaridade em negativa porque houve mudança de sinal
 	MOV		R3, #1
@@ -184,7 +184,7 @@ update_data_timer0
 	CMP		R3, #1
 	ITE		EQ
 	ADDEQ	R5, #1
-	SUBEQ	R5, #1
+	SUBNE	R5, #1
 	STR		R5, [R1]
 
 	
