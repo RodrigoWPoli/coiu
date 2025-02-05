@@ -110,7 +110,7 @@ create_data_row
         BL      LCD_Display_Character 
         LDR     R0, =char_space
         BL      LCD_Display_Character 
-        ;Aqui fazer receber o valor de ang, separar ele em até 3 digitos e mostrar
+        ;Verifica polaridade do angulo e mostra o valor dele
         
         LDR     R1, =APOLARITY
         LDR     R0, [R1]
@@ -123,7 +123,7 @@ positive
 
         LDR     R1, =ANGLE
         LDR     R0, [R1]
-        BL      LCD_Display_Number      ; Chama função C
+        BL      LCD_Display_Number      	; Chama função C
 		
         LDR     R0, =char_angle
         BL      LCD_Display_Character
@@ -144,7 +144,7 @@ positive
         BL      LCD_Display_Character
         LDR     R0, =char_space
         BL      LCD_Display_Character
-        ;Aqui fazer receber o valor de turn, separar ele em até 3 digitos e mostrar, lembrar que pode ser negativo
+        ;Verifica polaridade da volta e mostra o valor dela
 
         LDR     R1, =TPOLARITY
         LDR     R0, [R1]
@@ -157,7 +157,7 @@ positive2
 
         LDR     R1, =TURN
         LDR     R0, [R1]
-        BL      LCD_Display_Number      ; Chama função C
+        BL      LCD_Display_Number      	; Chama função C
 
         POP     {LR} 
         BX      LR
@@ -406,7 +406,7 @@ cursor_shift_left2
 			
 display_resetado
 
-	BL      create_data_row
+		BL      create_data_row
 		
         POP     {LR} 
         BX      LR

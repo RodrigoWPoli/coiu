@@ -10,7 +10,7 @@
 ; Declaracoes EQU - Defines
 ; ========================
 ANGLE            	     EQU     0x20030000
-TURN			     EQU     0x20030004
+TURN			     	 EQU     0x20030004
 MODE         		     EQU     0x20030008
 APOLARITY         	     EQU     0x2003000C
 TPOLARITY         	     EQU     0x20030010
@@ -22,8 +22,8 @@ GPIO_PORTA_AHB_IS_R             EQU    0x40058404
 GPIO_PORTA_AHB_IBE_R            EQU    0x40058408
 GPIO_PORTA_AHB_IEV_R            EQU    0x4005840C
 GPIO_PORTA_AHB_ICR_R            EQU    0x4005841C
-GPIO_PORTA_AHB_DATA_R   	EQU    0x400583FC
-GPIO_PORTA 			EQU    2_000000000000001
+GPIO_PORTA_AHB_DATA_R   		EQU    0x400583FC
+GPIO_PORTA 						EQU    2_000000000000001
 
 ; ~~~~~~~~~~~~~~~~ PORT B ~~~~~~~~~~~~~~~~~~
 GPIO_PORTB_AHB_IM_R             EQU     0x40059410
@@ -31,8 +31,8 @@ GPIO_PORTB_AHB_IS_R             EQU     0x40059404
 GPIO_PORTB_AHB_IBE_R            EQU     0x40059408
 GPIO_PORTB_AHB_IEV_R            EQU     0x4005940C
 GPIO_PORTB_AHB_ICR_R            EQU     0x4005941C
-GPIO_PORTB_AHB_DATA_R   	EQU     0x400593FC
-GPIO_PORTB 			EQU     2_000000000000010
+GPIO_PORTB_AHB_DATA_R   		EQU     0x400593FC
+GPIO_PORTB 						EQU     2_000000000000010
 
 ; ~~~~~~~~~~~~~~~~ PORT C ~~~~~~~~~~~~~~~~~~
 GPIO_PORTC_AHB_IS_R             EQU     0x4005A404
@@ -40,8 +40,8 @@ GPIO_PORTC_AHB_IBE_R            EQU     0x4005A408
 GPIO_PORTC_AHB_IEV_R            EQU     0x4005A40C
 GPIO_PORTC_AHB_IM_R             EQU     0x4005A410
 GPIO_PORTC_AHB_ICR_R            EQU     0x4005A41C
-GPIO_PORTC_AHB_DATA_R   	EQU     0x4005A3FC
-GPIO_PORTC 			EQU     2_000000000000100
+GPIO_PORTC_AHB_DATA_R   		EQU     0x4005A3FC
+GPIO_PORTC 						EQU     2_000000000000100
 
 ; ~~~~~~~~~~~~~~~~ PORT D ~~~~~~~~~~~~~~~~~~
 GPIO_PORTD_AHB_IM_R             EQU     0x4005B410
@@ -49,8 +49,8 @@ GPIO_PORTD_AHB_IS_R             EQU     0x4005B404
 GPIO_PORTD_AHB_IBE_R            EQU     0x4005B408
 GPIO_PORTD_AHB_IEV_R            EQU     0x4005B40C
 GPIO_PORTD_AHB_ICR_R            EQU     0x4005B41C
-GPIO_PORTD_AHB_DATA_R   	EQU     0x4005B3FC
-GPIO_PORTD 			EQU     2_000000000001000
+GPIO_PORTD_AHB_DATA_R   		EQU     0x4005B3FC
+GPIO_PORTD 						EQU     2_000000000001000
 
 ; ~~~~~~~~~~~~~~~~ PORT E ~~~~~~~~~~~~~~~~~~   
 GPIO_PORTE_AHB_IM_R             EQU     0x4005C410
@@ -58,8 +58,8 @@ GPIO_PORTE_AHB_IS_R             EQU     0x4005C404
 GPIO_PORTE_AHB_IBE_R            EQU     0x4005C408
 GPIO_PORTE_AHB_IEV_R            EQU     0x4005C40C
 GPIO_PORTE_AHB_ICR_R            EQU     0x4005C41C
-GPIO_PORTE_AHB_DATA_R   	EQU     0x4005C3FC
-GPIO_PORTE 			EQU     2_000000000010000
+GPIO_PORTE_AHB_DATA_R   		EQU     0x4005C3FC
+GPIO_PORTE 						EQU     2_000000000010000
 
 ; ~~~~~~~~~~~~~~~~ PORT F ~~~~~~~~~~~~~~~~~~
 GPIO_PORTF_AHB_IM_R             EQU     0x4005D410
@@ -67,8 +67,8 @@ GPIO_PORTF_AHB_IS_R             EQU     0x4005D404
 GPIO_PORTF_AHB_IBE_R            EQU     0x4005D408
 GPIO_PORTF_AHB_IEV_R            EQU     0x4005D40C
 GPIO_PORTF_AHB_ICR_R            EQU     0x4005D41C
-GPIO_PORTF_AHB_DATA_R   	EQU     0x4005D3FC
-GPIO_PORTF 			EQU     2_000000000100000
+GPIO_PORTF_AHB_DATA_R   		EQU     0x4005D3FC
+GPIO_PORTF 						EQU     2_000000000100000
 
 ; ~~~~~~~~~~~~~~~~ PORT G ~~~~~~~~~~~~~~~~~~
 GPIO_PORTG_AHB_IM_R             EQU     0x4005E410
@@ -76,8 +76,8 @@ GPIO_PORTG_AHB_IS_R             EQU     0x4005E404
 GPIO_PORTG_AHB_IBE_R            EQU     0x4005E408
 GPIO_PORTG_AHB_IEV_R            EQU     0x4005E40C
 GPIO_PORTG_AHB_ICR_R            EQU     0x4005E41C
-GPIO_PORTG_AHB_DATA_R   	EQU     0x4005E3FC
-GPIO_PORTG 			EQU     2_000000001000000
+GPIO_PORTG_AHB_DATA_R   		EQU     0x4005E3FC
+GPIO_PORTG 						EQU     2_000000001000000
 
 ; ~~~~~~~~~~~~~~~~ PORT H ~~~~~~~~~~~~~~~~~~
 GPIO_PORTH_AHB_IM_R             EQU     0x4005F410
@@ -85,8 +85,8 @@ GPIO_PORTH_AHB_IS_R             EQU     0x4005F404
 GPIO_PORTH_AHB_IBE_R            EQU     0x4005F408
 GPIO_PORTH_AHB_IEV_R            EQU     0x4005F40C
 GPIO_PORTH_AHB_ICR_R            EQU     0x4005F41C
-GPIO_PORTH_AHB_DATA_R   	EQU     0x4005F3FC
-GPIO_PORTH 			EQU     2_000000010000000
+GPIO_PORTH_AHB_DATA_R   		EQU     0x4005F3FC
+GPIO_PORTH 						EQU     2_000000010000000
 
 ; ~~~~~~~~~~~~~~~~ PORT J ~~~~~~~~~~~~~~~~~~
 GPIO_PORTJ_AHB_IS_R             EQU    0x40060404
@@ -95,8 +95,8 @@ GPIO_PORTJ_AHB_IEV_R            EQU    0x4006040C
 GPIO_PORTJ_AHB_IM_R             EQU    0x40060410
 GPIO_PORTJ_AHB_RIS_R            EQU    0x40060414
 GPIO_PORTJ_AHB_ICR_R            EQU    0x4006041C
-GPIO_PORTJ_AHB_DATA_R    	EQU    0x400603FC
-GPIO_PORTJ               	EQU    2_000000100000000
+GPIO_PORTJ_AHB_DATA_R    		EQU    0x400603FC
+GPIO_PORTJ               		EQU    2_000000100000000
 
 ; ~~~~~~~~~~~~~~~~ PORT K ~~~~~~~~~~~~~~~~~~
 GPIO_PORTK_IM_R                 EQU    0x40061410
@@ -105,7 +105,7 @@ GPIO_PORTK_IBE_R                EQU    0x40061408
 GPIO_PORTK_IEV_R                EQU    0x4006140C
 GPIO_PORTK_ICR_R                EQU    0x4006141C
 GPIO_PORTK_DATA_R    	        EQU    0x400613FC
-GPIO_PORTK               	EQU    2_000001000000000
+GPIO_PORTK               		EQU    2_000001000000000
 
 ; ~~~~~~~~~~~~~~~~ PORT L ~~~~~~~~~~~~~~~~~~
 GPIO_PORTL_IM_R                 EQU    0x40062410
@@ -327,15 +327,15 @@ sw2
         CMP 	R1, R2								; Ignora varia��es de freq. > 50Hz
         BNE 	debounce_skip
 
-	MOV R1, #0						 ;Reset do angulo, das voltas e das polaridades
-	LDR R0, =ANGLE
-	STR R1, [R0]
-	LDR R0, =TURN
-	STR R1, [R0]
-	LDR R0, =APOLARITY
-	STR R1, [R0]
-	LDR R0, =TPOLARITY
-	STR R1, [R0]        
+		MOV R1, #0						 ;Reset do angulo, das voltas e das polaridades
+		LDR R0, =ANGLE
+		STR R1, [R0]
+		LDR R0, =TURN
+		STR R1, [R0]
+		LDR R0, =APOLARITY
+		STR R1, [R0]
+		LDR R0, =TPOLARITY
+		STR R1, [R0]        
 		
         BL      create_reset_row   
 

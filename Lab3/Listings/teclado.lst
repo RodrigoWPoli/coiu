@@ -118,14 +118,14 @@ ARM Macro Assembler    Page 2
                        a for pressionada)
    52 00000000         TecladoM_Poll
    53 00000000 F04F 0280       MOV              R2, #2_10000000
-   54 00000004         ;
+   54 00000004         
    55 00000004         loop_columns
    56 00000004 F04F 0110       MOV              R1, #0x10   ; Seta a saida para
                                                              10 pois a tecla 10
                                                              nao existe
    57 00000008 2A08            CMP              R2, #2_00001000
    58 0000000A D94A            BLS              teclado_retorno
-   59 0000000C         ;
+   59 0000000C         
    60 0000000C 4827            LDR              R0, =GPIO_PORTM_DATA_R ; Habili
                                                             ta o Pino de R2
 

@@ -51,12 +51,12 @@ GPIO_PORTM               	EQU    2_000100000000000
 ; Saida: R1 -> Valor da tecla pressionada (0xF se nenhuma for pressionada)
 TecladoM_Poll
             MOV     R2, #2_10000000
-            ;
+            
 loop_columns
             MOV     R1, #0x10                                ; Seta a saida para 10 pois a tecla 10 nao existe
             CMP     R2, #2_00001000
             BLS     teclado_retorno
-            ;
+            
             LDR     R0, =GPIO_PORTM_DATA_R                  ; Habilita o Pino de R2
             STR     R2, [R0]
 

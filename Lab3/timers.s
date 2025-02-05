@@ -198,7 +198,7 @@ Timer1A_Handler
             
             BX LR
 
-;
+;-----------------------------------------------------------------------------------------
             ALIGN                        ;Garante que o fim da secao esta alinhada 
             END                          ;Fim do arquivo
 

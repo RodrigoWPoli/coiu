@@ -561,9 +561,7 @@ ARM Macro Assembler    Page 9
   197 00000000         
   198 00000000         ; ===========================================
   199 00000000         ;~~~~~~~~~~~~ OUTRAS CONSTANTES ~~~~~~~~~~~~~
-  200 00000000 20000B00 
-                       TECLADO_PRESS_ADDR
-                               EQU              0x20000B00
+  200 00000000         
   201 00000000         
   202 00000000         
   203 00000000         ; ------------------------------------------------------
@@ -583,14 +581,14 @@ ARM Macro Assembler    Page 9
   213 00000000         ;-------------------------------------------------------
                        -------------------------
   214 00000000         ; Funcao GPIO_Init
+  215 00000000         ; Ports e Pinos utilizados:
+  216 00000000         ;   Port J: PJ1     -> Botao RST Global -> PJ0 -> Botao 
 
 
 
 ARM Macro Assembler    Page 10 
 
 
-  215 00000000         ; Ports e Pinos utilizados:
-  216 00000000         ;   Port J: PJ1     -> Botao RST Global -> PJ0 -> Botao 
                        alterar mode
   217 00000000         ;   Port K: PK0-PK7 -> Dados do LCD
   218 00000000         ;   Port L: PL0-PL3 -> Teclado Matricial
@@ -648,14 +646,14 @@ ARM Macro Assembler    Page 10
   241 0000002A D0F4            BEQ              EsperaGPIO  ;Se o flag Z=1, vol
                                                             ta para o laco. Sen
                                                             ao continua executa
+                                                            ndo
+  242 0000002C         
 
 
 
 ARM Macro Assembler    Page 11 
 
 
-                                                            ndo
-  242 0000002C         
   243 0000002C         ; 2. Limpar o AMSEL para desabilitar a analogica
   244 0000002C F04F 0100       MOV              R1, #0x00   ;Colocar 0 no regis
                                                             trador para desabil
@@ -713,14 +711,14 @@ ARM Macro Assembler    Page 11
                                                             dor PCTL da porta g
                                                             enerica da memoria
   260 0000004C 484D            LDR              R0, =GPIO_PORTJ_AHB_PCTL_R ;Car
+                                                            rega o R0 com o end
+                                                            ereco do PCTL para 
 
 
 
 ARM Macro Assembler    Page 12 
 
 
-                                                            rega o R0 com o end
-                                                            ereco do PCTL para 
                                                             a porta generica
   261 0000004E 6001            STR              R1, [R0]    ;Guarda no registra
                                                             dor PCTL da porta g
@@ -778,14 +776,14 @@ ARM Macro Assembler    Page 12
   281 00000074         
   282 00000074         
   283 00000074         
+  284 00000074         ; 5. Limpar os bits AFSEL para 0 para selecionar GPIO 
+  285 00000074         ;    Sem funcao alternativa
 
 
 
 ARM Macro Assembler    Page 13 
 
 
-  284 00000074         ; 5. Limpar os bits AFSEL para 0 para selecionar GPIO 
-  285 00000074         ;    Sem funcao alternativa
   286 00000074 F04F 0100       MOV              R1, #0x00   ;Colocar o valor 0 
                                                             para nao setar func
                                                             ao alternativa
@@ -843,14 +841,14 @@ ARM Macro Assembler    Page 13
                                                             
   308 000000A0         
   309 000000A0 4845            LDR              R0, =GPIO_PORTJ_AHB_DEN_R ; Car
+                                                            rega o endereco do 
+                                                            DEN para a porta J
 
 
 
 ARM Macro Assembler    Page 14 
 
 
-                                                            rega o endereco do 
-                                                            DEN para a porta J
   310 000000A2 F04F 0103       MOV              R1, #2_00000011 ; Ativa a PJ0 e
                                                              PJ1 para ser digit
                                                             al
@@ -908,14 +906,14 @@ ARM Macro Assembler    Page 14
   343 000000DA 6001            STR              R1, [R0]
   344 000000DC         
   345 000000DC F04F 0028       LDR              R0, =40
+  346 000000E0 F7FF FFFE       BL               SysTick_Wait1us
+  347 000000E4         
 
 
 
 ARM Macro Assembler    Page 15 
 
 
-  346 000000E0 F7FF FFFE       BL               SysTick_Wait1us
-  347 000000E4         
   348 000000E4         ; 
   349 000000E4 4837            LDR              R0, =GPIO_PORTK_DATA_R
   350 000000E6 F04F 0106       MOV              R1, #0x06
@@ -973,14 +971,14 @@ ARM Macro Assembler    Page 15
   402 00000154 F04F 0002       LDR              R0, =2
   403 00000158 F7FF FFFE       BL               SysTick_Wait1us
   404 0000015C         
+  405 0000015C F85D EB04       POP              {LR}
+  406 00000160 4770            BX               LR          ;Retorno
 
 
 
 ARM Macro Assembler    Page 16 
 
 
-  405 0000015C F85D EB04       POP              {LR}
-  406 00000160 4770            BX               LR          ;Retorno
   407 00000162         
   408 00000162 00 00           ALIGN                        ; garante que o fim
                                                              da secaoo esta ali
@@ -2420,21 +2418,7 @@ Symbol: SYSCTL_RCGCGPIO_R
    Uses
       At line 226 in file gpio.s
 Comment: SYSCTL_RCGCGPIO_R used once
-TECLADO_PRESS_ADDR 20000B00
-
-
-
-ARM Macro Assembler    Page 22 Alphabetic symbol ordering
-Absolute symbols
-
-
-Symbol: TECLADO_PRESS_ADDR
-   Definitions
-      At line 200 in file gpio.s
-   Uses
-      None
-Comment: TECLADO_PRESS_ADDR unused
-154 symbols
+153 symbols
 
 
 
@@ -2457,4 +2441,4 @@ Symbol: SysTick_Wait1us
       At line 403 in file gpio.s
 
 1 symbol
-495 symbols in table
+494 symbols in table

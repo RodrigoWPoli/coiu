@@ -206,8 +206,7 @@ ARM Macro Assembler    Page 4
   110 0000003A F7FF FFFE       BL               LCD_Display_Character
   111 0000003E F04F 0020       LDR              R0, =char_space
   112 00000042 F7FF FFFE       BL               LCD_Display_Character
-  113 00000046         ;Aqui fazer receber o valor de ang, separar ele em até 
-                       3 digitos e mostrar
+  113 00000046         ;Verifica polaridade do angulo e mostra o valor dele
   114 00000046         
   115 00000046 49C2            LDR              R1, =APOLARITY
   116 00000048 6808            LDR              R0, [R1]
@@ -242,8 +241,7 @@ ARM Macro Assembler    Page 4
   144 00000096 F7FF FFFE       BL               LCD_Display_Character
   145 0000009A F04F 0020       LDR              R0, =char_space
   146 0000009E F7FF FFFE       BL               LCD_Display_Character
-  147 000000A2         ;Aqui fazer receber o valor de turn, separar ele em até
-                        3 digitos e mostrar, lembrar que pode ser negativo
+  147 000000A2         ;Verifica polaridade da volta e mostra o valor dela
   148 000000A2         
   149 000000A2 49AD            LDR              R1, =TPOLARITY
   150 000000A4 6808            LDR              R0, [R1]
@@ -258,14 +256,14 @@ ARM Macro Assembler    Page 4
   159 000000B4 6808            LDR              R0, [R1]
   160 000000B6 F7FF FFFE       BL               LCD_Display_Number 
                                                             ; Chama função C
+  161 000000BA         
+  162 000000BA F85D EB04       POP              {LR}
 
 
 
 ARM Macro Assembler    Page 5 
 
 
-  161 000000BA         
-  162 000000BA F85D EB04       POP              {LR}
   163 000000BE 4770            BX               LR
   164 000000C0         
   165 000000C0         ; ------------------------------------------------------
@@ -323,14 +321,14 @@ ARM Macro Assembler    Page 5
   214 00000136 F04F 006F       LDR              R0, =char_o
   215 0000013A F7FF FFFE       BL               LCD_Display_Character
   216 0000013E F04F 0064       LDR              R0, =char_d
+  217 00000142 F7FF FFFE       BL               LCD_Display_Character
+  218 00000146 F04F 006F       LDR              R0, =char_o
 
 
 
 ARM Macro Assembler    Page 6 
 
 
-  217 00000142 F7FF FFFE       BL               LCD_Display_Character
-  218 00000146 F04F 006F       LDR              R0, =char_o
   219 0000014A F7FF FFFE       BL               LCD_Display_Character
   220 0000014E F04F 003A       LDR              R0, =char_dois_pontos
   221 00000152 F7FF FFFE       BL               LCD_Display_Character
@@ -388,14 +386,14 @@ ARM Macro Assembler    Page 6
   272 000001FA F04F 0070       LDR              R0, =char_p
   273 000001FE F7FF FFFE       BL               LCD_Display_Character
   274 00000202 F04F 006C       LDR              R0, =char_l
+  275 00000206 F7FF FFFE       BL               LCD_Display_Character
+  276 0000020A F04F 0065       LDR              R0, =char_e
 
 
 
 ARM Macro Assembler    Page 7 
 
 
-  275 00000206 F7FF FFFE       BL               LCD_Display_Character
-  276 0000020A F04F 0065       LDR              R0, =char_e
   277 0000020E F7FF FFFE       BL               LCD_Display_Character
   278 00000212 F04F 0074       LDR              R0, =char_t
   279 00000216 F7FF FFFE       BL               LCD_Display_Character
@@ -453,14 +451,14 @@ ARM Macro Assembler    Page 7
   326 00000284         
   327 00000284 F04F 002E       LDR              R0 , =char_dot
   328 00000288 F7FF FFFE       BL               LCD_Display_Character
+  329 0000028C F04F 0296       MOV              R2, #150
+  330 00000290 F7FF FFFE       BL               SysTick_Wait1ms ;Mostra primeir
 
 
 
 ARM Macro Assembler    Page 8 
 
 
-  329 0000028C F04F 0296       MOV              R2, #150
-  330 00000290 F7FF FFFE       BL               SysTick_Wait1ms ;Mostra primeir
                                                             o ponto e espera um
                                                              pouco
   331 00000294 F04F 002E       LDR              R0, =char_dot
@@ -518,14 +516,14 @@ ARM Macro Assembler    Page 8
   373 000002F6 F04F 0020       LDR              R0, =char_space
   374 000002FA F7FF FFFE       BL               LCD_Display_Character
   375 000002FE F04F 0020       LDR              R0, =char_space
+  376 00000302 F7FF FFFE       BL               LCD_Display_Character
+  377 00000306         
 
 
 
 ARM Macro Assembler    Page 9 
 
 
-  376 00000302 F7FF FFFE       BL               LCD_Display_Character
-  377 00000306         
   378 00000306 F04F 0296       MOV              R2, #150
   379 0000030A F7FF FFFE       BL               SysTick_Wait1ms
   380 0000030E         

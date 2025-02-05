@@ -109,7 +109,7 @@ MainLoop
 	BEQ 	update_data_timer1
 	
 
-	B MainLoop                   ;Volta para o laco principal
+	B MainLoop                   	;Volta para o laco principal
 
 
 update_data_timer0
@@ -119,24 +119,24 @@ update_data_timer0
 
 	BL		TecladoM_Poll
 
-	LDR		R0, =PREV_KEYPRESS	; Recupera o último click e armazena o atual
+	LDR		R0, =PREV_KEYPRESS		; Recupera o último click e armazena o atual
 	LDR 	R2, [R0]
 	STR		R1, [R0]
 	
-	CMP 	R2, #0x10			; Pula se a última tecla for 0x10
+	CMP 	R2, #0x10				; Pula se a última tecla for 0x10
 	BEQ 	skip  
 	
-	CMP 	R1, #0x10			; Detecta falling-edge da tecla
+	CMP 	R1, #0x10				; Detecta falling-edge da tecla
 	BNE 	skip  
 
-	AND 	R1, R2, #0xFF		 ; Filtra os 8 LSB de R2
-	CMP 	R1, #0x31			 ; Verifica se a tecla pressionada esta entre 1 e C
+	AND 	R1, R2, #0xFF		 	; Filtra os 8 LSB de R2
+	CMP 	R1, #0x31			 	; Verifica se a tecla pressionada esta entre 1 e C
 	BLO		skip
 	
 	CMP 	R1, #0x43
 	BHI		skip
 	
-	LDR		R0, =CURR_KEY		; Atualiza a tecla atual
+	LDR		R0, =CURR_KEY			; Atualiza a tecla atual
 	STR		R1, [R0]
 	
 	BL 		calculate_angle_turn	
@@ -155,6 +155,8 @@ update_data_timer1
 
 skip
 	B MainLoop
+	
 
-    ALIGN                        ;Garante que o fim da secao esta alinhada 
-    END                          ;Fim do arquivo
+;--------------------------------------------------------------------------------------
+    ALIGN                        	;Garante que o fim da secao esta alinhada 
+    END                          	;Fim do arquivo

@@ -54,14 +54,14 @@ char_angle          	 EQU     2_11011111
 calculate_angle_turn
     PUSH    {LR}
 
-    LDR 	R1, =CURR_KEY		;Incremento do angulo
+    LDR 	R1, =CURR_KEY				;Incremento do angulo
     LDR 	R0, [R1]
 	BL		angle_decoder
 	MOV 	R4, R0
 
-	BL 		create_increment_row	;Cria a linha de incremento
+	BL 		create_increment_row		;Cria a linha de incremento
 
-	LDR 	R1, =CURR_KEY			;Verifica se o incremento do angulo é negativo ou positivo
+	LDR 	R1, =CURR_KEY				;Verifica se o incremento do angulo é negativo ou positivo
     LDR 	R0, [R1]
     CMP     R0, #0x37
     BLO     positive
@@ -109,7 +109,7 @@ negativeAngle
     CMP     R3, #1
     ITE     EQ
     ADDEQ   R5, #1
-    SUBNE   R5, #1                        ;Verificar se as voltas caíram para um valor negativo
+    SUBNE   R5, #1                      ;Verificar se as voltas caíram para um valor negativo
 
     CMP     R5, #0
     LDR     R1, =TPOLARITY
@@ -170,7 +170,7 @@ positiveAngle
     CMP     R3, #0
     ITE     EQ
     ADDEQ   R5, #1
-    SUBNE   R5, #1                        ;Verificar se as voltas subiram para um valor positivo
+    SUBNE   R5, #1                      ;Verificar se as voltas subiram para um valor positivo
 
     CMP     R5, #0
     LDR     R1, =TPOLARITY
@@ -193,7 +193,7 @@ skip_add_turn2
 display_number
 	
 	MOV 	R0, R4
-    BL      LCD_Display_Number      ; Chama função C
+    BL      LCD_Display_Number      	; Chama função C
 	LDR		R0, =char_angle
 	BL		LCD_Display_Character
 	
