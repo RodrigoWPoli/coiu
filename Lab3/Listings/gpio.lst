@@ -769,21 +769,22 @@ ARM Macro Assembler    Page 12
                                                             ega o R0 com o ende
                                                             reco do DIR para a 
                                                             porta generica
-  279 0000006E F04F 0100       MOV              R1, #2_00000000 ;J0 para entrad
-                                                            a USR_SW1
+  279 0000006E F04F 0100       MOV              R1, #2_00000000 ;J0 e J1 para e
+                                                            ntrada USR_SW1, USR
+                                                            _SW2
   280 00000072 6001            STR              R1, [R0]    ;Guarda no registra
                                                             dor PCTL da porta g
                                                             enerica da memoria
   281 00000074         
   282 00000074         
   283 00000074         
-  284 00000074         ; 5. Limpar os bits AFSEL para 0 para selecionar GPIO 
 
 
 
 ARM Macro Assembler    Page 13 
 
 
+  284 00000074         ; 5. Limpar os bits AFSEL para 0 para selecionar GPIO 
   285 00000074         ;    Sem funcao alternativa
   286 00000074 F04F 0100       MOV              R1, #0x00   ;Colocar o valor 0 
                                                             para nao setar func
@@ -842,18 +843,19 @@ ARM Macro Assembler    Page 13
                                                             
   308 000000A0         
   309 000000A0 4845            LDR              R0, =GPIO_PORTJ_AHB_DEN_R ; Car
-                                                            rega o endereco do 
 
 
 
 ARM Macro Assembler    Page 14 
 
 
+                                                            rega o endereco do 
                                                             DEN para a porta J
-  310 000000A2 F04F 0101       MOV              R1, #2_00000001 ; Ativa a PJ0 p
-                                                            ara ser digital
+  310 000000A2 F04F 0103       MOV              R1, #2_00000011 ; Ativa a PJ0 e
+                                                             PJ1 para ser digit
+                                                            al
   311 000000A6 6001            STR              R1, [R0]    ; Seta o bit digita
-                                                            l para PJ0
+                                                            l para PJ0 e PJ1
   312 000000A8         
   313 000000A8         ; 7. Para habilitar resistor de pull-down interno, setar
                         PDR para 1
@@ -874,9 +876,9 @@ ARM Macro Assembler    Page 14
   318 000000B0 4843            LDR              R0, =GPIO_PORTJ_AHB_PUR_R ; Car
                                                             rega o endereco do 
                                                             PUR para a porta J
-  319 000000B2 F04F 0101       MOV              R1, #2_00000001 ; Seta o bit do
-                                                             PJ0 para utilizar 
-                                                            o PUR
+  319 000000B2 F04F 0103       MOV              R1, #2_00000011 ; Seta o bit do
+                                                             PJ0 e PJ1 para uti
+                                                            lizar o PUR
   320 000000B6 6001            STR              R1, [R0]    ; Salva o bit setad
                                                             o no PUR da porta J
                                                              
@@ -906,14 +908,14 @@ ARM Macro Assembler    Page 14
   343 000000DA 6001            STR              R1, [R0]
   344 000000DC         
   345 000000DC F04F 0028       LDR              R0, =40
-  346 000000E0 F7FF FFFE       BL               SysTick_Wait1us
-  347 000000E4         
 
 
 
 ARM Macro Assembler    Page 15 
 
 
+  346 000000E0 F7FF FFFE       BL               SysTick_Wait1us
+  347 000000E4         
   348 000000E4         ; 
   349 000000E4 4837            LDR              R0, =GPIO_PORTK_DATA_R
   350 000000E6 F04F 0106       MOV              R1, #0x06
@@ -971,14 +973,14 @@ ARM Macro Assembler    Page 15
   402 00000154 F04F 0002       LDR              R0, =2
   403 00000158 F7FF FFFE       BL               SysTick_Wait1us
   404 0000015C         
-  405 0000015C F85D EB04       POP              {LR}
-  406 00000160 4770            BX               LR          ;Retorno
 
 
 
 ARM Macro Assembler    Page 16 
 
 
+  405 0000015C F85D EB04       POP              {LR}
+  406 00000160 4770            BX               LR          ;Retorno
   407 00000162         
   408 00000162 00 00           ALIGN                        ; garante que o fim
                                                              da secaoo esta ali
@@ -1010,11 +1012,11 @@ ARM Macro Assembler    Page 16
               40060510 
               400613FC 
               400633FC 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=.\objects\gpio.d -o.\objects\gpio.o -IC:\Users\Ricar\AppData
-\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL
- SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C1294NCPDT SE
-TA 1" --list=.\listings\gpio.lst gpio.s
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
+--depend=.\objects\gpio.d -o.\objects\gpio.o -IC:\Users\Ricar\AppData\Local\Arm
+\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1" -
+-predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1" --li
+st=.\listings\gpio.lst gpio.s
 
 
 

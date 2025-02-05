@@ -38,6 +38,7 @@ char_parenteses_dir EQU 2_00101001
 char_A              EQU 2_01000001   
 char_D              EQU 2_01011000
 char_I              EQU 2_01001001
+char_M              EQU 2_01001101
 char_P              EQU 2_01010000
 char_R              EQU 2_01010010
 char_V              EQU 2_01010110    
@@ -59,7 +60,7 @@ char_u              EQU 2_01110101
 char_x              EQU 2_01111000
 
 	
-CURR_KEY	    EQU	0x20020004
+CURR_KEY	    	EQU	0x20020004
 ANGLE               EQU 0x20030000
 TURN	            EQU	0x20030004
 APOLARITY           EQU 0x2003000C
@@ -69,13 +70,9 @@ TPOLARITY           EQU 0x20030010
 ; Area de Codigo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
-        EXPORT create_data_row
-        EXPORT create_increment_row
-        EXPORT create_reset_row
         EXPORT LCD_Display_Character
         EXPORT LCD_go_to_second_line
         EXPORT LCD_Reset
-
 
         IMPORT SysTick_Wait1ms
         IMPORT SysTick_Wait1us
@@ -202,285 +199,7 @@ LCD_Reset
 			
             POP     {LR}
             BX      LR
-; ------------------------------------------------------------------------------
-; Funcao create_data_row
-; Seta hardcode no LCD para apresentar "Angulo: ang Volta: turn"
-; Parametro de entrada: nenhum
-; Parametro de saida: nenhum
-create_data_row
-        PUSH    {LR}
-
-        BL      LCD_Reset
-
-        LDR     R0, =char_A
-        BL      LCD_Display_Character 
-        LDR     R0, =char_n
-        BL      LCD_Display_Character 
-        LDR     R0, =char_g
-        BL      LCD_Display_Character 
-        LDR     R0, =char_u
-        BL      LCD_Display_Character 
-        LDR     R0, =char_l
-        BL      LCD_Display_Character 
-        LDR     R0, =char_o
-        BL      LCD_Display_Character 
-        LDR     R0, =char_dois_pontos
-        BL      LCD_Display_Character 
-        LDR     R0, =char_space
-        BL      LCD_Display_Character 
-        ;Aqui fazer receber o valor de ang, separar ele em até 3 digitos e mostrar
-        
-        LDR     R1, =APOLARITY
-        LDR     R0, [R1]
-        CMP     R0, #0
-        BEQ     positive
-
-        LDR     R0, =char_minus
-        BL      LCD_Display_Character
-positive       
-
-        LDR     R1, =ANGLE
-        LDR     R0, [R1]
-        BL      LCD_Display_Number      ; Chama função C
-		
-        LDR     R0, =char_angle
-        BL      LCD_Display_Character
-
-        BL      LCD_go_to_second_line
-
-        LDR     R0, =char_V
-        BL      LCD_Display_Character 
-        LDR     R0, =char_o
-        BL      LCD_Display_Character 
-        LDR     R0, =char_l
-        BL      LCD_Display_Character	
-        LDR     R0, =char_t
-        BL      LCD_Display_Character
-        LDR     R0, =char_a
-        BL      LCD_Display_Character
-        LDR     R0, =char_dois_pontos
-        BL      LCD_Display_Character
-        LDR     R0, =char_space
-        BL      LCD_Display_Character
-        ;Aqui fazer receber o valor de turn, separar ele em até 3 digitos e mostrar, lembrar que pode ser negativo
-
-        LDR     R1, =TPOLARITY
-        LDR     R0, [R1]
-        CMP     R0, #0
-        BEQ     positive2
-
-        LDR     R0, =char_minus
-        BL      LCD_Display_Character
-positive2       
-
-        LDR     R1, =TURN
-        LDR     R0, [R1]
-        BL      LCD_Display_Number      ; Chama função C
-
-        POP     {LR} 
-        BX      LR
-
-; ------------------------------------------------------------------------------
-; Funcao create_increment_row
-; Seta hardcode no LCD para apresentar "Incremento: inc"
-; Parametro de entrada: nenhum
-; Parametro de saida: nenhum
-create_increment_row
-        PUSH    {LR}
-		
-		BL      LCD_Reset
-		
-        LDR     R0, =char_I
-        BL      LCD_Display_Character
-        LDR     R0, =char_n
-        BL      LCD_Display_Character
-        LDR     R0, =char_c
-        BL      LCD_Display_Character
-        LDR     R0, =char_r
-        BL      LCD_Display_Character
-        LDR     R0, =char_e
-        BL      LCD_Display_Character
-        LDR     R0, =char_m
-        BL      LCD_Display_Character
-        LDR     R0, =char_e
-        BL      LCD_Display_Character
-        LDR     R0, =char_n
-        BL      LCD_Display_Character
-        LDR     R0, =char_t
-        BL      LCD_Display_Character
-        LDR     R0, =char_o
-        BL      LCD_Display_Character
-        LDR     R0, =char_dois_pontos
-        BL      LCD_Display_Character
-        LDR     R0, =char_space
-        BL      LCD_Display_Character
-
-        
-        POP     {LR}
-        BX      LR
-
-; ------------------------------------------------------------------------------
-; Funcao create_mode_row
-; Seta hardcode no LCD para apresentar "Modo de passo: mode"
-; Parametro de entrada: nenhum
-; Parametro de saida: nenhum
-create_mode_row
-        PUSH    {LR}
-		
-        LDR     R0, =char_I
-        BL      LCD_Display_Character
-        LDR     R0, =char_n
-        BL      LCD_Display_Character
-        LDR     R0, =char_c
-        BL      LCD_Display_Character
-        LDR     R0, =char_r
-        BL      LCD_Display_Character
-        LDR     R0, =char_e
-        BL      LCD_Display_Character
-        LDR     R0, =char_m
-        BL      LCD_Display_Character
-        LDR     R0, =char_e
-        BL      LCD_Display_Character
-        LDR     R0, =char_n
-        BL      LCD_Display_Character
-        LDR     R0, =char_t
-        BL      LCD_Display_Character
-        LDR     R0, =char_o
-        BL      LCD_Display_Character
-        LDR     R0, =char_dois_pontos
-        BL      LCD_Display_Character
-        LDR     R0, =char_space
-        BL      LCD_Display_Character
-        
-        
-        POP     {LR}
-        BX      LR
-
-; ------------------------------------------------------------------------------
-; Funcao create_reset_row
-; Seta hardcode no LCD para apresentar "Resetando..."
-; Parametro de entrada: nenhum
-; Parametro de saida: nenhum
-create_reset_row
-        PUSH    {LR}
-
-        BL      LCD_Reset
-
-        ; Resetando
-        LDR     R0, =char_R
-        BL      LCD_Display_Character 
-        LDR     R0, =char_e
-        BL      LCD_Display_Character 
-        LDR     R0, =char_s
-        BL      LCD_Display_Character 
-        LDR     R0, =char_e
-        BL      LCD_Display_Character 
-        LDR     R0, =char_t
-        BL      LCD_Display_Character 
-        LDR     R0, =char_a
-        BL      LCD_Display_Character 
-        LDR     R0, =char_n
-        BL      LCD_Display_Character 
-        LDR     R0, =char_d
-        BL      LCD_Display_Character 
-        LDR     R0, =char_o
-        BL      LCD_Display_Character     
-
-        ; ... piscando
-        MOV    R9, #0                               ;quantidade de iteracoes geral
-blink_loop  
-        CMP    R9, #5                               ;Enquanto nao fizer x vezes, nao finaliza
-        BEQ    display_resetado
-
-display_dots
-        ADD    R9, #1                               ;Soma 1 no iterador
-
-        LDR    R0 , =char_dot
-        BL     LCD_Display_Character                
-        MOV    R2, #150
-        BL     SysTick_Wait1ms                      ;Mostra primeiro ponto e espera um pouco
-        LDR    R0, =char_dot
-        BL     LCD_Display_Character                
-        MOV    R2, #150
-        BL     SysTick_Wait1ms                      ;Mostra segundo ponto e espera um pouco
-        LDR    R0, =char_dot
-        BL     LCD_Display_Character                
-        MOV    R2, #150
-        BL     SysTick_Wait1ms                      ;Mostra terceiro ponto e espera um pouco
-
-
-LCD_Clear_Tail                                      ;limpa os 3 pontos finais
-
-		MOV     R8, #0                          ;contador de iteracoes de espacos
-		MOV     R7, #0                          ;contador de iteracoes de left shift
-
-cursor_shift_left                                   ;Volta os 3 dígitos para esquerda
-		LDR     R0, =GPIO_PORTK_DATA_R          
-		MOV     R1, #2_10000
-		STR     R1, [R0]
-
-		LDR     R0, =GPIO_PORTM_DATA_R
-		MOV     R1, #2_100
-		STR     R1, [R0]
-
-		MOV     R0, #2
-		BL      SysTick_Wait1us
-
-		LDR     R0, =GPIO_PORTM_DATA_R
-		MOV     R1, #0x00
-		STR     R1, [R0]
-		
-		MOV     R0, #2
-		BL      SysTick_Wait1us
-
-		ADD     R8, #1
-		CMP     R8, #3
-		BNE     cursor_shift_left
-		
-
-display_spaces                                      ;Mostra 3 espaços caso ja nao tenha mostrado
-		LDR    R0, =char_space
-		BL     LCD_Display_Character                
-		LDR    R0, =char_space
-		BL     LCD_Display_Character                
-		LDR    R0, =char_space
-		BL     LCD_Display_Character
-
-		MOV    R2, #150
-		BL     SysTick_Wait1ms 
-		
-		MOV     R8, #0
-cursor_shift_left2
-		LDR     R0, =GPIO_PORTK_DATA_R          
-		MOV     R1, #2_10000
-		STR     R1, [R0]
-
-		LDR     R0, =GPIO_PORTM_DATA_R
-		MOV     R1, #2_100
-		STR     R1, [R0]
-
-		MOV     R0, #2
-		BL      SysTick_Wait1us
-
-		LDR     R0, =GPIO_PORTM_DATA_R
-		MOV     R1, #0x00
-		STR     R1, [R0]
-		
-		MOV     R0, #2
-		BL      SysTick_Wait1us
-
-		ADD     R8, #1
-		CMP     R8, #3
-		BNE     cursor_shift_left2
-		
-		B     blink_loop                      ;Se nao voltou depois do espaco, volta. Se voltou, printa pontos dnv ou sai do loop
-			
-display_resetado
-
-	BL      create_data_row
-		
-        POP     {LR} 
-        BX      LR
+;-------------------------------------------------------------------------------
 
 
     ALIGN

@@ -284,11 +284,11 @@ ARM Macro Assembler    Page 5
               400633FC 
               400623FC 
               20000B00 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=.\objects\teclado.d -o.\objects\teclado.o -IC:\Users\Ricar\A
-ppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="
-__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C1294NC
-PDT SETA 1" --list=.\listings\teclado.lst teclado.s
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
+--depend=.\objects\teclado.d -o.\objects\teclado.o -IC:\Users\Ricar\AppData\Loc
+al\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SET
+A 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1
+" --list=.\listings\teclado.lst teclado.s
 
 
 

@@ -89,10 +89,11 @@ GPIO_PORTH_AHB_DATA_R   	EQU     0x4005F3FC
 GPIO_PORTH 			EQU     2_000000010000000
 
 ; ~~~~~~~~~~~~~~~~ PORT J ~~~~~~~~~~~~~~~~~~
-GPIO_PORTJ_AHB_IM_R             EQU    0x40060410
 GPIO_PORTJ_AHB_IS_R             EQU    0x40060404
 GPIO_PORTJ_AHB_IBE_R            EQU    0x40060408
 GPIO_PORTJ_AHB_IEV_R            EQU    0x4006040C
+GPIO_PORTJ_AHB_IM_R             EQU    0x40060410
+GPIO_PORTJ_AHB_RIS_R            EQU    0x40060414
 GPIO_PORTJ_AHB_ICR_R            EQU    0x4006041C
 GPIO_PORTJ_AHB_DATA_R    	EQU    0x400603FC
 GPIO_PORTJ               	EQU    2_000000100000000
@@ -207,6 +208,7 @@ NVIC_PRI28_R                    EQU     0xE000E470
 									
         IMPORT SysTick_Wait1ms
         IMPORT create_reset_row
+        IMPORT create_mode_row
         IMPORT LCD_Reset
 ;--------------------------------------------------------------------------------
 ;=========================================
@@ -250,15 +252,15 @@ Interrupt_Init
         LDR     R0, =GPIO_PORTJ_AHB_IM_R                                                ;Carrega o endereco do IM para a porta generica
         STR     R1, [R0]                                                                ;Escreve no registrador
 
-; 7. Habilitar fonte de interrupcao no NVIC (Portj = interrupcao 51 - Tabela 3-8, pagina 146)
-; Achar qual o ENX, pag 154
+; 7. Habilitar fonte de interrupcao no NVIC (Portj = interrupcao 51 - pag 116, tabela 2-9)
+; Achar qual o ENX - Tabela 3-8, pagina 146
 
         MOV     R1, #1                                                                  ;Seta 1
         LSL     R1, #19                                                                 ;Desloca 19 bits, ja que 51-32=19 (intervalo entre inicio do EN que contem o 51)
         LDR     R0, =NVIC_EN1_R                                                         ;Carrega o endereco do EN1
         STR     R1, [R0]                                                                ;Seta no registrador
 
-; 8. Setar prioridade no NVIC, achar qual PRIX, pag 159
+; 8. Setar prioridade no NVIC, achar qual PRIX - Tabela 3-8, pagina 147
  
         MOV     R1, #2                                                                  ;Prioridade 2
         LSL     R1, #29                                                                 ;Deslocar 29 bits para ir pro ultimo byte do PRI12
@@ -274,21 +276,56 @@ Interrupt_Init
 ;Parametro de saida: nao tem
 GPIOPortJ_Handler
         PUSH    {LR}
+
+        LDR     R0, =GPIO_PORTJ_AHB_RIS_R                                               ;Carrega o endereco do RIS para verificar qual botão foi apertado
+        LDR     R1, [R0]                                                                ;Carrega o valor do RIS
+        CMP     R1, #2_00000001                                                         ;Verifica se o botão 0 foi apertado
+        BEQ     sw1
+
+        CMP     R1, #2_00000010                                                         ;Verifica se o botão 1 foi apertado
+        BEQ     sw2
+
+        B      debounce_skip
+
+sw1
         LDR     R0, =GPIO_PORTJ_AHB_ICR_R                                               ;Carrega o endereco do ICR para o ack
         MOV     R1, #2_00000001                                                         ;Seta o bit 0 para ack
         STR     R1, [R0]                                                                ;Salva no registrador
 
-		LDR		R0, =GPIO_PORTJ_AHB_DATA_R
-		LDR 	R1, [R0]
+        LDR		R0, =GPIO_PORTJ_AHB_DATA_R
+        LDR 	R1, [R0]
 		
-		MOV 	R2, #20
-		BL 		SysTick_Wait1ms
+        MOV 	R2, #20
+        BL 		SysTick_Wait1ms
 	
-		LDR		R0, =GPIO_PORTJ_AHB_DATA_R
-		LDR 	R2, [R0]
+        LDR		R0, =GPIO_PORTJ_AHB_DATA_R
+        LDR 	R2, [R0]
 		
-		CMP 	R1, R2								; Ignora varia��es de freq. > 50Hz
-		BNE 	debounce_skip
+        CMP 	R1, R2								; Ignora varia��es de freq. > 50Hz
+        BNE 	debounce_skip
+
+        LDR     R0, =MODE
+        LDR     R1, [R0]
+        EOR     R1, R1, #1                                                      ;XOR para inverter o modo
+        STR     R1, [R0]                                                        ;Salva o valor na memoria
+
+        BL      create_mode_row
+sw2
+        LDR     R0, =GPIO_PORTJ_AHB_ICR_R                                               ;Carrega o endereco do ICR para o ack
+        MOV     R1, #2_00000010                                                         ;Seta o bit 0 para ack
+        STR     R1, [R0]                                                                ;Salva no registrador
+
+        LDR		R0, =GPIO_PORTJ_AHB_DATA_R
+        LDR 	R1, [R0]
+		
+        MOV 	R2, #20
+        BL 		SysTick_Wait1ms
+	
+        LDR		R0, =GPIO_PORTJ_AHB_DATA_R
+        LDR 	R2, [R0]
+		
+        CMP 	R1, R2								; Ignora varia��es de freq. > 50Hz
+        BNE 	debounce_skip
 
 	MOV R1, #0						 ;Reset do angulo, das voltas e das polaridades
 	LDR R0, =ANGLE

@@ -237,508 +237,571 @@ ARM Macro Assembler    Page 4
                                EQU              2_000000010000000
    90 00000000         
    91 00000000         ; ~~~~~~~~~~~~~~~~ PORT J ~~~~~~~~~~~~~~~~~~
-   92 00000000 40060410 
-                       GPIO_PORTJ_AHB_IM_R
-                               EQU              0x40060410
-   93 00000000 40060404 
+   92 00000000 40060404 
                        GPIO_PORTJ_AHB_IS_R
                                EQU              0x40060404
-   94 00000000 40060408 
+   93 00000000 40060408 
                        GPIO_PORTJ_AHB_IBE_R
                                EQU              0x40060408
-   95 00000000 4006040C 
+   94 00000000 4006040C 
                        GPIO_PORTJ_AHB_IEV_R
                                EQU              0x4006040C
-   96 00000000 4006041C 
+   95 00000000 40060410 
+                       GPIO_PORTJ_AHB_IM_R
+                               EQU              0x40060410
+   96 00000000 40060414 
+                       GPIO_PORTJ_AHB_RIS_R
+                               EQU              0x40060414
+   97 00000000 4006041C 
                        GPIO_PORTJ_AHB_ICR_R
                                EQU              0x4006041C
-   97 00000000 400603FC 
+   98 00000000 400603FC 
                        GPIO_PORTJ_AHB_DATA_R
                                EQU              0x400603FC
-   98 00000000 00000100 
-                       GPIO_PORTJ
-                               EQU              2_000000100000000
 
 
 
 ARM Macro Assembler    Page 5 
 
 
-   99 00000000         
-  100 00000000         ; ~~~~~~~~~~~~~~~~ PORT K ~~~~~~~~~~~~~~~~~~
-  101 00000000 40061410 
+   99 00000000 00000100 
+                       GPIO_PORTJ
+                               EQU              2_000000100000000
+  100 00000000         
+  101 00000000         ; ~~~~~~~~~~~~~~~~ PORT K ~~~~~~~~~~~~~~~~~~
+  102 00000000 40061410 
                        GPIO_PORTK_IM_R
                                EQU              0x40061410
-  102 00000000 40061404 
+  103 00000000 40061404 
                        GPIO_PORTK_IS_R
                                EQU              0x40061404
-  103 00000000 40061408 
+  104 00000000 40061408 
                        GPIO_PORTK_IBE_R
                                EQU              0x40061408
-  104 00000000 4006140C 
+  105 00000000 4006140C 
                        GPIO_PORTK_IEV_R
                                EQU              0x4006140C
-  105 00000000 4006141C 
+  106 00000000 4006141C 
                        GPIO_PORTK_ICR_R
                                EQU              0x4006141C
-  106 00000000 400613FC 
+  107 00000000 400613FC 
                        GPIO_PORTK_DATA_R
                                EQU              0x400613FC
-  107 00000000 00000200 
+  108 00000000 00000200 
                        GPIO_PORTK
                                EQU              2_000001000000000
-  108 00000000         
-  109 00000000         ; ~~~~~~~~~~~~~~~~ PORT L ~~~~~~~~~~~~~~~~~~
-  110 00000000 40062410 
+  109 00000000         
+  110 00000000         ; ~~~~~~~~~~~~~~~~ PORT L ~~~~~~~~~~~~~~~~~~
+  111 00000000 40062410 
                        GPIO_PORTL_IM_R
                                EQU              0x40062410
-  111 00000000 40062404 
+  112 00000000 40062404 
                        GPIO_PORTL_IS_R
                                EQU              0x40062404
-  112 00000000 40062408 
+  113 00000000 40062408 
                        GPIO_PORTL_IBE_R
                                EQU              0x40062408
-  113 00000000 4006240C 
+  114 00000000 4006240C 
                        GPIO_PORTL_IEV_R
                                EQU              0x4006240C
-  114 00000000 4006241C 
+  115 00000000 4006241C 
                        GPIO_PORTL_ICR_R
                                EQU              0x4006241C
-  115 00000000 400623FC 
+  116 00000000 400623FC 
                        GPIO_PORTL_DATA_R
                                EQU              0x400623FC
-  116 00000000 00000400 
+  117 00000000 00000400 
                        GPIO_PORTL
                                EQU              2_000010000000000
-  117 00000000         
-  118 00000000         ; ~~~~~~~~~~~~~~~~ PORT M ~~~~~~~~~~~~~~~~~~
-  119 00000000 40063410 
+  118 00000000         
+  119 00000000         ; ~~~~~~~~~~~~~~~~ PORT M ~~~~~~~~~~~~~~~~~~
+  120 00000000 40063410 
                        GPIO_PORTM_IM_R
                                EQU              0x40063410
-  120 00000000 40063404 
+  121 00000000 40063404 
                        GPIO_PORTM_IS_R
                                EQU              0x40063404
-  121 00000000 40063408 
+  122 00000000 40063408 
                        GPIO_PORTM_IBE_R
-                               EQU              0x40063408
-  122 00000000 4006340C 
-                       GPIO_PORTM_IEV_R
 
 
 
 ARM Macro Assembler    Page 6 
 
 
+                               EQU              0x40063408
+  123 00000000 4006340C 
+                       GPIO_PORTM_IEV_R
                                EQU              0x4006340C
-  123 00000000 4006341C 
+  124 00000000 4006341C 
                        GPIO_PORTM_ICR_R
                                EQU              0x4006341C
-  124 00000000 400633FC 
+  125 00000000 400633FC 
                        GPIO_PORTM_DATA_R
                                EQU              0x400633FC
-  125 00000000 00000800 
+  126 00000000 00000800 
                        GPIO_PORTM
                                EQU              2_000100000000000
-  126 00000000         
-  127 00000000         ; ~~~~~~~~~~~~~~~~ PORT N ~~~~~~~~~~~~~~~~~~
-  128 00000000 40064410 
+  127 00000000         
+  128 00000000         ; ~~~~~~~~~~~~~~~~ PORT N ~~~~~~~~~~~~~~~~~~
+  129 00000000 40064410 
                        GPIO_PORTN_IM_R
                                EQU              0x40064410
-  129 00000000 40064404 
+  130 00000000 40064404 
                        GPIO_PORTN_IS_R
                                EQU              0x40064404
-  130 00000000 40064408 
+  131 00000000 40064408 
                        GPIO_PORTN_IBE_R
                                EQU              0x40064408
-  131 00000000 4006440C 
+  132 00000000 4006440C 
                        GPIO_PORTN_IEV_R
                                EQU              0x4006440C
-  132 00000000 4006441C 
+  133 00000000 4006441C 
                        GPIO_PORTN_ICR_R
                                EQU              0x4006441C
-  133 00000000 400643FC 
+  134 00000000 400643FC 
                        GPIO_PORTN_DATA_R
                                EQU              0x400643FC
-  134 00000000 00001000 
+  135 00000000 00001000 
                        GPIO_PORTN
                                EQU              2_001000000000000
-  135 00000000         
-  136 00000000         ; ~~~~~~~~~~~~~~~~ PORT P ~~~~~~~~~~~~~~~~~~
-  137 00000000 40065410 
+  136 00000000         
+  137 00000000         ; ~~~~~~~~~~~~~~~~ PORT P ~~~~~~~~~~~~~~~~~~
+  138 00000000 40065410 
                        GPIO_PORTP_IM_R
                                EQU              0x40065410
-  138 00000000 40065404 
+  139 00000000 40065404 
                        GPIO_PORTP_IS_R
                                EQU              0x40065404
-  139 00000000 40065408 
+  140 00000000 40065408 
                        GPIO_PORTP_IBE_R
                                EQU              0x40065408
-  140 00000000 4006540C 
+  141 00000000 4006540C 
                        GPIO_PORTP_IEV_R
                                EQU              0x4006540C
-  141 00000000 4006541C 
+  142 00000000 4006541C 
                        GPIO_PORTP_ICR_R
                                EQU              0x4006541C
-  142 00000000 400653FC 
+  143 00000000 400653FC 
                        GPIO_PORTP_DATA_R
                                EQU              0x400653FC
-  143 00000000 00002000 
+  144 00000000 00002000 
                        GPIO_PORTP
                                EQU              2_010000000000000
-  144 00000000         
-  145 00000000         ; ~~~~~~~~~~~~~~~~ PORT Q ~~~~~~~~~~~~~~~~~~
-  146 00000000 40066410 
 
 
 
 ARM Macro Assembler    Page 7 
 
 
+  145 00000000         
+  146 00000000         ; ~~~~~~~~~~~~~~~~ PORT Q ~~~~~~~~~~~~~~~~~~
+  147 00000000 40066410 
                        GPIO_PORTQ_IM_R
                                EQU              0x40066410
-  147 00000000 40066404 
+  148 00000000 40066404 
                        GPIO_PORTQ_IS_R
                                EQU              0x40066404
-  148 00000000 40066408 
+  149 00000000 40066408 
                        GPIO_PORTQ_IBE_R
                                EQU              0x40066408
-  149 00000000 4006640C 
+  150 00000000 4006640C 
                        GPIO_PORTQ_IEV_R
                                EQU              0x4006640C
-  150 00000000 4006641C 
+  151 00000000 4006641C 
                        GPIO_PORTQ_ICR_R
                                EQU              0x4006641C
-  151 00000000 400663FC 
+  152 00000000 400663FC 
                        GPIO_PORTQ_DATA_R
                                EQU              0x400663FC
-  152 00000000 00004000 
+  153 00000000 00004000 
                        GPIO_PORTQ
                                EQU              2_100000000000000
-  153 00000000         
   154 00000000         
-  155 00000000         ; ================== DEFINICOES DO NVIC ================
+  155 00000000         
+  156 00000000         ; ================== DEFINICOES DO NVIC ================
                        ===
-  156 00000000         
-  157 00000000         ; ~~~~~~~~~~~~~~~~ ENABLE ~~~~~~~~~~~~~~~~~~
-  158 00000000 E000E100 
+  157 00000000         
+  158 00000000         ; ~~~~~~~~~~~~~~~~ ENABLE ~~~~~~~~~~~~~~~~~~
+  159 00000000 E000E100 
                        NVIC_EN0_R
                                EQU              0xE000E100
-  159 00000000 E000E104 
+  160 00000000 E000E104 
                        NVIC_EN1_R
                                EQU              0xE000E104
-  160 00000000 E000E108 
+  161 00000000 E000E108 
                        NVIC_EN2_R
                                EQU              0xE000E108
-  161 00000000 E000E10C 
+  162 00000000 E000E10C 
                        NVIC_EN3_R
                                EQU              0xE000E10C
-  162 00000000         
-  163 00000000         ; ~~~~~~~~~~~~~~~~ DISABLE ~~~~~~~~~~~~~~~~~~
-  164 00000000 E000E180 
+  163 00000000         
+  164 00000000         ; ~~~~~~~~~~~~~~~~ DISABLE ~~~~~~~~~~~~~~~~~~
+  165 00000000 E000E180 
                        NVIC_DIS0_R
                                EQU              0xE000E180
-  165 00000000 E000E184 
+  166 00000000 E000E184 
                        NVIC_DIS1_R
                                EQU              0xE000E184
-  166 00000000 E000E188 
+  167 00000000 E000E188 
                        NVIC_DIS2_R
                                EQU              0xE000E188
-  167 00000000 E000E18C 
+  168 00000000 E000E18C 
                        NVIC_DIS3_R
                                EQU              0xE000E18C
-  168 00000000         
-  169 00000000         ; ~~~~~~~~~~~~~~~~ PRIORITY ~~~~~~~~~~~~~~~~~~
-  170 00000000 E000E400 
+  169 00000000         
+  170 00000000         ; ~~~~~~~~~~~~~~~~ PRIORITY ~~~~~~~~~~~~~~~~~~
+  171 00000000 E000E400 
                        NVIC_PRI0_R
-                               EQU              0xE000E400
-  171 00000000 E000E404 
-                       NVIC_PRI1_R
 
 
 
 ARM Macro Assembler    Page 8 
 
 
+                               EQU              0xE000E400
+  172 00000000 E000E404 
+                       NVIC_PRI1_R
                                EQU              0xE000E404
-  172 00000000 E000E408 
+  173 00000000 E000E408 
                        NVIC_PRI2_R
                                EQU              0xE000E408
-  173 00000000 E000E40C 
+  174 00000000 E000E40C 
                        NVIC_PRI3_R
                                EQU              0xE000E40C
-  174 00000000 E000E410 
+  175 00000000 E000E410 
                        NVIC_PRI4_R
                                EQU              0xE000E410
-  175 00000000 E000E414 
+  176 00000000 E000E414 
                        NVIC_PRI5_R
                                EQU              0xE000E414
-  176 00000000 E000E418 
+  177 00000000 E000E418 
                        NVIC_PRI6_R
                                EQU              0xE000E418
-  177 00000000 E000E41C 
+  178 00000000 E000E41C 
                        NVIC_PRI7_R
                                EQU              0xE000E41C
-  178 00000000 E000E420 
+  179 00000000 E000E420 
                        NVIC_PRI8_R
                                EQU              0xE000E420
-  179 00000000 E000E424 
+  180 00000000 E000E424 
                        NVIC_PRI9_R
                                EQU              0xE000E424
-  180 00000000 E000E428 
+  181 00000000 E000E428 
                        NVIC_PRI10_R
                                EQU              0xE000E428
-  181 00000000 E000E42C 
+  182 00000000 E000E42C 
                        NVIC_PRI11_R
                                EQU              0xE000E42C
-  182 00000000 E000E430 
+  183 00000000 E000E430 
                        NVIC_PRI12_R
                                EQU              0xE000E430
-  183 00000000 E000E434 
+  184 00000000 E000E434 
                        NVIC_PRI13_R
                                EQU              0xE000E434
-  184 00000000 E000E438 
+  185 00000000 E000E438 
                        NVIC_PRI14_R
                                EQU              0xE000E438
-  185 00000000 E000E43C 
+  186 00000000 E000E43C 
                        NVIC_PRI15_R
                                EQU              0xE000E43C
-  186 00000000 E000E440 
+  187 00000000 E000E440 
                        NVIC_PRI16_R
                                EQU              0xE000E440
-  187 00000000 E000E444 
+  188 00000000 E000E444 
                        NVIC_PRI17_R
                                EQU              0xE000E444
-  188 00000000 E000E448 
+  189 00000000 E000E448 
                        NVIC_PRI18_R
                                EQU              0xE000E448
-  189 00000000 E000E44C 
+  190 00000000 E000E44C 
                        NVIC_PRI19_R
                                EQU              0xE000E44C
-  190 00000000 E000E450 
-                       NVIC_PRI20_R
-                               EQU              0xE000E450
-  191 00000000 E000E454 
+  191 00000000 E000E450 
 
 
 
 ARM Macro Assembler    Page 9 
 
 
+                       NVIC_PRI20_R
+                               EQU              0xE000E450
+  192 00000000 E000E454 
                        NVIC_PRI21_R
                                EQU              0xE000E454
-  192 00000000 E000E458 
+  193 00000000 E000E458 
                        NVIC_PRI22_R
                                EQU              0xE000E458
-  193 00000000 E000E45C 
+  194 00000000 E000E45C 
                        NVIC_PRI23_R
                                EQU              0xE000E45C
-  194 00000000 E000E460 
+  195 00000000 E000E460 
                        NVIC_PRI24_R
                                EQU              0xE000E460
-  195 00000000 E000E464 
+  196 00000000 E000E464 
                        NVIC_PRI25_R
                                EQU              0xE000E464
-  196 00000000 E000E468 
+  197 00000000 E000E468 
                        NVIC_PRI26_R
                                EQU              0xE000E468
-  197 00000000 E000E46C 
+  198 00000000 E000E46C 
                        NVIC_PRI27_R
                                EQU              0xE000E46C
-  198 00000000 E000E470 
+  199 00000000 E000E470 
                        NVIC_PRI28_R
                                EQU              0xE000E470
-  199 00000000         ; ------------------------------------------------------
+  200 00000000         ; ------------------------------------------------------
                        -------------------------
-  200 00000000         ; Area de Codigo - Tudo abaixo da diretiva a seguir sera
+  201 00000000         ; Area de Codigo - Tudo abaixo da diretiva a seguir sera
                         armazenado na memoria de 
-  201 00000000         ;                  codigo
-  202 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+  202 00000000         ;                  codigo
+  203 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
 2
-  203 00000000         
-  204 00000000         ; Se alguma funcao do arquivo for chamada em outro arqui
+  204 00000000         
+  205 00000000         ; Se alguma funcao do arquivo for chamada em outro arqui
                        vo 
-  205 00000000                 EXPORT           Interrupt_Init
-  206 00000000                 EXPORT           GPIOPortJ_Handler
-  207 00000000         
-  208 00000000                 IMPORT           SysTick_Wait1ms
-  209 00000000                 IMPORT           create_reset_row
-  210 00000000                 IMPORT           LCD_Reset
-  211 00000000         ;-------------------------------------------------------
+  206 00000000                 EXPORT           Interrupt_Init
+  207 00000000                 EXPORT           GPIOPortJ_Handler
+  208 00000000         
+  209 00000000                 IMPORT           SysTick_Wait1ms
+  210 00000000                 IMPORT           create_reset_row
+  211 00000000                 IMPORT           create_mode_row
+  212 00000000                 IMPORT           LCD_Reset
+  213 00000000         ;-------------------------------------------------------
                        -------------------------
-  212 00000000         ;=========================================
-  213 00000000         ; Funcao Interrupt_Init
-  214 00000000         ; Parametro de entrada: Nao tem
-  215 00000000         ; Parametro de saida: Nao tem
-  216 00000000         Interrupt_Init
-  217 00000000         
-  218 00000000         ; 1. Desabilitar a interrupcao no registradore IM
-  219 00000000 F04F 0100       MOV              R1, #0x00   ;Desabilitar as int
+  214 00000000         ;=========================================
+  215 00000000         ; Funcao Interrupt_Init
+  216 00000000         ; Parametro de entrada: Nao tem
+  217 00000000         ; Parametro de saida: Nao tem
+  218 00000000         Interrupt_Init
+  219 00000000         
+  220 00000000         ; 1. Desabilitar a interrupcao no registradore IM
+  221 00000000 F04F 0100       MOV              R1, #0x00   ;Desabilitar as int
                                                             errupcoes
-  220 00000004 4820            LDR              R0, =GPIO_PORTJ_AHB_IM_R ;Carre
+  222 00000004 482E            LDR              R0, =GPIO_PORTJ_AHB_IM_R ;Carre
                                                             ga o endereco do IM
                                                              para a porta gener
                                                             ica
-  221 00000006 6001            STR              R1, [R0]    ;Escreve no registr
-                                                            ador
-  222 00000008         
-  223 00000008         ; 2. Configurar o tipo de interrupcao (borda = 0 , nivel
-                        = 1) no IS
+  223 00000006 6001            STR              R1, [R0]    ;Escreve no registr
 
 
 
 ARM Macro Assembler    Page 10 
 
 
+                                                            ador
   224 00000008         
-  225 00000008 F04F 0100       MOV              R1, #2_00   ;Por borda
-  226 0000000C 481F            LDR              R0, =GPIO_PORTJ_AHB_IS_R ;Carre
+  225 00000008         ; 2. Configurar o tipo de interrupcao (borda = 0 , nivel
+                        = 1) no IS
+  226 00000008         
+  227 00000008 F04F 0100       MOV              R1, #2_00   ;Por borda
+  228 0000000C 482D            LDR              R0, =GPIO_PORTJ_AHB_IS_R ;Carre
                                                             ga o endereco IS pa
                                                             ra a porta generica
                                                             
-  227 0000000E 6001            STR              R1, [R0]    ;Seta o valor no re
+  229 0000000E 6001            STR              R1, [R0]    ;Seta o valor no re
                                                             gistrador
-  228 00000010         
-  229 00000010         ; 3. Configurar tipo de borda (unica = 0, dupla = 1) no 
-                       IBE
   230 00000010         
-  231 00000010 F04F 0100       MOV              R1, #2_00   ;Por borda unica
-  232 00000014 481E            LDR              R0, =GPIO_PORTJ_AHB_IBE_R ;Carr
+  231 00000010         ; 3. Configurar tipo de borda (unica = 0, dupla = 1) no 
+                       IBE
+  232 00000010         
+  233 00000010 F04F 0100       MOV              R1, #2_00   ;Por borda unica
+  234 00000014 482C            LDR              R0, =GPIO_PORTJ_AHB_IBE_R ;Carr
                                                             ega o endereco IBE 
                                                             para a porta generi
                                                             ca
-  233 00000016 6001            STR              R1, [R0]    ;Seta o valor no re
+  235 00000016 6001            STR              R1, [R0]    ;Seta o valor no re
                                                             gistrador
-  234 00000018         
-  235 00000018         ; 4. Configurar modo da borda (descida = 0, subida = 1) 
-                       no IEV                          
   236 00000018         
-  237 00000018 F04F 0100       MOV              R1, #2_00   ;Por borda de desci
+  237 00000018         ; 4. Configurar modo da borda (descida = 0, subida = 1) 
+                       no IEV                          
+  238 00000018         
+  239 00000018 F04F 0100       MOV              R1, #2_00   ;Por borda de desci
                                                             da
-  238 0000001C 481D            LDR              R0, =GPIO_PORTJ_AHB_IEV_R ;Carr
+  240 0000001C 482B            LDR              R0, =GPIO_PORTJ_AHB_IEV_R ;Carr
                                                             ega o endereco IEV 
                                                             para a porta generi
                                                             ca
-  239 0000001E 6001            STR              R1, [R0]    ;Seta o valor no re
+  241 0000001E 6001            STR              R1, [R0]    ;Seta o valor no re
                                                             gistrador
-  240 00000020         
-  241 00000020         ; 5. Realizar o ack para garantir que a interrupcao ira 
-                       ocorrer no ICR
   242 00000020         
-  243 00000020 F04F 0101       MOV              R1, #2_01   ;Seta o bit de ackn
+  243 00000020         ; 5. Realizar o ack para garantir que a interrupcao ira 
+                       ocorrer no ICR
+  244 00000020         
+  245 00000020 F04F 0103       MOV              R1, #2_11   ;Seta o bit de ackn
                                                             owledge
-  244 00000024 481C            LDR              R0, =GPIO_PORTJ_AHB_ICR_R ;Pega
+  246 00000024 482A            LDR              R0, =GPIO_PORTJ_AHB_ICR_R ;Pega
                                                              o endereco do ICR
-  245 00000026 6001            STR              R1, [R0]    ;Seta o valor no re
+  247 00000026 6001            STR              R1, [R0]    ;Seta o valor no re
                                                             gistrador
-  246 00000028         
-  247 00000028         ; 6. Habilitar a interrupcao no registrador IM
   248 00000028         
-  249 00000028 F04F 0101       MOV              R1, #2_01   ;Habilitar as inter
+  249 00000028         ; 6. Habilitar a interrupcao no registrador IM
+  250 00000028         
+  251 00000028 F04F 0103       MOV              R1, #2_11   ;Habilitar as inter
                                                             rupcoes
-  250 0000002C 4816            LDR              R0, =GPIO_PORTJ_AHB_IM_R ;Carre
+  252 0000002C 4824            LDR              R0, =GPIO_PORTJ_AHB_IM_R ;Carre
                                                             ga o endereco do IM
                                                              para a porta gener
                                                             ica
-  251 0000002E 6001            STR              R1, [R0]    ;Escreve no registr
+  253 0000002E 6001            STR              R1, [R0]    ;Escreve no registr
                                                             ador
-  252 00000030         
-  253 00000030         ; 7. Habilitar fonte de interrupcao no NVIC (Portj = int
-                       errupcao 51 - Tabela 3-8, pagina 146)
-  254 00000030         ; Achar qual o ENX, pag 154
-  255 00000030         
-  256 00000030 F04F 0101       MOV              R1, #1      ;Seta 1
-  257 00000034 EA4F 41C1       LSL              R1, #19     ;Desloca 19 bits, j
+  254 00000030         
+  255 00000030         ; 7. Habilitar fonte de interrupcao no NVIC (Portj = int
+                       errupcao 51 - pag 116, tabela 2-9)
 
 
 
 ARM Macro Assembler    Page 11 
 
 
+  256 00000030         ; Achar qual o ENX - Tabela 3-8, pagina 146
+  257 00000030         
+  258 00000030 F04F 0101       MOV              R1, #1      ;Seta 1
+  259 00000034 EA4F 41C1       LSL              R1, #19     ;Desloca 19 bits, j
                                                             a que 51-32=19 (int
                                                             ervalo entre inicio
                                                              do EN que contem o
                                                              51)
-  258 00000038 4818            LDR              R0, =NVIC_EN1_R ;Carrega o ende
+  260 00000038 4826            LDR              R0, =NVIC_EN1_R ;Carrega o ende
                                                             reco do EN1
-  259 0000003A 6001            STR              R1, [R0]    ;Seta no registrado
+  261 0000003A 6001            STR              R1, [R0]    ;Seta no registrado
                                                             r
-  260 0000003C         
-  261 0000003C         ; 8. Setar prioridade no NVIC, achar qual PRIX, pag 159
   262 0000003C         
-  263 0000003C F04F 0102       MOV              R1, #2      ;Prioridade 2
-  264 00000040 EA4F 7141       LSL              R1, #29     ;Deslocar 29 bits p
+  263 0000003C         ; 8. Setar prioridade no NVIC, achar qual PRIX - Tabela 
+                       3-8, pagina 147
+  264 0000003C         
+  265 0000003C F04F 0102       MOV              R1, #2      ;Prioridade 2
+  266 00000040 EA4F 7141       LSL              R1, #29     ;Deslocar 29 bits p
                                                             ara ir pro ultimo b
                                                             yte do PRI12
-  265 00000044 4816            LDR              R0, =NVIC_PRI12_R ;Carrega o en
+  267 00000044 4824            LDR              R0, =NVIC_PRI12_R ;Carrega o en
                                                             dereco do PRI12
-  266 00000046 6001            STR              R1, [R0]    ;Seta no registrado
+  268 00000046 6001            STR              R1, [R0]    ;Seta no registrado
                                                             r
-  267 00000048         
-  268 00000048 4770            BX               LR
-  269 0000004A         ;=========================================
-  270 0000004A         ; ******************************************************
+  269 00000048         
+  270 00000048 4770            BX               LR
+  271 0000004A         ;=========================================
+  272 0000004A         ; ******************************************************
                        
-  271 0000004A         
-  272 0000004A         ;Funcao GPIOPortJ_Handler ISR, tratamento de interrupcao
+  273 0000004A         
+  274 0000004A         ;Funcao GPIOPortJ_Handler ISR, tratamento de interrupcao
                        
-  273 0000004A         ;Parametro de entrada: nao tem
-  274 0000004A         ;Parametro de saida: nao tem
-  275 0000004A         GPIOPortJ_Handler
-  276 0000004A B500            PUSH             {LR}
-  277 0000004C 4812            LDR              R0, =GPIO_PORTJ_AHB_ICR_R ;Carr
+  275 0000004A         ;Parametro de entrada: nao tem
+  276 0000004A         ;Parametro de saida: nao tem
+  277 0000004A         GPIOPortJ_Handler
+  278 0000004A B500            PUSH             {LR}
+  279 0000004C         
+  280 0000004C 4823            LDR              R0, =GPIO_PORTJ_AHB_RIS_R ;Carr
+                                                            ega o endereco do R
+                                                            IS para verificar q
+                                                            ual botÃ£o foi aper
+                                                            tado
+  281 0000004E 6801            LDR              R1, [R0]    ;Carrega o valor do
+                                                             RIS
+  282 00000050 2901            CMP              R1, #2_00000001 ;Verifica se o 
+                                                            botÃ£o 0 foi aperta
+                                                            do
+  283 00000052 D002            BEQ              sw1
+  284 00000054         
+  285 00000054 2902            CMP              R1, #2_00000010 ;Verifica se o 
+                                                            botÃ£o 1 foi aperta
+                                                            do
+  286 00000056 D015            BEQ              sw2
+  287 00000058         
+  288 00000058 E02E            B                debounce_skip
+  289 0000005A         
+  290 0000005A         sw1
+  291 0000005A 481D            LDR              R0, =GPIO_PORTJ_AHB_ICR_R ;Carr
                                                             ega o endereco do I
-                                                            CR para o ack
-  278 0000004E F04F 0101       MOV              R1, #2_00000001 ;Seta o bit 0 p
-                                                            ara ack
-  279 00000052 6001            STR              R1, [R0]    ;Salva no registrad
-                                                            or
-  280 00000054         
-  281 00000054 4813            LDR              R0, =GPIO_PORTJ_AHB_DATA_R
-  282 00000056 6801            LDR              R1, [R0]
-  283 00000058         
-  284 00000058 F04F 0214       MOV              R2, #20
-  285 0000005C F7FF FFFE       BL               SysTick_Wait1ms
-  286 00000060         
-  287 00000060 4810            LDR              R0, =GPIO_PORTJ_AHB_DATA_R
-  288 00000062 6802            LDR              R2, [R0]
-  289 00000064         
-  290 00000064 4291            CMP              R1, R2      ; Ignora variaï¿½ï¿
-                                                            ½es de freq. > 50Hz
-                                                            
-  291 00000066 D10B            BNE              debounce_skip
-  292 00000068         
-  293 00000068 F04F 0100       MOV              R1, #0      ;Reset do angulo, d
-                                                            as voltas e das pol
-                                                            aridades
-  294 0000006C 480E            LDR              R0, =ANGLE
-  295 0000006E 6001            STR              R1, [R0]
-  296 00000070 480E            LDR              R0, =TURN
 
 
 
 ARM Macro Assembler    Page 12 
 
 
-  297 00000072 6001            STR              R1, [R0]
-  298 00000074 480E            LDR              R0, =APOLARITY
-  299 00000076 6001            STR              R1, [R0]
-  300 00000078 480E            LDR              R0, =TPOLARITY
-  301 0000007A 6001            STR              R1, [R0]
-  302 0000007C         
-  303 0000007C F7FF FFFE       BL               create_reset_row
-  304 00000080         
-  305 00000080         debounce_skip
-  306 00000080 F85D EB04       POP              {LR}
-  307 00000084 4770            BX               LR
-  308 00000086         
-  309 00000086         ;=========================================
-  310 00000086         ; ******************************************************
+                                                            CR para o ack
+  292 0000005C F04F 0101       MOV              R1, #2_00000001 ;Seta o bit 0 p
+                                                            ara ack
+  293 00000060 6001            STR              R1, [R0]    ;Salva no registrad
+                                                            or
+  294 00000062         
+  295 00000062 481F            LDR              R0, =GPIO_PORTJ_AHB_DATA_R
+  296 00000064 6801            LDR              R1, [R0]
+  297 00000066         
+  298 00000066 F04F 0214       MOV              R2, #20
+  299 0000006A F7FF FFFE       BL               SysTick_Wait1ms
+  300 0000006E         
+  301 0000006E 481C            LDR              R0, =GPIO_PORTJ_AHB_DATA_R
+  302 00000070 6802            LDR              R2, [R0]
+  303 00000072         
+  304 00000072 4291            CMP              R1, R2      ; Ignora variaï¿½ï¿
+                                                            ½es de freq. > 50Hz
+                                                            
+  305 00000074 D120            BNE              debounce_skip
+  306 00000076         
+  307 00000076 481B            LDR              R0, =MODE
+  308 00000078 6801            LDR              R1, [R0]
+  309 0000007A F081 0101       EOR              R1, R1, #1  ;XOR para inverter 
+                                                            o modo
+  310 0000007E 6001            STR              R1, [R0]    ;Salva o valor na m
+                                                            emoria
+  311 00000080         
+  312 00000080 F7FF FFFE       BL               create_mode_row
+  313 00000084         sw2
+  314 00000084 4812            LDR              R0, =GPIO_PORTJ_AHB_ICR_R ;Carr
+                                                            ega o endereco do I
+                                                            CR para o ack
+  315 00000086 F04F 0102       MOV              R1, #2_00000010 ;Seta o bit 0 p
+                                                            ara ack
+  316 0000008A 6001            STR              R1, [R0]    ;Salva no registrad
+                                                            or
+  317 0000008C         
+  318 0000008C 4814            LDR              R0, =GPIO_PORTJ_AHB_DATA_R
+  319 0000008E 6801            LDR              R1, [R0]
+  320 00000090         
+  321 00000090 F04F 0214       MOV              R2, #20
+  322 00000094 F7FF FFFE       BL               SysTick_Wait1ms
+  323 00000098         
+  324 00000098 4811            LDR              R0, =GPIO_PORTJ_AHB_DATA_R
+  325 0000009A 6802            LDR              R2, [R0]
+  326 0000009C         
+  327 0000009C 4291            CMP              R1, R2      ; Ignora variaï¿½ï¿
+                                                            ½es de freq. > 50Hz
+                                                            
+  328 0000009E D10B            BNE              debounce_skip
+  329 000000A0         
+  330 000000A0 F04F 0100       MOV              R1, #0      ;Reset do angulo, d
+                                                            as voltas e das pol
+                                                            aridades
+  331 000000A4 4810            LDR              R0, =ANGLE
+  332 000000A6 6001            STR              R1, [R0]
+  333 000000A8 4810            LDR              R0, =TURN
+  334 000000AA 6001            STR              R1, [R0]
+  335 000000AC 4810            LDR              R0, =APOLARITY
+
+
+
+ARM Macro Assembler    Page 13 
+
+
+  336 000000AE 6001            STR              R1, [R0]
+  337 000000B0 4810            LDR              R0, =TPOLARITY
+  338 000000B2 6001            STR              R1, [R0]
+  339 000000B4         
+  340 000000B4 F7FF FFFE       BL               create_reset_row
+  341 000000B8         
+  342 000000B8         debounce_skip
+  343 000000B8 F85D EB04       POP              {LR}
+  344 000000BC 4770            BX               LR
+  345 000000BE         
+  346 000000BE         ;=========================================
+  347 000000BE         ; ******************************************************
                        
-  311 00000086         
-  312 00000086 00 00           ALIGN                        ;Garante que o fim 
+  348 000000BE         
+  349 000000BE 00 00           ALIGN                        ;Garante que o fim 
                                                             da secao esta alinh
                                                             ada 
-  313 00000088                 END                          ;Fim do arquivo
+  350 000000C0                 END                          ;Fim do arquivo
               40060410 
               40060404 
               40060408 
@@ -746,16 +809,18 @@ ARM Macro Assembler    Page 12
               4006041C 
               E000E104 
               E000E430 
+              40060414 
               400603FC 
+              20030008 
               20030000 
               20030004 
               2003000C 
               20030010 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
-interwork --depend=.\objects\interrupt.d -o.\objects\interrupt.o -IC:\Users\Ric
-ar\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefi
-ne="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 536" --predefine="TM4C12
-94NCPDT SETA 1" --list=.\listings\interrupt.lst interrupt.s
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
+--depend=.\objects\interrupt.d -o.\objects\interrupt.o -IC:\Users\Ricar\AppData
+\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL
+ SETA 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SE
+TA 1" --list=.\listings\interrupt.lst interrupt.s
 
 
 
@@ -766,7 +831,7 @@ Relocatable symbols
 
 Symbol: .text
    Definitions
-      At line 202 in file interrupt.s
+      At line 203 in file interrupt.s
    Uses
       None
 Comment: .text unused
@@ -774,27 +839,45 @@ GPIOPortJ_Handler 0000004A
 
 Symbol: GPIOPortJ_Handler
    Definitions
-      At line 275 in file interrupt.s
+      At line 277 in file interrupt.s
    Uses
-      At line 206 in file interrupt.s
+      At line 207 in file interrupt.s
 Comment: GPIOPortJ_Handler used once
 Interrupt_Init 00000000
 
 Symbol: Interrupt_Init
    Definitions
-      At line 216 in file interrupt.s
+      At line 218 in file interrupt.s
    Uses
-      At line 205 in file interrupt.s
+      At line 206 in file interrupt.s
 Comment: Interrupt_Init used once
-debounce_skip 00000080
+debounce_skip 000000B8
 
 Symbol: debounce_skip
    Definitions
-      At line 305 in file interrupt.s
+      At line 342 in file interrupt.s
    Uses
-      At line 291 in file interrupt.s
-Comment: debounce_skip used once
-4 symbols
+      At line 288 in file interrupt.s
+      At line 305 in file interrupt.s
+      At line 328 in file interrupt.s
+
+sw1 0000005A
+
+Symbol: sw1
+   Definitions
+      At line 290 in file interrupt.s
+   Uses
+      At line 283 in file interrupt.s
+Comment: sw1 used once
+sw2 00000084
+
+Symbol: sw2
+   Definitions
+      At line 313 in file interrupt.s
+   Uses
+      At line 286 in file interrupt.s
+Comment: sw2 used once
+6 symbols
 
 
 
@@ -807,7 +890,7 @@ Symbol: ANGLE
    Definitions
       At line 12 in file interrupt.s
    Uses
-      At line 294 in file interrupt.s
+      At line 331 in file interrupt.s
 Comment: ANGLE used once
 APOLARITY 2003000C
 
@@ -815,7 +898,7 @@ Symbol: APOLARITY
    Definitions
       At line 15 in file interrupt.s
    Uses
-      At line 298 in file interrupt.s
+      At line 335 in file interrupt.s
 Comment: APOLARITY used once
 GPIO_PORTA 00000001
 
@@ -1311,7 +1394,7 @@ GPIO_PORTJ 00000100
 
 Symbol: GPIO_PORTJ
    Definitions
-      At line 98 in file interrupt.s
+      At line 99 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTJ unused
@@ -1325,72 +1408,83 @@ GPIO_PORTJ_AHB_DATA_R 400603FC
 
 Symbol: GPIO_PORTJ_AHB_DATA_R
    Definitions
-      At line 97 in file interrupt.s
+      At line 98 in file interrupt.s
    Uses
-      At line 281 in file interrupt.s
-      At line 287 in file interrupt.s
+      At line 295 in file interrupt.s
+      At line 301 in file interrupt.s
+      At line 318 in file interrupt.s
+      At line 324 in file interrupt.s
 
 GPIO_PORTJ_AHB_IBE_R 40060408
 
 Symbol: GPIO_PORTJ_AHB_IBE_R
    Definitions
-      At line 94 in file interrupt.s
+      At line 93 in file interrupt.s
    Uses
-      At line 232 in file interrupt.s
+      At line 234 in file interrupt.s
 Comment: GPIO_PORTJ_AHB_IBE_R used once
 GPIO_PORTJ_AHB_ICR_R 4006041C
 
 Symbol: GPIO_PORTJ_AHB_ICR_R
    Definitions
-      At line 96 in file interrupt.s
+      At line 97 in file interrupt.s
    Uses
-      At line 244 in file interrupt.s
-      At line 277 in file interrupt.s
+      At line 246 in file interrupt.s
+      At line 291 in file interrupt.s
+      At line 314 in file interrupt.s
 
 GPIO_PORTJ_AHB_IEV_R 4006040C
 
 Symbol: GPIO_PORTJ_AHB_IEV_R
    Definitions
-      At line 95 in file interrupt.s
+      At line 94 in file interrupt.s
    Uses
-      At line 238 in file interrupt.s
+      At line 240 in file interrupt.s
 Comment: GPIO_PORTJ_AHB_IEV_R used once
 GPIO_PORTJ_AHB_IM_R 40060410
 
 Symbol: GPIO_PORTJ_AHB_IM_R
    Definitions
-      At line 92 in file interrupt.s
+      At line 95 in file interrupt.s
    Uses
-      At line 220 in file interrupt.s
-      At line 250 in file interrupt.s
+      At line 222 in file interrupt.s
+      At line 252 in file interrupt.s
 
 GPIO_PORTJ_AHB_IS_R 40060404
 
 Symbol: GPIO_PORTJ_AHB_IS_R
    Definitions
-      At line 93 in file interrupt.s
+      At line 92 in file interrupt.s
    Uses
-      At line 226 in file interrupt.s
+      At line 228 in file interrupt.s
 Comment: GPIO_PORTJ_AHB_IS_R used once
-GPIO_PORTK 00000200
+GPIO_PORTJ_AHB_RIS_R 40060414
 
-Symbol: GPIO_PORTK
+Symbol: GPIO_PORTJ_AHB_RIS_R
    Definitions
-      At line 107 in file interrupt.s
-   Uses
-      None
-Comment: GPIO_PORTK unused
+      At line 96 in file interrupt.s
 
 
 
 ARM Macro Assembler    Page 10 Alphabetic symbol ordering
 Absolute symbols
 
+   Uses
+      At line 280 in file interrupt.s
+Comment: GPIO_PORTJ_AHB_RIS_R used once
+GPIO_PORTK 00000200
+
+Symbol: GPIO_PORTK
+   Definitions
+      At line 108 in file interrupt.s
+   Uses
+      None
+Comment: GPIO_PORTK unused
 GPIO_PORTK_DATA_R 400613FC
 
 Symbol: GPIO_PORTK_DATA_R
    Definitions
-      At line 106 in file interrupt.s
+      At line 107 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTK_DATA_R unused
@@ -1398,7 +1492,7 @@ GPIO_PORTK_IBE_R 40061408
 
 Symbol: GPIO_PORTK_IBE_R
    Definitions
-      At line 103 in file interrupt.s
+      At line 104 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTK_IBE_R unused
@@ -1406,7 +1500,7 @@ GPIO_PORTK_ICR_R 4006141C
 
 Symbol: GPIO_PORTK_ICR_R
    Definitions
-      At line 105 in file interrupt.s
+      At line 106 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTK_ICR_R unused
@@ -1414,7 +1508,7 @@ GPIO_PORTK_IEV_R 4006140C
 
 Symbol: GPIO_PORTK_IEV_R
    Definitions
-      At line 104 in file interrupt.s
+      At line 105 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTK_IEV_R unused
@@ -1422,7 +1516,7 @@ GPIO_PORTK_IM_R 40061410
 
 Symbol: GPIO_PORTK_IM_R
    Definitions
-      At line 101 in file interrupt.s
+      At line 102 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTK_IM_R unused
@@ -1430,29 +1524,29 @@ GPIO_PORTK_IS_R 40061404
 
 Symbol: GPIO_PORTK_IS_R
    Definitions
-      At line 102 in file interrupt.s
+      At line 103 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTK_IS_R unused
-GPIO_PORTL 00000400
-
-Symbol: GPIO_PORTL
-   Definitions
-      At line 116 in file interrupt.s
-   Uses
-      None
-Comment: GPIO_PORTL unused
-GPIO_PORTL_DATA_R 400623FC
-
-Symbol: GPIO_PORTL_DATA_R
 
 
 
 ARM Macro Assembler    Page 11 Alphabetic symbol ordering
 Absolute symbols
 
+GPIO_PORTL 00000400
+
+Symbol: GPIO_PORTL
    Definitions
-      At line 115 in file interrupt.s
+      At line 117 in file interrupt.s
+   Uses
+      None
+Comment: GPIO_PORTL unused
+GPIO_PORTL_DATA_R 400623FC
+
+Symbol: GPIO_PORTL_DATA_R
+   Definitions
+      At line 116 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTL_DATA_R unused
@@ -1460,7 +1554,7 @@ GPIO_PORTL_IBE_R 40062408
 
 Symbol: GPIO_PORTL_IBE_R
    Definitions
-      At line 112 in file interrupt.s
+      At line 113 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTL_IBE_R unused
@@ -1468,7 +1562,7 @@ GPIO_PORTL_ICR_R 4006241C
 
 Symbol: GPIO_PORTL_ICR_R
    Definitions
-      At line 114 in file interrupt.s
+      At line 115 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTL_ICR_R unused
@@ -1476,7 +1570,7 @@ GPIO_PORTL_IEV_R 4006240C
 
 Symbol: GPIO_PORTL_IEV_R
    Definitions
-      At line 113 in file interrupt.s
+      At line 114 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTL_IEV_R unused
@@ -1484,7 +1578,7 @@ GPIO_PORTL_IM_R 40062410
 
 Symbol: GPIO_PORTL_IM_R
    Definitions
-      At line 110 in file interrupt.s
+      At line 111 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTL_IM_R unused
@@ -1492,15 +1586,21 @@ GPIO_PORTL_IS_R 40062404
 
 Symbol: GPIO_PORTL_IS_R
    Definitions
-      At line 111 in file interrupt.s
+      At line 112 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTL_IS_R unused
 GPIO_PORTM 00000800
 
 Symbol: GPIO_PORTM
+
+
+
+ARM Macro Assembler    Page 12 Alphabetic symbol ordering
+Absolute symbols
+
    Definitions
-      At line 125 in file interrupt.s
+      At line 126 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTM unused
@@ -1508,21 +1608,15 @@ GPIO_PORTM_DATA_R 400633FC
 
 Symbol: GPIO_PORTM_DATA_R
    Definitions
-      At line 124 in file interrupt.s
+      At line 125 in file interrupt.s
    Uses
-
-
-
-ARM Macro Assembler    Page 12 Alphabetic symbol ordering
-Absolute symbols
-
       None
 Comment: GPIO_PORTM_DATA_R unused
 GPIO_PORTM_IBE_R 40063408
 
 Symbol: GPIO_PORTM_IBE_R
    Definitions
-      At line 121 in file interrupt.s
+      At line 122 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTM_IBE_R unused
@@ -1530,7 +1624,7 @@ GPIO_PORTM_ICR_R 4006341C
 
 Symbol: GPIO_PORTM_ICR_R
    Definitions
-      At line 123 in file interrupt.s
+      At line 124 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTM_ICR_R unused
@@ -1538,7 +1632,7 @@ GPIO_PORTM_IEV_R 4006340C
 
 Symbol: GPIO_PORTM_IEV_R
    Definitions
-      At line 122 in file interrupt.s
+      At line 123 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTM_IEV_R unused
@@ -1546,7 +1640,7 @@ GPIO_PORTM_IM_R 40063410
 
 Symbol: GPIO_PORTM_IM_R
    Definitions
-      At line 119 in file interrupt.s
+      At line 120 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTM_IM_R unused
@@ -1554,7 +1648,7 @@ GPIO_PORTM_IS_R 40063404
 
 Symbol: GPIO_PORTM_IS_R
    Definitions
-      At line 120 in file interrupt.s
+      At line 121 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTM_IS_R unused
@@ -1562,29 +1656,29 @@ GPIO_PORTN 00001000
 
 Symbol: GPIO_PORTN
    Definitions
-      At line 134 in file interrupt.s
+      At line 135 in file interrupt.s
    Uses
-      None
-Comment: GPIO_PORTN unused
-GPIO_PORTN_DATA_R 400643FC
-
-Symbol: GPIO_PORTN_DATA_R
-   Definitions
-      At line 133 in file interrupt.s
-   Uses
-      None
-Comment: GPIO_PORTN_DATA_R unused
-GPIO_PORTN_IBE_R 40064408
 
 
 
 ARM Macro Assembler    Page 13 Alphabetic symbol ordering
 Absolute symbols
 
+      None
+Comment: GPIO_PORTN unused
+GPIO_PORTN_DATA_R 400643FC
+
+Symbol: GPIO_PORTN_DATA_R
+   Definitions
+      At line 134 in file interrupt.s
+   Uses
+      None
+Comment: GPIO_PORTN_DATA_R unused
+GPIO_PORTN_IBE_R 40064408
 
 Symbol: GPIO_PORTN_IBE_R
    Definitions
-      At line 130 in file interrupt.s
+      At line 131 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTN_IBE_R unused
@@ -1592,7 +1686,7 @@ GPIO_PORTN_ICR_R 4006441C
 
 Symbol: GPIO_PORTN_ICR_R
    Definitions
-      At line 132 in file interrupt.s
+      At line 133 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTN_ICR_R unused
@@ -1600,7 +1694,7 @@ GPIO_PORTN_IEV_R 4006440C
 
 Symbol: GPIO_PORTN_IEV_R
    Definitions
-      At line 131 in file interrupt.s
+      At line 132 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTN_IEV_R unused
@@ -1608,7 +1702,7 @@ GPIO_PORTN_IM_R 40064410
 
 Symbol: GPIO_PORTN_IM_R
    Definitions
-      At line 128 in file interrupt.s
+      At line 129 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTN_IM_R unused
@@ -1616,7 +1710,7 @@ GPIO_PORTN_IS_R 40064404
 
 Symbol: GPIO_PORTN_IS_R
    Definitions
-      At line 129 in file interrupt.s
+      At line 130 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTN_IS_R unused
@@ -1624,15 +1718,21 @@ GPIO_PORTP 00002000
 
 Symbol: GPIO_PORTP
    Definitions
-      At line 143 in file interrupt.s
+      At line 144 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTP unused
 GPIO_PORTP_DATA_R 400653FC
 
+
+
+ARM Macro Assembler    Page 14 Alphabetic symbol ordering
+Absolute symbols
+
+
 Symbol: GPIO_PORTP_DATA_R
    Definitions
-      At line 142 in file interrupt.s
+      At line 143 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTP_DATA_R unused
@@ -1640,13 +1740,7 @@ GPIO_PORTP_IBE_R 40065408
 
 Symbol: GPIO_PORTP_IBE_R
    Definitions
-
-
-
-ARM Macro Assembler    Page 14 Alphabetic symbol ordering
-Absolute symbols
-
-      At line 139 in file interrupt.s
+      At line 140 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTP_IBE_R unused
@@ -1654,7 +1748,7 @@ GPIO_PORTP_ICR_R 4006541C
 
 Symbol: GPIO_PORTP_ICR_R
    Definitions
-      At line 141 in file interrupt.s
+      At line 142 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTP_ICR_R unused
@@ -1662,7 +1756,7 @@ GPIO_PORTP_IEV_R 4006540C
 
 Symbol: GPIO_PORTP_IEV_R
    Definitions
-      At line 140 in file interrupt.s
+      At line 141 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTP_IEV_R unused
@@ -1670,7 +1764,7 @@ GPIO_PORTP_IM_R 40065410
 
 Symbol: GPIO_PORTP_IM_R
    Definitions
-      At line 137 in file interrupt.s
+      At line 138 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTP_IM_R unused
@@ -1678,7 +1772,7 @@ GPIO_PORTP_IS_R 40065404
 
 Symbol: GPIO_PORTP_IS_R
    Definitions
-      At line 138 in file interrupt.s
+      At line 139 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTP_IS_R unused
@@ -1686,7 +1780,7 @@ GPIO_PORTQ 00004000
 
 Symbol: GPIO_PORTQ
    Definitions
-      At line 152 in file interrupt.s
+      At line 153 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTQ unused
@@ -1694,7 +1788,13 @@ GPIO_PORTQ_DATA_R 400663FC
 
 Symbol: GPIO_PORTQ_DATA_R
    Definitions
-      At line 151 in file interrupt.s
+
+
+
+ARM Macro Assembler    Page 15 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 152 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTQ_DATA_R unused
@@ -1702,21 +1802,15 @@ GPIO_PORTQ_IBE_R 40066408
 
 Symbol: GPIO_PORTQ_IBE_R
    Definitions
-      At line 148 in file interrupt.s
+      At line 149 in file interrupt.s
    Uses
       None
-
-
-
-ARM Macro Assembler    Page 15 Alphabetic symbol ordering
-Absolute symbols
-
 Comment: GPIO_PORTQ_IBE_R unused
 GPIO_PORTQ_ICR_R 4006641C
 
 Symbol: GPIO_PORTQ_ICR_R
    Definitions
-      At line 150 in file interrupt.s
+      At line 151 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTQ_ICR_R unused
@@ -1724,7 +1818,7 @@ GPIO_PORTQ_IEV_R 4006640C
 
 Symbol: GPIO_PORTQ_IEV_R
    Definitions
-      At line 149 in file interrupt.s
+      At line 150 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTQ_IEV_R unused
@@ -1732,7 +1826,7 @@ GPIO_PORTQ_IM_R 40066410
 
 Symbol: GPIO_PORTQ_IM_R
    Definitions
-      At line 146 in file interrupt.s
+      At line 147 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTQ_IM_R unused
@@ -1740,7 +1834,7 @@ GPIO_PORTQ_IS_R 40066404
 
 Symbol: GPIO_PORTQ_IS_R
    Definitions
-      At line 147 in file interrupt.s
+      At line 148 in file interrupt.s
    Uses
       None
 Comment: GPIO_PORTQ_IS_R unused
@@ -1750,35 +1844,35 @@ Symbol: MODE
    Definitions
       At line 14 in file interrupt.s
    Uses
-      None
-Comment: MODE unused
+      At line 307 in file interrupt.s
+Comment: MODE used once
 NVIC_DIS0_R E000E180
 
 Symbol: NVIC_DIS0_R
    Definitions
-      At line 164 in file interrupt.s
-   Uses
-      None
-Comment: NVIC_DIS0_R unused
-NVIC_DIS1_R E000E184
-
-Symbol: NVIC_DIS1_R
-   Definitions
       At line 165 in file interrupt.s
    Uses
       None
-Comment: NVIC_DIS1_R unused
-NVIC_DIS2_R E000E188
-
 
 
 
 ARM Macro Assembler    Page 16 Alphabetic symbol ordering
 Absolute symbols
 
-Symbol: NVIC_DIS2_R
+Comment: NVIC_DIS0_R unused
+NVIC_DIS1_R E000E184
+
+Symbol: NVIC_DIS1_R
    Definitions
       At line 166 in file interrupt.s
+   Uses
+      None
+Comment: NVIC_DIS1_R unused
+NVIC_DIS2_R E000E188
+
+Symbol: NVIC_DIS2_R
+   Definitions
+      At line 167 in file interrupt.s
    Uses
       None
 Comment: NVIC_DIS2_R unused
@@ -1786,7 +1880,7 @@ NVIC_DIS3_R E000E18C
 
 Symbol: NVIC_DIS3_R
    Definitions
-      At line 167 in file interrupt.s
+      At line 168 in file interrupt.s
    Uses
       None
 Comment: NVIC_DIS3_R unused
@@ -1794,7 +1888,7 @@ NVIC_EN0_R E000E100
 
 Symbol: NVIC_EN0_R
    Definitions
-      At line 158 in file interrupt.s
+      At line 159 in file interrupt.s
    Uses
       None
 Comment: NVIC_EN0_R unused
@@ -1802,15 +1896,15 @@ NVIC_EN1_R E000E104
 
 Symbol: NVIC_EN1_R
    Definitions
-      At line 159 in file interrupt.s
+      At line 160 in file interrupt.s
    Uses
-      At line 258 in file interrupt.s
+      At line 260 in file interrupt.s
 Comment: NVIC_EN1_R used once
 NVIC_EN2_R E000E108
 
 Symbol: NVIC_EN2_R
    Definitions
-      At line 160 in file interrupt.s
+      At line 161 in file interrupt.s
    Uses
       None
 Comment: NVIC_EN2_R unused
@@ -1818,15 +1912,21 @@ NVIC_EN3_R E000E10C
 
 Symbol: NVIC_EN3_R
    Definitions
-      At line 161 in file interrupt.s
+      At line 162 in file interrupt.s
    Uses
       None
 Comment: NVIC_EN3_R unused
 NVIC_PRI0_R E000E400
 
+
+
+
+ARM Macro Assembler    Page 17 Alphabetic symbol ordering
+Absolute symbols
+
 Symbol: NVIC_PRI0_R
    Definitions
-      At line 170 in file interrupt.s
+      At line 171 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI0_R unused
@@ -1834,13 +1934,7 @@ NVIC_PRI10_R E000E428
 
 Symbol: NVIC_PRI10_R
    Definitions
-      At line 180 in file interrupt.s
-
-
-
-ARM Macro Assembler    Page 17 Alphabetic symbol ordering
-Absolute symbols
-
+      At line 181 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI10_R unused
@@ -1848,7 +1942,7 @@ NVIC_PRI11_R E000E42C
 
 Symbol: NVIC_PRI11_R
    Definitions
-      At line 181 in file interrupt.s
+      At line 182 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI11_R unused
@@ -1856,15 +1950,15 @@ NVIC_PRI12_R E000E430
 
 Symbol: NVIC_PRI12_R
    Definitions
-      At line 182 in file interrupt.s
+      At line 183 in file interrupt.s
    Uses
-      At line 265 in file interrupt.s
+      At line 267 in file interrupt.s
 Comment: NVIC_PRI12_R used once
 NVIC_PRI13_R E000E434
 
 Symbol: NVIC_PRI13_R
    Definitions
-      At line 183 in file interrupt.s
+      At line 184 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI13_R unused
@@ -1872,7 +1966,7 @@ NVIC_PRI14_R E000E438
 
 Symbol: NVIC_PRI14_R
    Definitions
-      At line 184 in file interrupt.s
+      At line 185 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI14_R unused
@@ -1880,7 +1974,7 @@ NVIC_PRI15_R E000E43C
 
 Symbol: NVIC_PRI15_R
    Definitions
-      At line 185 in file interrupt.s
+      At line 186 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI15_R unused
@@ -1888,7 +1982,13 @@ NVIC_PRI16_R E000E440
 
 Symbol: NVIC_PRI16_R
    Definitions
-      At line 186 in file interrupt.s
+      At line 187 in file interrupt.s
+
+
+
+ARM Macro Assembler    Page 18 Alphabetic symbol ordering
+Absolute symbols
+
    Uses
       None
 Comment: NVIC_PRI16_R unused
@@ -1896,21 +1996,15 @@ NVIC_PRI17_R E000E444
 
 Symbol: NVIC_PRI17_R
    Definitions
-      At line 187 in file interrupt.s
+      At line 188 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI17_R unused
-
-
-
-ARM Macro Assembler    Page 18 Alphabetic symbol ordering
-Absolute symbols
-
 NVIC_PRI18_R E000E448
 
 Symbol: NVIC_PRI18_R
    Definitions
-      At line 188 in file interrupt.s
+      At line 189 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI18_R unused
@@ -1918,7 +2012,7 @@ NVIC_PRI19_R E000E44C
 
 Symbol: NVIC_PRI19_R
    Definitions
-      At line 189 in file interrupt.s
+      At line 190 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI19_R unused
@@ -1926,7 +2020,7 @@ NVIC_PRI1_R E000E404
 
 Symbol: NVIC_PRI1_R
    Definitions
-      At line 171 in file interrupt.s
+      At line 172 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI1_R unused
@@ -1934,7 +2028,7 @@ NVIC_PRI20_R E000E450
 
 Symbol: NVIC_PRI20_R
    Definitions
-      At line 190 in file interrupt.s
+      At line 191 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI20_R unused
@@ -1942,7 +2036,7 @@ NVIC_PRI21_R E000E454
 
 Symbol: NVIC_PRI21_R
    Definitions
-      At line 191 in file interrupt.s
+      At line 192 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI21_R unused
@@ -1950,29 +2044,29 @@ NVIC_PRI22_R E000E458
 
 Symbol: NVIC_PRI22_R
    Definitions
-      At line 192 in file interrupt.s
-   Uses
-      None
-Comment: NVIC_PRI22_R unused
-NVIC_PRI23_R E000E45C
-
-Symbol: NVIC_PRI23_R
-   Definitions
       At line 193 in file interrupt.s
    Uses
       None
-Comment: NVIC_PRI23_R unused
-NVIC_PRI24_R E000E460
-
-Symbol: NVIC_PRI24_R
+Comment: NVIC_PRI22_R unused
 
 
 
 ARM Macro Assembler    Page 19 Alphabetic symbol ordering
 Absolute symbols
 
+NVIC_PRI23_R E000E45C
+
+Symbol: NVIC_PRI23_R
    Definitions
       At line 194 in file interrupt.s
+   Uses
+      None
+Comment: NVIC_PRI23_R unused
+NVIC_PRI24_R E000E460
+
+Symbol: NVIC_PRI24_R
+   Definitions
+      At line 195 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI24_R unused
@@ -1980,7 +2074,7 @@ NVIC_PRI25_R E000E464
 
 Symbol: NVIC_PRI25_R
    Definitions
-      At line 195 in file interrupt.s
+      At line 196 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI25_R unused
@@ -1988,7 +2082,7 @@ NVIC_PRI26_R E000E468
 
 Symbol: NVIC_PRI26_R
    Definitions
-      At line 196 in file interrupt.s
+      At line 197 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI26_R unused
@@ -1996,7 +2090,7 @@ NVIC_PRI27_R E000E46C
 
 Symbol: NVIC_PRI27_R
    Definitions
-      At line 197 in file interrupt.s
+      At line 198 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI27_R unused
@@ -2004,7 +2098,7 @@ NVIC_PRI28_R E000E470
 
 Symbol: NVIC_PRI28_R
    Definitions
-      At line 198 in file interrupt.s
+      At line 199 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI28_R unused
@@ -2012,15 +2106,21 @@ NVIC_PRI2_R E000E408
 
 Symbol: NVIC_PRI2_R
    Definitions
-      At line 172 in file interrupt.s
+      At line 173 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI2_R unused
 NVIC_PRI3_R E000E40C
 
 Symbol: NVIC_PRI3_R
+
+
+
+ARM Macro Assembler    Page 20 Alphabetic symbol ordering
+Absolute symbols
+
    Definitions
-      At line 173 in file interrupt.s
+      At line 174 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI3_R unused
@@ -2028,21 +2128,15 @@ NVIC_PRI4_R E000E410
 
 Symbol: NVIC_PRI4_R
    Definitions
-      At line 174 in file interrupt.s
+      At line 175 in file interrupt.s
    Uses
-
-
-
-ARM Macro Assembler    Page 20 Alphabetic symbol ordering
-Absolute symbols
-
       None
 Comment: NVIC_PRI4_R unused
 NVIC_PRI5_R E000E414
 
 Symbol: NVIC_PRI5_R
    Definitions
-      At line 175 in file interrupt.s
+      At line 176 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI5_R unused
@@ -2050,7 +2144,7 @@ NVIC_PRI6_R E000E418
 
 Symbol: NVIC_PRI6_R
    Definitions
-      At line 176 in file interrupt.s
+      At line 177 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI6_R unused
@@ -2058,7 +2152,7 @@ NVIC_PRI7_R E000E41C
 
 Symbol: NVIC_PRI7_R
    Definitions
-      At line 177 in file interrupt.s
+      At line 178 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI7_R unused
@@ -2066,7 +2160,7 @@ NVIC_PRI8_R E000E420
 
 Symbol: NVIC_PRI8_R
    Definitions
-      At line 178 in file interrupt.s
+      At line 179 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI8_R unused
@@ -2074,7 +2168,7 @@ NVIC_PRI9_R E000E424
 
 Symbol: NVIC_PRI9_R
    Definitions
-      At line 179 in file interrupt.s
+      At line 180 in file interrupt.s
    Uses
       None
 Comment: NVIC_PRI9_R unused
@@ -2084,7 +2178,13 @@ Symbol: TPOLARITY
    Definitions
       At line 16 in file interrupt.s
    Uses
-      At line 300 in file interrupt.s
+
+
+
+ARM Macro Assembler    Page 21 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 337 in file interrupt.s
 Comment: TPOLARITY used once
 TURN 20030004
 
@@ -2092,9 +2192,9 @@ Symbol: TURN
    Definitions
       At line 13 in file interrupt.s
    Uses
-      At line 296 in file interrupt.s
+      At line 333 in file interrupt.s
 Comment: TURN used once
-147 symbols
+148 symbols
 
 
 
@@ -2105,7 +2205,7 @@ LCD_Reset 00000000
 
 Symbol: LCD_Reset
    Definitions
-      At line 210 in file interrupt.s
+      At line 212 in file interrupt.s
    Uses
       None
 Comment: LCD_Reset unused
@@ -2113,17 +2213,26 @@ SysTick_Wait1ms 00000000
 
 Symbol: SysTick_Wait1ms
    Definitions
-      At line 208 in file interrupt.s
+      At line 209 in file interrupt.s
    Uses
-      At line 285 in file interrupt.s
-Comment: SysTick_Wait1ms used once
+      At line 299 in file interrupt.s
+      At line 322 in file interrupt.s
+
+create_mode_row 00000000
+
+Symbol: create_mode_row
+   Definitions
+      At line 211 in file interrupt.s
+   Uses
+      At line 312 in file interrupt.s
+Comment: create_mode_row used once
 create_reset_row 00000000
 
 Symbol: create_reset_row
    Definitions
-      At line 209 in file interrupt.s
+      At line 210 in file interrupt.s
    Uses
-      At line 303 in file interrupt.s
+      At line 340 in file interrupt.s
 Comment: create_reset_row used once
-3 symbols
-490 symbols in table
+4 symbols
+494 symbols in table

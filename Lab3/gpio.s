@@ -276,7 +276,7 @@ EsperaGPIO
             STR     R1, [R0]                                        ;Guarda no registrador
 
             LDR     R0, =GPIO_PORTJ_AHB_DIR_R                       ;Carrega o R0 com o endereco do DIR para a porta generica
-            MOV     R1, #2_00000000            		                ;J0 para entrada USR_SW1
+            MOV     R1, #2_00000000            		                ;J0 e J1 para entrada USR_SW1, USR_SW2
             STR     R1, [R0]						                ;Guarda no registrador PCTL da porta generica da memoria
 
             
@@ -307,8 +307,8 @@ EsperaGPIO
             STR     R1, [R0]                                        ;Escreve no registrador da memoria funcionalidade digital
 
             LDR 	R0, =GPIO_PORTJ_AHB_DEN_R			            ; Carrega o endereco do DEN para a porta J
-			MOV 	R1, #2_00000001						            ; Ativa a PJ0 para ser digital
-            STR		R1, [R0]							            ; Seta o bit digital para PJ0
+			MOV 	R1, #2_00000011						            ; Ativa a PJ0 e PJ1 para ser digital
+            STR		R1, [R0]							            ; Seta o bit digital para PJ0 e PJ1
 
 ; 7. Para habilitar resistor de pull-down interno, setar PDR para 1
 			LDR     R0, =GPIO_PORTL_PDR_R			                ;Carrega o endereco do PDR para a porta generica
@@ -316,7 +316,7 @@ EsperaGPIO
             STR     R1, [R0]						                ;Escreve no registrador da memoria do resistor de pull-down
 
             LDR 	R0, =GPIO_PORTJ_AHB_PUR_R 			            ; Carrega o endereco do PUR para a porta J
-			MOV 	R1, #2_00000001				     	            ; Seta o bit do PJ0 para utilizar o PUR
+			MOV 	R1, #2_00000011				     	            ; Seta o bit do PJ0 e PJ1 para utilizar o PUR
 			STR 	R1, [R0]							            ; Salva o bit setado no PUR da porta J 
             
 ;retorno            
