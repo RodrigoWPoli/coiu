@@ -105,326 +105,144 @@ ARM Macro Assembler    Page 2
    58 00000000                 IMPORT           TecladoM_Poll
    59 00000000                 IMPORT           Timer0A_Handler
    60 00000000                 IMPORT           create_data_row
-   61 00000000                 IMPORT           create_increment_row
+   61 00000000                 IMPORT           calculate_angle_turn
    62 00000000         
-   63 00000000                 IMPORT           LCD_Display_Number
-   64 00000000                 IMPORT           LCD_Display_Character
-   65 00000000         
-   66 00000000                 IMPORT           angle_decoder
-   67 00000000         
-   68 00000000         ; ------------------------------------------------------
+   63 00000000         ; ------------------------------------------------------
                        -------------------------
-   69 00000000         ; Funcao main()
-   70 00000000         Start
-   71 00000000 F7FF FFFE       BL               PLL_Init    ;Subrotina para alt
+   64 00000000         ; Funcao main()
+   65 00000000         Start
+   66 00000000 F7FF FFFE       BL               PLL_Init    ;Subrotina para alt
                                                             erar o clock do mic
                                                             rocontrolador para 
                                                             80MHz
-   72 00000004 F7FF FFFE       BL               SysTick_Init ;
-   73 00000008 F7FF FFFE       BL               GPIO_Init   ;Subrotina que inic
+   67 00000004 F7FF FFFE       BL               SysTick_Init ;
+   68 00000008 F7FF FFFE       BL               GPIO_Init   ;Subrotina que inic
                                                             ializa os GPIO
-   74 0000000C F7FF FFFE       BL               LCD_Init    ;Subrotina que inic
+   69 0000000C F7FF FFFE       BL               LCD_Init    ;Subrotina que inic
                                                             ializa o LCD
-   75 00000010 F7FF FFFE       BL               Timers_Init ;Subrotina que inic
+   70 00000010 F7FF FFFE       BL               Timers_Init ;Subrotina que inic
                                                             ializa o Timer0A
-   76 00000014 F7FF FFFE       BL               Interrupt_Init ;Subrotina que i
+   71 00000014 F7FF FFFE       BL               Interrupt_Init ;Subrotina que i
+                                                            nicializa os Interr
+                                                            upts de GPIO
+   72 00000018         
+   73 00000018 F04F 0100       MOV              R1, #0      ;Inicialização do
+                                                             angulo, das voltas
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-                                                            nicializa os Interr
-                                                            upts de GPIO
-   77 00000018         
-   78 00000018 F04F 0100       MOV              R1, #0      ;Inicialização do
-                                                             angulo, das voltas
                                                             , do modo e das pol
                                                             aridades
-   79 0000001C 484B            LDR              R0, =ANGLE
-   80 0000001E 6001            STR              R1, [R0]
-   81 00000020 484B            LDR              R0, =TURN
-   82 00000022 6001            STR              R1, [R0]
-   83 00000024 484B            LDR              R0, =MODE
-   84 00000026 6001            STR              R1, [R0]
-   85 00000028 484B            LDR              R0, =APOLARITY
-   86 0000002A 6001            STR              R1, [R0]
-   87 0000002C 484B            LDR              R0, =TPOLARITY
-   88 0000002E 6001            STR              R1, [R0]
-   89 00000030         
-   90 00000030 F7FF FFFE       BL               create_data_row
-   91 00000034         
-   92 00000034 484A            LDR              R0, =PREV_KEYPRESS
-   93 00000036 F04F 0110       MOV              R1, #0x10
-   94 0000003A 6001            STR              R1, [R0]
-   95 0000003C         
-   96 0000003C 4849            LDR              R0, =CURR_KEY
-   97 0000003E F04F 0100       MOV              R1, #0
-   98 00000042 6001            STR              R1, [R0]
-   99 00000044         
-  100 00000044         ; ------------------------------------------------------
+   74 0000001C 481E            LDR              R0, =ANGLE
+   75 0000001E 6001            STR              R1, [R0]
+   76 00000020 481E            LDR              R0, =TURN
+   77 00000022 6001            STR              R1, [R0]
+   78 00000024 481E            LDR              R0, =MODE
+   79 00000026 6001            STR              R1, [R0]
+   80 00000028 481E            LDR              R0, =APOLARITY
+   81 0000002A 6001            STR              R1, [R0]
+   82 0000002C 481E            LDR              R0, =TPOLARITY
+   83 0000002E 6001            STR              R1, [R0]
+   84 00000030         
+   85 00000030 F7FF FFFE       BL               create_data_row
+   86 00000034         
+   87 00000034 481D            LDR              R0, =PREV_KEYPRESS
+   88 00000036 F04F 0110       MOV              R1, #0x10
+   89 0000003A 6001            STR              R1, [R0]
+   90 0000003C         
+   91 0000003C 481C            LDR              R0, =CURR_KEY
+   92 0000003E F04F 0100       MOV              R1, #0
+   93 00000042 6001            STR              R1, [R0]
+   94 00000044         
+   95 00000044         ; ------------------------------------------------------
                        -------------------------
-  101 00000044         ; Laco principal
-  102 00000044         ; R1 = valor da tecla pressionada
-  103 00000044         
-  104 00000044         
-  105 00000044         MainLoop
-  106 00000044 4848            LDR              R0, =Timer0A_Addr
-  107 00000046 6801            LDR              R1, [R0]
-  108 00000048 2901            CMP              R1, #1
-  109 0000004A D004            BEQ              update_data_timer0
-  110 0000004C         
-  111 0000004C 4847            LDR              R0, =Timer1A_Addr
-  112 0000004E 6801            LDR              R1, [R0]
-  113 00000050 2901            CMP              R1, #1
-  114 00000052 D074            BEQ              update_data_timer1
-  115 00000054         
-  116 00000054         
-  117 00000054 E7F6            B                MainLoop    ;Volta para o laco 
+   96 00000044         ; Laco principal
+   97 00000044         ; R1 = valor da tecla pressionada
+   98 00000044         
+   99 00000044         
+  100 00000044         MainLoop
+  101 00000044 481B            LDR              R0, =Timer0A_Addr
+  102 00000046 6801            LDR              R1, [R0]
+  103 00000048 2901            CMP              R1, #1
+  104 0000004A D004            BEQ              update_data_timer0
+  105 0000004C         
+  106 0000004C 481A            LDR              R0, =Timer1A_Addr
+  107 0000004E 6801            LDR              R1, [R0]
+  108 00000050 2901            CMP              R1, #1
+  109 00000052 D01A            BEQ              update_data_timer1
+  110 00000054         
+  111 00000054         
+  112 00000054 E7F6            B                MainLoop    ;Volta para o laco 
                                                             principal
-  118 00000056         
-  119 00000056         
-  120 00000056         update_data_timer0
-  121 00000056 4844            LDR              R0, =Timer0A_Addr
-  122 00000058 F04F 0100       MOV              R1, #0
-  123 0000005C 6001            STR              R1, [R0]
-  124 0000005E         
-  125 0000005E F7FF FFFE       BL               TecladoM_Poll
-  126 00000062         
-  127 00000062 483F            LDR              R0, =PREV_KEYPRESS ; Recupera o
+  113 00000056         
+  114 00000056         
+  115 00000056         update_data_timer0
+  116 00000056 4817            LDR              R0, =Timer0A_Addr
+  117 00000058 F04F 0100       MOV              R1, #0
+  118 0000005C 6001            STR              R1, [R0]
+  119 0000005E         
+  120 0000005E F7FF FFFE       BL               TecladoM_Poll
+  121 00000062         
+  122 00000062 4812            LDR              R0, =PREV_KEYPRESS ; Recupera o
                                                              último click e ar
+                                                            mazena o atual
+  123 00000064 6802            LDR              R2, [R0]
+  124 00000066 6001            STR              R1, [R0]
+  125 00000068         
+  126 00000068 2A10            CMP              R2, #0x10   ; Pula se a última
 
 
 
 ARM Macro Assembler    Page 4 
 
 
-                                                            mazena o atual
-  128 00000064 6802            LDR              R2, [R0]
-  129 00000066 6001            STR              R1, [R0]
-  130 00000068         
-  131 00000068 2A10            CMP              R2, #0x10   ; Pula se a última
                                                              tecla for 0x10
-  132 0000006A D06D            BEQ              skip
-  133 0000006C         
-  134 0000006C 2910            CMP              R1, #0x10   ; Detecta falling-e
+  127 0000006A D013            BEQ              skip
+  128 0000006C         
+  129 0000006C 2910            CMP              R1, #0x10   ; Detecta falling-e
                                                             dge da tecla
-  135 0000006E D16B            BNE              skip
-  136 00000070         
-  137 00000070 F002 01FF       AND              R1, R2, #0xFF ; Filtra os 8 LSB
+  130 0000006E D111            BNE              skip
+  131 00000070         
+  132 00000070 F002 01FF       AND              R1, R2, #0xFF ; Filtra os 8 LSB
                                                              de R2
-  138 00000074 2931            CMP              R1, #0x31   ; Verifica se a tec
+  133 00000074 2931            CMP              R1, #0x31   ; Verifica se a tec
                                                             la pressionada esta
                                                              entre 1 e C
-  139 00000076 D367            BLO              skip
-  140 00000078         
-  141 00000078 2943            CMP              R1, #0x43
-  142 0000007A D865            BHI              skip
-  143 0000007C         
-  144 0000007C 4839            LDR              R0, =CURR_KEY ; Atualiza a tecl
+  134 00000076 D30D            BLO              skip
+  135 00000078         
+  136 00000078 2943            CMP              R1, #0x43
+  137 0000007A D80B            BHI              skip
+  138 0000007C         
+  139 0000007C 480C            LDR              R0, =CURR_KEY ; Atualiza a tecl
                                                             a atual
-  145 0000007E 6001            STR              R1, [R0]
-  146 00000080         
-  147 00000080 4938            LDR              R1, =CURR_KEY ;Incremento do an
-                                                            gulo
-  148 00000082 6808            LDR              R0, [R1]
-  149 00000084 F7FF FFFE       BL               angle_decoder
-  150 00000088 4604            MOV              R4, R0
-  151 0000008A         
-  152 0000008A F7FF FFFE       BL               create_increment_row ;Cria a li
-                                                            nha de incremento
-  153 0000008E         
-  154 0000008E 4935            LDR              R1, =CURR_KEY ;Verifica se o in
-                                                            cremento do angulo 
-                                                            é negativo ou posi
-                                                            tivo
-  155 00000090 6808            LDR              R0, [R1]
-  156 00000092 2837            CMP              R0, #0x37
-  157 00000094 D334            BLO              positive
-  158 00000096         
-  159 00000096 F04F 002D       LDR              R0, =char_minus ;Valor negativo
-                                                             de incremento, sub
-                                                            trair de angulo pos
-                                                            itivo ou somar de a
-                                                            ngulo negativo
-  160 0000009A F7FF FFFE       BL               LCD_Display_Character ; printar
-                                                             - no display
-  161 0000009E         
-  162 0000009E 492E            LDR              R1, =APOLARITY ;Verifica polari
-                                                            dade: 0 = positivo,
-                                                             1 = negativo
-  163 000000A0 680A            LDR              R2, [R1]
-  164 000000A2 2A01            CMP              R2, #1
-  165 000000A4 D00F            BEQ              negativeAngle
-  166 000000A6         
-  167 000000A6 4929            LDR              R1, =ANGLE  ;Faz a subtração 
-
-
-
-ARM Macro Assembler    Page 5 
-
-
-                                                            do angulo, porque o
-                                                             angulo é positivo
-                                                             e incremento negat
-                                                            ivo
-  168 000000A8 680A            LDR              R2, [R1]
-  169 000000AA 4620            MOV              R0, R4
-  170 000000AC EBA2 0200       SUB              R2, R0      ;Verifica se houve 
-                                                            mudança de sinal
-  171 000000B0 2A00            CMP              R2, #0
-  172 000000B2 DA05            BGE              skip_inverse_apolarity1
-  173 000000B4         
-  174 000000B4 4928            LDR              R1, =APOLARITY ;Transforma a po
-                                                            laridade em negativ
-                                                            a porque houve muda
-                                                            nça de sinal
-  175 000000B6 F04F 0301       MOV              R3, #1
-  176 000000BA 600B            STR              R3, [R1]
-  177 000000BC         
-  178 000000BC F1C2 0200       NEG              R2, R2      ;Inverte o sinal do
-                                                             angulo para sempre
-                                                             ser positivo
-  179 000000C0         
-  180 000000C0         skip_inverse_apolarity1
-  181 000000C0 4922            LDR              R1, =ANGLE
-  182 000000C2 600A            STR              R2, [R1]
-  183 000000C4         
-  184 000000C4 E02D            B                display_number
-  185 000000C6         
-  186 000000C6         negativeAngle
-  187 000000C6 4921            LDR              R1, =ANGLE  ;Faz a soma do angu
-                                                            lo, porque o angulo
-                                                             é negativo e incr
-                                                            emento negativo
-  188 000000C8 680A            LDR              R2, [R1]
-  189 000000CA 4620            MOV              R0, R4
-  190 000000CC 4402            ADD              R2, R0
-  191 000000CE         
-  192 000000CE F5B2 7FB4       CMP              R2, #360    ;Verifica se bateu 
-                                                            uma volta
-  193 000000D2 D313            BLO              skip_add_turn
-  194 000000D4         
-  195 000000D4 4921            LDR              R1, =TPOLARITY ;Verifica polari
-                                                            dade: 0 = positivo,
-                                                             1 = negativo
-  196 000000D6 680B            LDR              R3, [R1]    ;Se a polaridade fo
-                                                            r negativa, somar m
-                                                            ais um, se for posi
-                                                            tiva, subtrair um
-  197 000000D8 491D            LDR              R1, =TURN
-  198 000000DA 680D            LDR              R5, [R1]
-  199 000000DC 2B01            CMP              R3, #1
-  200 000000DE BF0C            ITE              EQ
-  201 000000E0 3501            ADDEQ            R5, #1
-  202 000000E2 3D01            SUBNE            R5, #1      ;Verificar se as vo
-                                                            ltas caíram para u
-                                                            m valor negativo
-  203 000000E4         
-  204 000000E4 2D00            CMP              R5, #0
-  205 000000E6 491D            LDR              R1, =TPOLARITY
-
-
-
-ARM Macro Assembler    Page 6 
-
-
-  206 000000E8 F04F 0601       MOV              R6, #1
-  207 000000EC BFBC            ITT              LT          ;Se caiu para valor
-                                                             negativo, coloco p
-                                                            ositivo a volta e m
-                                                            udo a polaridade
-  208 000000EE 426D            NEGLT            R5, R5
-  209 000000F0 600E            STRLT            R6, [R1]
-  210 000000F2         
-  211 000000F2 4917            LDR              R1, =TURN
-  212 000000F4 600D            STR              R5, [R1]
-  213 000000F6         
-  214 000000F6 F5A2 72B4       SUB              R2, #360
-  215 000000FA 4914            LDR              R1, =ANGLE
-  216 000000FC         
-  217 000000FC         skip_add_turn
-  218 000000FC 600A            STR              R2, [R1]
-  219 000000FE         
-  220 000000FE E010            B                display_number
-  221 00000100         positive
-  222 00000100         
-  223 00000100         ;Valor positivo de incremento, somar de angulo positivo 
-                       ou subtrair de angulo negativo
-  224 00000100         
-  225 00000100 4915            LDR              R1, =APOLARITY ;Verifica polari
-                                                            dade: 0 = positivo,
-                                                             1 = negativo
-  226 00000102 680A            LDR              R2, [R1]
-  227 00000104 2A01            CMP              R2, #1
-  228 00000106 D005            BEQ              negativeAngle2
-  229 00000108         
-  230 00000108 4910            LDR              R1, =ANGLE  ;Faz a soma do angu
-                                                            lo, porque o angulo
-                                                             é positivo e incr
-                                                            emento positivo
-  231 0000010A 680A            LDR              R2, [R1]
-  232 0000010C 4620            MOV              R0, R4
-  233 0000010E 4402            ADD              R2, R0
-  234 00000110 600A            STR              R2, [R1]
-  235 00000112         
-  236 00000112 E006            B                display_number
-  237 00000114         
-  238 00000114         negativeAngle2
-  239 00000114         
-  240 00000114 490D            LDR              R1, =ANGLE  ;Faz a subtração 
-                                                            do angulo, porque o
-                                                             angulo é negativo
-                                                             e incremento posit
-                                                            ivo
-  241 00000116 680A            LDR              R2, [R1]
-  242 00000118 4620            MOV              R0, R4
-  243 0000011A EBA2 0200       SUB              R2, R0
-  244 0000011E 600A            STR              R2, [R1]
-  245 00000120         
-  246 00000120 E7FF            B                display_number
-  247 00000122         
-  248 00000122         
-  249 00000122         
-  250 00000122         
-  251 00000122         display_number
-
-
-
-ARM Macro Assembler    Page 7 
-
-
-  252 00000122         
-  253 00000122 4620            MOV              R0, R4
-  254 00000124 F7FF FFFE       BL               LCD_Display_Number 
-                                                            ; Chama função C
-  255 00000128 F04F 00DF       LDR              R0, =char_angle
-  256 0000012C F7FF FFFE       BL               LCD_Display_Character
-  257 00000130         
-  258 00000130 F44F 727A       MOV              R2, #1000
-  259 00000134 F7FF FFFE       BL               SysTick_Wait1ms
-  260 00000138         
-  261 00000138         
-  262 00000138 F7FF FFFE       BL               create_data_row
-  263 0000013C         
-  264 0000013C E004            B                skip
-  265 0000013E         
-  266 0000013E         update_data_timer1
-  267 0000013E 480B            LDR              R0, =Timer1A_Addr ; Zera o bit 
+  140 0000007E 6001            STR              R1, [R0]
+  141 00000080         
+  142 00000080 F7FF FFFE       BL               calculate_angle_turn
+  143 00000084         
+  144 00000084         
+  145 00000084 F7FF FFFE       BL               create_data_row
+  146 00000088         
+  147 00000088 E004            B                skip
+  148 0000008A         
+  149 0000008A         update_data_timer1
+  150 0000008A 480B            LDR              R0, =Timer1A_Addr ; Zera o bit 
                                                             do endereço do int
                                                             errupt do timer 1
-  268 00000140 F04F 0100       MOV              R1, #0
-  269 00000144 6001            STR              R1, [R0]
-  270 00000146         
-  271 00000146 E7FF            B                skip
-  272 00000148         
-  273 00000148         skip
-  274 00000148 E77C            B                MainLoop
-  275 0000014A         
-  276 0000014A 00 00           ALIGN                        ;Garante que o fim 
+  151 0000008C F04F 0100       MOV              R1, #0
+  152 00000090 6001            STR              R1, [R0]
+  153 00000092         
+  154 00000092 E7FF            B                skip
+  155 00000094         
+  156 00000094         skip
+  157 00000094 E7D6            B                MainLoop
+  158 00000096         
+  159 00000096 00 00           ALIGN                        ;Garante que o fim 
                                                             da secao esta alinh
                                                             ada 
-  277 0000014C                 END                          ;Fim do arquivo
+  160 00000098                 END                          ;Fim do arquivo
               20030000 
               20030004 
               20030008 
@@ -472,106 +290,49 @@ MainLoop 00000044
 
 Symbol: MainLoop
    Definitions
-      At line 105 in file main.s
+      At line 100 in file main.s
    Uses
-      At line 117 in file main.s
-      At line 274 in file main.s
+      At line 112 in file main.s
+      At line 157 in file main.s
 
 Start 00000000
 
 Symbol: Start
    Definitions
-      At line 70 in file main.s
+      At line 65 in file main.s
    Uses
       At line 43 in file main.s
 Comment: Start used once
-display_number 00000122
-
-Symbol: display_number
-   Definitions
-      At line 251 in file main.s
-   Uses
-      At line 184 in file main.s
-      At line 220 in file main.s
-      At line 236 in file main.s
-      At line 246 in file main.s
-
-negativeAngle 000000C6
-
-Symbol: negativeAngle
-   Definitions
-      At line 186 in file main.s
-   Uses
-      At line 165 in file main.s
-Comment: negativeAngle used once
-negativeAngle2 00000114
-
-Symbol: negativeAngle2
-   Definitions
-      At line 238 in file main.s
-   Uses
-      At line 228 in file main.s
-Comment: negativeAngle2 used once
-positive 00000100
-
-Symbol: positive
-   Definitions
-      At line 221 in file main.s
-   Uses
-      At line 157 in file main.s
-
-
-
-ARM Macro Assembler    Page 2 Alphabetic symbol ordering
-Relocatable symbols
-
-Comment: positive used once
-skip 00000148
+skip 00000094
 
 Symbol: skip
    Definitions
-      At line 273 in file main.s
+      At line 156 in file main.s
    Uses
-      At line 132 in file main.s
-      At line 135 in file main.s
-      At line 139 in file main.s
-      At line 142 in file main.s
-      At line 264 in file main.s
-      At line 271 in file main.s
+      At line 127 in file main.s
+      At line 130 in file main.s
+      At line 134 in file main.s
+      At line 137 in file main.s
+      At line 147 in file main.s
+      At line 154 in file main.s
 
-skip_add_turn 000000FC
-
-Symbol: skip_add_turn
-   Definitions
-      At line 217 in file main.s
-   Uses
-      At line 193 in file main.s
-Comment: skip_add_turn used once
-skip_inverse_apolarity1 000000C0
-
-Symbol: skip_inverse_apolarity1
-   Definitions
-      At line 180 in file main.s
-   Uses
-      At line 172 in file main.s
-Comment: skip_inverse_apolarity1 used once
 update_data_timer0 00000056
 
 Symbol: update_data_timer0
    Definitions
-      At line 120 in file main.s
+      At line 115 in file main.s
    Uses
-      At line 109 in file main.s
+      At line 104 in file main.s
 Comment: update_data_timer0 used once
-update_data_timer1 0000013E
+update_data_timer1 0000008A
 
 Symbol: update_data_timer1
    Definitions
-      At line 266 in file main.s
+      At line 149 in file main.s
    Uses
-      At line 114 in file main.s
+      At line 109 in file main.s
 Comment: update_data_timer1 used once
-12 symbols
+6 symbols
 
 
 
@@ -584,35 +345,24 @@ Symbol: ANGLE
    Definitions
       At line 19 in file main.s
    Uses
-      At line 79 in file main.s
-      At line 167 in file main.s
-      At line 181 in file main.s
-      At line 187 in file main.s
-      At line 215 in file main.s
-      At line 230 in file main.s
-      At line 240 in file main.s
-
+      At line 74 in file main.s
+Comment: ANGLE used once
 APOLARITY 2003000C
 
 Symbol: APOLARITY
    Definitions
       At line 22 in file main.s
    Uses
-      At line 85 in file main.s
-      At line 162 in file main.s
-      At line 174 in file main.s
-      At line 225 in file main.s
-
+      At line 80 in file main.s
+Comment: APOLARITY used once
 CURR_KEY 20020004
 
 Symbol: CURR_KEY
    Definitions
       At line 18 in file main.s
    Uses
-      At line 96 in file main.s
-      At line 144 in file main.s
-      At line 147 in file main.s
-      At line 154 in file main.s
+      At line 91 in file main.s
+      At line 139 in file main.s
 
 MODE 20030008
 
@@ -620,7 +370,7 @@ Symbol: MODE
    Definitions
       At line 21 in file main.s
    Uses
-      At line 83 in file main.s
+      At line 78 in file main.s
 Comment: MODE used once
 PREV_KEYPRESS 20020000
 
@@ -628,8 +378,8 @@ Symbol: PREV_KEYPRESS
    Definitions
       At line 17 in file main.s
    Uses
-      At line 92 in file main.s
-      At line 127 in file main.s
+      At line 87 in file main.s
+      At line 122 in file main.s
 
 TPOLARITY 20030010
 
@@ -637,34 +387,30 @@ Symbol: TPOLARITY
    Definitions
       At line 23 in file main.s
    Uses
-
-
-
-ARM Macro Assembler    Page 2 Alphabetic symbol ordering
-Absolute symbols
-
-      At line 87 in file main.s
-      At line 195 in file main.s
-      At line 205 in file main.s
-
+      At line 82 in file main.s
+Comment: TPOLARITY used once
 TURN 20030004
 
 Symbol: TURN
    Definitions
       At line 20 in file main.s
    Uses
-      At line 81 in file main.s
-      At line 197 in file main.s
-      At line 211 in file main.s
-
+      At line 76 in file main.s
+Comment: TURN used once
 Timer0A_Addr 20010000
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
 
 Symbol: Timer0A_Addr
    Definitions
       At line 15 in file main.s
    Uses
-      At line 106 in file main.s
-      At line 121 in file main.s
+      At line 101 in file main.s
+      At line 116 in file main.s
 
 Timer1A_Addr 20010004
 
@@ -672,8 +418,8 @@ Symbol: Timer1A_Addr
    Definitions
       At line 16 in file main.s
    Uses
-      At line 111 in file main.s
-      At line 267 in file main.s
+      At line 106 in file main.s
+      At line 150 in file main.s
 
 char_angle 000000DF
 
@@ -681,16 +427,16 @@ Symbol: char_angle
    Definitions
       At line 25 in file main.s
    Uses
-      At line 255 in file main.s
-Comment: char_angle used once
+      None
+Comment: char_angle unused
 char_minus 0000002D
 
 Symbol: char_minus
    Definitions
       At line 24 in file main.s
    Uses
-      At line 159 in file main.s
-Comment: char_minus used once
+      None
+Comment: char_minus unused
 11 symbols
 
 
@@ -704,7 +450,7 @@ Symbol: GPIO_Init
    Definitions
       At line 53 in file main.s
    Uses
-      At line 73 in file main.s
+      At line 68 in file main.s
 Comment: GPIO_Init used once
 Interrupt_Init 00000000
 
@@ -712,32 +458,15 @@ Symbol: Interrupt_Init
    Definitions
       At line 56 in file main.s
    Uses
-      At line 76 in file main.s
+      At line 71 in file main.s
 Comment: Interrupt_Init used once
-LCD_Display_Character 00000000
-
-Symbol: LCD_Display_Character
-   Definitions
-      At line 64 in file main.s
-   Uses
-      At line 160 in file main.s
-      At line 256 in file main.s
-
-LCD_Display_Number 00000000
-
-Symbol: LCD_Display_Number
-   Definitions
-      At line 63 in file main.s
-   Uses
-      At line 254 in file main.s
-Comment: LCD_Display_Number used once
 LCD_Init 00000000
 
 Symbol: LCD_Init
    Definitions
       At line 54 in file main.s
    Uses
-      At line 74 in file main.s
+      At line 69 in file main.s
 Comment: LCD_Init used once
 PLL_Init 00000000
 
@@ -745,7 +474,7 @@ Symbol: PLL_Init
    Definitions
       At line 49 in file main.s
    Uses
-      At line 71 in file main.s
+      At line 66 in file main.s
 Comment: PLL_Init used once
 SysTick_Init 00000000
 
@@ -753,22 +482,16 @@ Symbol: SysTick_Init
    Definitions
       At line 50 in file main.s
    Uses
-      At line 72 in file main.s
+      At line 67 in file main.s
 Comment: SysTick_Init used once
 SysTick_Wait1ms 00000000
-
-
-
-
-ARM Macro Assembler    Page 2 Alphabetic symbol ordering
-External symbols
 
 Symbol: SysTick_Wait1ms
    Definitions
       At line 52 in file main.s
    Uses
-      At line 259 in file main.s
-Comment: SysTick_Wait1ms used once
+      None
+Comment: SysTick_Wait1ms unused
 SysTick_Wait1us 00000000
 
 Symbol: SysTick_Wait1us
@@ -780,10 +503,16 @@ Comment: SysTick_Wait1us unused
 TecladoM_Poll 00000000
 
 Symbol: TecladoM_Poll
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
+
    Definitions
       At line 58 in file main.s
    Uses
-      At line 125 in file main.s
+      At line 120 in file main.s
 Comment: TecladoM_Poll used once
 Timer0A_Handler 00000000
 
@@ -799,38 +528,24 @@ Symbol: Timers_Init
    Definitions
       At line 55 in file main.s
    Uses
-      At line 75 in file main.s
+      At line 70 in file main.s
 Comment: Timers_Init used once
-angle_decoder 00000000
+calculate_angle_turn 00000000
 
-Symbol: angle_decoder
+Symbol: calculate_angle_turn
    Definitions
-      At line 66 in file main.s
+      At line 61 in file main.s
    Uses
-      At line 149 in file main.s
-Comment: angle_decoder used once
+      At line 142 in file main.s
+Comment: calculate_angle_turn used once
 create_data_row 00000000
 
 Symbol: create_data_row
    Definitions
       At line 60 in file main.s
    Uses
-      At line 90 in file main.s
-      At line 262 in file main.s
+      At line 85 in file main.s
+      At line 145 in file main.s
 
-create_increment_row 00000000
-
-Symbol: create_increment_row
-   Definitions
-
-
-
-ARM Macro Assembler    Page 3 Alphabetic symbol ordering
-External symbols
-
-      At line 61 in file main.s
-   Uses
-      At line 152 in file main.s
-Comment: create_increment_row used once
-15 symbols
-375 symbols in table
+12 symbols
+366 symbols in table

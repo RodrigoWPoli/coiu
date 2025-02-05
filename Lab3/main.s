@@ -58,12 +58,7 @@ char_angle          	 EQU     2_11011111
 		IMPORT	TecladoM_Poll
         IMPORT 	Timer0A_Handler
 		IMPORT  create_data_row
-		IMPORT 	create_increment_row
-			
-		IMPORT LCD_Display_Number
-		IMPORT LCD_Display_Character
-
-		IMPORT angle_decoder
+		IMPORT 	calculate_angle_turn
 
 ; -------------------------------------------------------------------------------
 ; Funcao main()
@@ -144,119 +139,7 @@ update_data_timer0
 	LDR		R0, =CURR_KEY		; Atualiza a tecla atual
 	STR		R1, [R0]
 	
-	LDR 	R1, =CURR_KEY		;Incremento do angulo
-    LDR 	R0, [R1]
-	BL		angle_decoder
-	MOV 	R4, R0
-
-	BL 		create_increment_row	;Cria a linha de incremento
-
-	LDR 	R1, =CURR_KEY			;Verifica se o incremento do angulo é negativo ou positivo
-    LDR 	R0, [R1]
-    CMP     R0, #0x37
-    BLO     positive
-
-    LDR     R0, =char_minus				;Valor negativo de incremento, subtrair de angulo positivo ou somar de angulo negativo
-    BL      LCD_Display_Character		; printar - no display
-
-	LDR 	R1, =APOLARITY				;Verifica polaridade: 0 = positivo, 1 = negativo
-	LDR 	R2, [R1]
-	CMP		R2, #1
-	BEQ		negativeAngle
-	
-	LDR 	R1, =ANGLE					;Faz a subtração do angulo, porque o angulo é positivo e incremento negativo
-	LDR 	R2, [R1]
-	MOV		R0, R4
-	SUB		R2, R0						;Verifica se houve mudança de sinal
-	CMP		R2, #0
-	BGE     skip_inverse_apolarity1
-
-	LDR		R1, =APOLARITY				;Transforma a polaridade em negativa porque houve mudança de sinal
-	MOV		R3, #1
-	STR		R3, [R1]
-
-	NEG 	R2, R2						;Inverte o sinal do angulo para sempre ser positivo
-
-skip_inverse_apolarity1
-	LDR 	R1, =ANGLE
-	STR		R2, [R1]
-
-	B 		display_number
-
-negativeAngle
-	LDR 	R1, =ANGLE					;Faz a soma do angulo, porque o angulo é negativo e incremento negativo
-	LDR 	R2, [R1]
-	MOV		R0, R4
-	ADD		R2, R0
-
-	CMP		R2, #360					;Verifica se bateu uma volta
-	BLO		skip_add_turn
-
-	LDR     R1, =TPOLARITY              ;Verifica polaridade: 0 = positivo, 1 = negativo
-    LDR     R3, [R1]                    ;Se a polaridade for negativa, somar mais um, se for positiva, subtrair um
-    LDR     R1, =TURN
-    LDR     R5, [R1]
-    CMP     R3, #1
-    ITE     EQ
-    ADDEQ   R5, #1
-    SUBNE   R5, #1                        ;Verificar se as voltas caíram para um valor negativo
-
-    CMP     R5, #0
-    LDR     R1, =TPOLARITY
-    MOV     R6, #1
-    ITT     LT							;Se caiu para valor negativo, coloco positivo a volta e mudo a polaridade
-    NEGLT   R5, R5
-    STRLT   R6, [R1]
-
-	LDR 	R1, =TURN
-    STR     R5, [R1]
-
-	SUB 	R2, #360
-	LDR		R1, =ANGLE
-	
-skip_add_turn
-	STR		R2, [R1]
-
-	B 		display_number
-positive   
-
-										;Valor positivo de incremento, somar de angulo positivo ou subtrair de angulo negativo
-
-	LDR 	R1, =APOLARITY				;Verifica polaridade: 0 = positivo, 1 = negativo
-	LDR 	R2, [R1]
-	CMP		R2, #1
-	BEQ		negativeAngle2
-
-	LDR 	R1, =ANGLE					;Faz a soma do angulo, porque o angulo é positivo e incremento positivo
-	LDR 	R2, [R1]
-	MOV		R0, R4
-	ADD		R2, R0
-	STR		R2, [R1]
-
-	B 		display_number
-
-negativeAngle2
-
-	LDR 	R1, =ANGLE					;Faz a subtração do angulo, porque o angulo é negativo e incremento positivo
-	LDR 	R2, [R1]
-	MOV		R0, R4
-	SUB		R2, R0
-	STR		R2, [R1]
-
-	B 		display_number
-
-
-
-	
-display_number
-	
-	MOV 	R0, R4
-    BL      LCD_Display_Number      ; Chama função C
-	LDR		R0, =char_angle
-	BL		LCD_Display_Character
-	
-	MOV 	R2, #1000
-	BL		SysTick_Wait1ms
+	BL 		calculate_angle_turn	
 	
 
 	BL		create_data_row
