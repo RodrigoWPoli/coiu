@@ -208,6 +208,8 @@ create_increment_row
 ; Parametro de saida: nenhum
 create_mode_row
         PUSH    {LR}
+
+        BL      LCD_Reset
 		
         LDR     R0, =char_M
         BL      LCD_Display_Character
@@ -223,7 +225,8 @@ create_mode_row
         BL      LCD_go_to_second_line
 
         LDR     R0, =MODE
-        CMP     R0, #0                          ;0 = passo completo, 1 = meio passo
+        LDR     R1, [R0]
+        CMP     R1, #0                          ;0 = passo completo, 1 = meio passo
         BEQ     full_step
 
         LDR     R0, =char_M

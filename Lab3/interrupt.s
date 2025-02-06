@@ -209,6 +209,7 @@ NVIC_PRI28_R                    EQU     0xE000E470
         IMPORT SysTick_Wait1ms
         IMPORT create_reset_row
         IMPORT create_mode_row
+        IMPORT create_data_row
         IMPORT LCD_Reset
 ;--------------------------------------------------------------------------------
 ;=========================================
@@ -285,7 +286,7 @@ GPIOPortJ_Handler
         CMP     R1, #2_00000010                                                         ;Verifica se o botão 1 foi apertado
         BEQ     sw2
 
-        B      debounce_skip
+        B      end
 
 sw1
         LDR     R0, =GPIO_PORTJ_AHB_ICR_R                                               ;Carrega o endereco do ICR para o ack
@@ -295,21 +296,28 @@ sw1
         LDR		R0, =GPIO_PORTJ_AHB_DATA_R
         LDR 	R1, [R0]
 		
-        MOV 	R2, #20
-        BL 		SysTick_Wait1ms
+        MOV 	R2, #200
+        BL      SysTick_Wait1ms
 	
         LDR		R0, =GPIO_PORTJ_AHB_DATA_R
         LDR 	R2, [R0]
 		
         CMP 	R1, R2								; Ignora varia��es de freq. > 50Hz
-        BNE 	debounce_skip
+        BNE 	end
 
         LDR     R0, =MODE
         LDR     R1, [R0]
+        AND     R1, R1, #1                                                      ;Filtra o ultimo bit se por algum acaso bugou
         EOR     R1, R1, #1                                                      ;XOR para inverter o modo
         STR     R1, [R0]                                                        ;Salva o valor na memoria
 
         BL      create_mode_row
+
+        MOV     R2, #1000
+        BL      SysTick_Wait1ms
+
+        BL      create_data_row
+        B       end
 sw2
         LDR     R0, =GPIO_PORTJ_AHB_ICR_R                                               ;Carrega o endereco do ICR para o ack
         MOV     R1, #2_00000010                                                         ;Seta o bit 0 para ack
@@ -318,14 +326,14 @@ sw2
         LDR		R0, =GPIO_PORTJ_AHB_DATA_R
         LDR 	R1, [R0]
 		
-        MOV 	R2, #20
+        MOV 	R2, #100
         BL 		SysTick_Wait1ms
 	
         LDR		R0, =GPIO_PORTJ_AHB_DATA_R
         LDR 	R2, [R0]
 		
         CMP 	R1, R2								; Ignora varia��es de freq. > 50Hz
-        BNE 	debounce_skip
+        BNE 	end
 
 		MOV R1, #0						 ;Reset do angulo, das voltas e das polaridades
 		LDR R0, =ANGLE
@@ -339,7 +347,7 @@ sw2
 		
         BL      create_reset_row   
 
-debounce_skip
+end
         POP     {LR}
         BX      LR
 

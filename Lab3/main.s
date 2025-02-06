@@ -102,12 +102,6 @@ MainLoop
 	LDR     R1, [R0]
 	CMP     R1, #1
 	BEQ 	update_data_timer0
-	
-	LDR     R0, =Timer1A_Addr
-	LDR     R1, [R0]
-	CMP     R1, #1
-	BEQ 	update_data_timer1
-	
 
 	B MainLoop                   	;Volta para o laco principal
 
@@ -143,13 +137,6 @@ update_data_timer0
 	
 
 	BL		create_data_row
-
-	B 		skip
-
-update_data_timer1
-	LDR     R0, =Timer1A_Addr       ; Zera o bit do endereço do interrupt do timer 1
-	MOV     R1, #0
-	STR     R1, [R0]
 
 	B 		skip
 

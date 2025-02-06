@@ -136,24 +136,24 @@ ARM Macro Assembler    Page 3
 
                                                             , do modo e das pol
                                                             aridades
-   74 0000001C 481E            LDR              R0, =ANGLE
+   74 0000001C 4819            LDR              R0, =ANGLE
    75 0000001E 6001            STR              R1, [R0]
-   76 00000020 481E            LDR              R0, =TURN
+   76 00000020 4819            LDR              R0, =TURN
    77 00000022 6001            STR              R1, [R0]
-   78 00000024 481E            LDR              R0, =MODE
+   78 00000024 4819            LDR              R0, =MODE
    79 00000026 6001            STR              R1, [R0]
-   80 00000028 481E            LDR              R0, =APOLARITY
+   80 00000028 4819            LDR              R0, =APOLARITY
    81 0000002A 6001            STR              R1, [R0]
-   82 0000002C 481E            LDR              R0, =TPOLARITY
+   82 0000002C 4819            LDR              R0, =TPOLARITY
    83 0000002E 6001            STR              R1, [R0]
    84 00000030         
    85 00000030 F7FF FFFE       BL               create_data_row
    86 00000034         
-   87 00000034 481D            LDR              R0, =PREV_KEYPRESS
+   87 00000034 4818            LDR              R0, =PREV_KEYPRESS
    88 00000036 F04F 0110       MOV              R1, #0x10
    89 0000003A 6001            STR              R1, [R0]
    90 0000003C         
-   91 0000003C 481C            LDR              R0, =CURR_KEY
+   91 0000003C 4817            LDR              R0, =CURR_KEY
    92 0000003E F04F 0100       MOV              R1, #0
    93 00000042 6001            STR              R1, [R0]
    94 00000044         
@@ -164,85 +164,73 @@ ARM Macro Assembler    Page 3
    98 00000044         
    99 00000044         
   100 00000044         MainLoop
-  101 00000044 481B            LDR              R0, =Timer0A_Addr
+  101 00000044 4816            LDR              R0, =Timer0A_Addr
   102 00000046 6801            LDR              R1, [R0]
   103 00000048 2901            CMP              R1, #1
-  104 0000004A D004            BEQ              update_data_timer0
+  104 0000004A D000            BEQ              update_data_timer0
   105 0000004C         
-  106 0000004C 481A            LDR              R0, =Timer1A_Addr
-  107 0000004E 6801            LDR              R1, [R0]
-  108 00000050 2901            CMP              R1, #1
-  109 00000052 D01A            BEQ              update_data_timer1
-  110 00000054         
-  111 00000054         
-  112 00000054 E7F6            B                MainLoop    ;Volta para o laco 
+  106 0000004C E7FA            B                MainLoop    ;Volta para o laco 
                                                             principal
+  107 0000004E         
+  108 0000004E         
+  109 0000004E         update_data_timer0
+  110 0000004E 4814            LDR              R0, =Timer0A_Addr
+  111 00000050 F04F 0100       MOV              R1, #0
+  112 00000054 6001            STR              R1, [R0]
   113 00000056         
-  114 00000056         
-  115 00000056         update_data_timer0
-  116 00000056 4817            LDR              R0, =Timer0A_Addr
-  117 00000058 F04F 0100       MOV              R1, #0
-  118 0000005C 6001            STR              R1, [R0]
-  119 0000005E         
-  120 0000005E F7FF FFFE       BL               TecladoM_Poll
-  121 00000062         
-  122 00000062 4812            LDR              R0, =PREV_KEYPRESS ; Recupera o
+  114 00000056 F7FF FFFE       BL               TecladoM_Poll
+  115 0000005A         
+  116 0000005A 480F            LDR              R0, =PREV_KEYPRESS ; Recupera o
                                                              último click e ar
                                                             mazena o atual
-  123 00000064 6802            LDR              R2, [R0]
-  124 00000066 6001            STR              R1, [R0]
-  125 00000068         
-  126 00000068 2A10            CMP              R2, #0x10   ; Pula se a última
+  117 0000005C 6802            LDR              R2, [R0]
+  118 0000005E 6001            STR              R1, [R0]
+  119 00000060         
+  120 00000060 2A10            CMP              R2, #0x10   ; Pula se a última
+                                                             tecla for 0x10
+  121 00000062 D00E            BEQ              skip
+  122 00000064         
+  123 00000064 2910            CMP              R1, #0x10   ; Detecta falling-e
+                                                            dge da tecla
+  124 00000066 D10C            BNE              skip
 
 
 
 ARM Macro Assembler    Page 4 
 
 
-                                                             tecla for 0x10
-  127 0000006A D013            BEQ              skip
-  128 0000006C         
-  129 0000006C 2910            CMP              R1, #0x10   ; Detecta falling-e
-                                                            dge da tecla
-  130 0000006E D111            BNE              skip
-  131 00000070         
-  132 00000070 F002 01FF       AND              R1, R2, #0xFF ; Filtra os 8 LSB
+  125 00000068         
+  126 00000068 F002 01FF       AND              R1, R2, #0xFF ; Filtra os 8 LSB
                                                              de R2
-  133 00000074 2931            CMP              R1, #0x31   ; Verifica se a tec
+  127 0000006C 2931            CMP              R1, #0x31   ; Verifica se a tec
                                                             la pressionada esta
                                                              entre 1 e C
-  134 00000076 D30D            BLO              skip
-  135 00000078         
-  136 00000078 2943            CMP              R1, #0x43
-  137 0000007A D80B            BHI              skip
-  138 0000007C         
-  139 0000007C 480C            LDR              R0, =CURR_KEY ; Atualiza a tecl
+  128 0000006E D308            BLO              skip
+  129 00000070         
+  130 00000070 2943            CMP              R1, #0x43
+  131 00000072 D806            BHI              skip
+  132 00000074         
+  133 00000074 4809            LDR              R0, =CURR_KEY ; Atualiza a tecl
                                                             a atual
-  140 0000007E 6001            STR              R1, [R0]
-  141 00000080         
-  142 00000080 F7FF FFFE       BL               calculate_angle_turn
-  143 00000084         
-  144 00000084         
-  145 00000084 F7FF FFFE       BL               create_data_row
-  146 00000088         
-  147 00000088 E004            B                skip
-  148 0000008A         
-  149 0000008A         update_data_timer1
-  150 0000008A 480B            LDR              R0, =Timer1A_Addr ; Zera o bit 
-                                                            do endereço do int
-                                                            errupt do timer 1
-  151 0000008C F04F 0100       MOV              R1, #0
-  152 00000090 6001            STR              R1, [R0]
-  153 00000092         
-  154 00000092 E7FF            B                skip
-  155 00000094         
-  156 00000094         skip
-  157 00000094 E7D6            B                MainLoop
-  158 00000096         
-  159 00000096 00 00           ALIGN                        ;Garante que o fim 
+  134 00000076 6001            STR              R1, [R0]
+  135 00000078         
+  136 00000078 F7FF FFFE       BL               calculate_angle_turn
+  137 0000007C         
+  138 0000007C         
+  139 0000007C F7FF FFFE       BL               create_data_row
+  140 00000080         
+  141 00000080 E7FF            B                skip
+  142 00000082         
+  143 00000082         skip
+  144 00000082 E7DF            B                MainLoop
+  145 00000084         
+  146 00000084         
+  147 00000084         ;-------------------------------------------------------
+                       -------------------------------
+  148 00000084                 ALIGN                        ;Garante que o fim 
                                                             da secao esta alinh
                                                             ada 
-  160 00000098                 END                          ;Fim do arquivo
+  149 00000084                 END                          ;Fim do arquivo
               20030000 
               20030004 
               20030008 
@@ -251,9 +239,8 @@ ARM Macro Assembler    Page 4
               20020000 
               20020004 
               20010000 
-              20010004 
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
---depend=.\objects\main.d -o.\objects\main.o -IC:\Users\Ricar\AppData\Local\Arm
+--depend=.\objects\main.d -o.\objects\main.o -IC:\Users\jhony\AppData\Local\Arm
 \Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1" -
 -predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1" --li
 st=.\listings\main.lst main.s
@@ -292,8 +279,8 @@ Symbol: MainLoop
    Definitions
       At line 100 in file main.s
    Uses
-      At line 112 in file main.s
-      At line 157 in file main.s
+      At line 106 in file main.s
+      At line 144 in file main.s
 
 Start 00000000
 
@@ -303,36 +290,27 @@ Symbol: Start
    Uses
       At line 43 in file main.s
 Comment: Start used once
-skip 00000094
+skip 00000082
 
 Symbol: skip
    Definitions
-      At line 156 in file main.s
+      At line 143 in file main.s
    Uses
-      At line 127 in file main.s
-      At line 130 in file main.s
-      At line 134 in file main.s
-      At line 137 in file main.s
-      At line 147 in file main.s
-      At line 154 in file main.s
+      At line 121 in file main.s
+      At line 124 in file main.s
+      At line 128 in file main.s
+      At line 131 in file main.s
+      At line 141 in file main.s
 
-update_data_timer0 00000056
+update_data_timer0 0000004E
 
 Symbol: update_data_timer0
    Definitions
-      At line 115 in file main.s
+      At line 109 in file main.s
    Uses
       At line 104 in file main.s
 Comment: update_data_timer0 used once
-update_data_timer1 0000008A
-
-Symbol: update_data_timer1
-   Definitions
-      At line 149 in file main.s
-   Uses
-      At line 109 in file main.s
-Comment: update_data_timer1 used once
-6 symbols
+5 symbols
 
 
 
@@ -362,7 +340,7 @@ Symbol: CURR_KEY
       At line 18 in file main.s
    Uses
       At line 91 in file main.s
-      At line 139 in file main.s
+      At line 133 in file main.s
 
 MODE 20030008
 
@@ -379,7 +357,7 @@ Symbol: PREV_KEYPRESS
       At line 17 in file main.s
    Uses
       At line 87 in file main.s
-      At line 122 in file main.s
+      At line 116 in file main.s
 
 TPOLARITY 20030010
 
@@ -410,7 +388,7 @@ Symbol: Timer0A_Addr
       At line 15 in file main.s
    Uses
       At line 101 in file main.s
-      At line 116 in file main.s
+      At line 110 in file main.s
 
 Timer1A_Addr 20010004
 
@@ -418,9 +396,8 @@ Symbol: Timer1A_Addr
    Definitions
       At line 16 in file main.s
    Uses
-      At line 106 in file main.s
-      At line 150 in file main.s
-
+      None
+Comment: Timer1A_Addr unused
 char_angle 000000DF
 
 Symbol: char_angle
@@ -512,7 +489,7 @@ External symbols
    Definitions
       At line 58 in file main.s
    Uses
-      At line 120 in file main.s
+      At line 114 in file main.s
 Comment: TecladoM_Poll used once
 Timer0A_Handler 00000000
 
@@ -536,7 +513,7 @@ Symbol: calculate_angle_turn
    Definitions
       At line 61 in file main.s
    Uses
-      At line 142 in file main.s
+      At line 136 in file main.s
 Comment: calculate_angle_turn used once
 create_data_row 00000000
 
@@ -545,7 +522,7 @@ Symbol: create_data_row
       At line 60 in file main.s
    Uses
       At line 85 in file main.s
-      At line 145 in file main.s
+      At line 139 in file main.s
 
 12 symbols
-366 symbols in table
+365 symbols in table

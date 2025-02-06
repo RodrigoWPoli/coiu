@@ -44,300 +44,763 @@ ARM Macro Assembler    Page 1
    23 00000000 000000DF 
                        char_angle
                                EQU              2_11011111
-   24 00000000         
-   25 00000000         ; ------------------------------------------------------
-                       -------------------------
-   26 00000000         ; Area de Dados - Declaracoes de variaveis
-   27 00000000                 AREA             DATA, ALIGN=2
-   28 00000000         ; Se alguma variavel for chamada em outro arquivo
-   29 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
-                       riavel <var> a 
-   30 00000000         ; partir de outro arquivo
-   31 00000000         ;<var> SPACE <tam>                        ; Declara uma 
-                       variavel de nome <var>
-   32 00000000         ; de <tam> bytes a partir da primeira 
-   33 00000000         ; posicao da RAM  
-   34 00000000         
-   35 00000000         ; ------------------------------------------------------
-                       -------------------------
-   36 00000000         ; Area de Codigo - Tudo abaixo da diretiva a seguir sera
-                        armazenado na memoria de 
-   37 00000000         ;                  codigo
+   24 00000000 00000002 
+                       MOTOR_PERIOD
+                               EQU              0x2
+   25 00000000         
+   26 00000000         
+   27 00000000         ; ~~~~~~~~~~~~~~~~ PORT H ~~~~~~~~~~~~~~~~~~
+   28 00000000 4005F3FC 
+                       GPIO_PORTH_AHB_DATA_R
+                               EQU              0x4005F3FC
+   29 00000000 4005F400 
+                       GPIO_PORTH_AHB_DIR_R
+                               EQU              0x4005F400
+   30 00000000 4005F420 
+                       GPIO_PORTH_AHB_AFSEL_R
+                               EQU              0x4005F420
+   31 00000000 4005F510 
+                       GPIO_PORTH_AHB_PUR_R
+                               EQU              0x4005F510
+   32 00000000 4005F51C 
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   38 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
-2
-   39 00000000         
-   40 00000000                 EXPORT           calculate_angle_turn
-   41 00000000         
-   42 00000000                 IMPORT           SysTick_Wait1ms
-   43 00000000                 IMPORT           create_data_row
-   44 00000000                 IMPORT           create_increment_row
-   45 00000000                 IMPORT           LCD_Display_Number
-   46 00000000                 IMPORT           LCD_Display_Character
-   47 00000000                 IMPORT           angle_decoder
+                       GPIO_PORTH_AHB_DEN_R
+                               EQU              0x4005F51C
+   33 00000000 4005F520 
+                       GPIO_PORTH_AHB_LOCK_R
+                               EQU              0x4005F520
+   34 00000000 4005F524 
+                       GPIO_PORTH_AHB_CR_R
+                               EQU              0x4005F524
+   35 00000000 4005F528 
+                       GPIO_PORTH_AHB_AMSEL_R
+                               EQU              0x4005F528
+   36 00000000 4005F52C 
+                       GPIO_PORTH_AHB_PCTL_R
+                               EQU              0x4005F52C
+   37 00000000 00000080 
+                       GPIO_PORTH
+                               EQU              2_000000010000000
+   38 00000000         
+   39 00000000         ; ------------------------------------------------------
+                       -------------------------
+   40 00000000         ; Area de Dados - Declaracoes de variaveis
+   41 00000000                 AREA             DATA, ALIGN=2
+   42 00000000         ; Se alguma variavel for chamada em outro arquivo
+   43 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
+                       riavel <var> a 
+   44 00000000         ; partir de outro arquivo
+   45 00000000         ;<var> SPACE <tam>                        ; Declara uma 
+                       variavel de nome <var>
+   46 00000000         ; de <tam> bytes a partir da primeira 
+   47 00000000         ; posicao da RAM  
    48 00000000         
    49 00000000         ; ------------------------------------------------------
                        -------------------------
-   50 00000000         ; Funcao calculate_angle_turn
-   51 00000000         ; Input: nenhum
-   52 00000000         ; Output: nenhum
+   50 00000000         ; Area de Codigo - Tudo abaixo da diretiva a seguir sera
+                        armazenado na memoria de 
+   51 00000000         ;                  codigo
+   52 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
    53 00000000         
-   54 00000000         calculate_angle_turn
-   55 00000000 B500            PUSH             {LR}
-   56 00000002         
-   57 00000002 493F            LDR              R1, =CURR_KEY ;Incremento do an
+   54 00000000                 EXPORT           calculate_angle_turn
+   55 00000000         
+   56 00000000                 IMPORT           SysTick_Wait1ms
+   57 00000000                 IMPORT           create_data_row
+   58 00000000                 IMPORT           create_increment_row
+   59 00000000                 IMPORT           LCD_Display_Number
+   60 00000000                 IMPORT           LCD_Display_Character
+   61 00000000                 IMPORT           angle_decoder
+   62 00000000         
+   63 00000000         ; ------------------------------------------------------
+                       -------------------------
+   64 00000000         ; Funcao calculate_angle_turn
+   65 00000000         ; Input: nenhum
+   66 00000000         ; Output: nenhum
+   67 00000000         
+   68 00000000         calculate_angle_turn
+   69 00000000 B500            PUSH             {LR}
+   70 00000002         
+   71 00000002 49E5            LDR              R1, =CURR_KEY ;Incremento do an
                                                             gulo
-   58 00000004 6808            LDR              R0, [R1]
-   59 00000006 F7FF FFFE       BL               angle_decoder
-   60 0000000A 4604            MOV              R4, R0
-   61 0000000C         
-   62 0000000C F7FF FFFE       BL               create_increment_row ;Cria a li
-                                                            nha de incremento
-   63 00000010         
-   64 00000010 493B            LDR              R1, =CURR_KEY ;Verifica se o in
-                                                            cremento do angulo 
-                                                            é negativo ou posi
-                                                            tivo
-   65 00000012 6808            LDR              R0, [R1]
-   66 00000014 2837            CMP              R0, #0x37
-   67 00000016 D334            BLO              positive
-   68 00000018         
-   69 00000018 F04F 002D       LDR              R0, =char_minus ;Valor negativo
-                                                             de incremento, sub
-                                                            trair de angulo pos
-                                                            itivo ou somar de a
-                                                            ngulo negativo
-   70 0000001C F7FF FFFE       BL               LCD_Display_Character ; printar
-                                                             - no display
-   71 00000020         
-   72 00000020 4938            LDR              R1, =APOLARITY ;Verifica polari
-                                                            dade: 0 = positivo,
-                                                             1 = negativo
-   73 00000022 680A            LDR              R2, [R1]
-   74 00000024 2A01            CMP              R2, #1
-   75 00000026 D00F            BEQ              negativeAngle
-   76 00000028         
-   77 00000028 4937            LDR              R1, =ANGLE  ;Faz a subtração 
-                                                            do angulo, porque o
-                                                             angulo é positivo
-                                                             e incremento negat
-                                                            ivo
-   78 0000002A 680A            LDR              R2, [R1]
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-   79 0000002C 4620            MOV              R0, R4
-   80 0000002E EBA2 0200       SUB              R2, R0      ;Verifica se houve 
+   72 00000004 6808            LDR              R0, [R1]
+   73 00000006 F7FF FFFE       BL               angle_decoder
+   74 0000000A 4604            MOV              R4, R0
+   75 0000000C         
+   76 0000000C F7FF FFFE       BL               create_increment_row ;Cria a li
+                                                            nha de incremento
+   77 00000010         
+   78 00000010 49E1            LDR              R1, =CURR_KEY ;Verifica se o in
+                                                            cremento do angulo 
+                                                            é negativo ou posi
+                                                            tivo
+   79 00000012 6808            LDR              R0, [R1]
+   80 00000014 2837            CMP              R0, #0x37
+   81 00000016 D346            BLO              positive
+   82 00000018         
+   83 00000018 F04F 002D       LDR              R0, =char_minus ;Valor negativo
+                                                             de incremento, sub
+                                                            trair de angulo pos
+                                                            itivo ou somar de a
+                                                            ngulo negativo
+   84 0000001C F7FF FFFE       BL               LCD_Display_Character ; printar
+                                                             - no display
+   85 00000020         
+   86 00000020 49DE            LDR              R1, =APOLARITY ;Verifica polari
+                                                            dade: 0 = positivo,
+                                                             1 = negativo
+   87 00000022 680A            LDR              R2, [R1]
+   88 00000024 2A01            CMP              R2, #1
+   89 00000026 D018            BEQ              negativeAngle
+   90 00000028         
+   91 00000028 49DD            LDR              R1, =ANGLE  ;Faz a subtração 
+                                                            do angulo, porque o
+                                                             angulo é positivo
+                                                             e incremento negat
+                                                            ivo
+   92 0000002A 680A            LDR              R2, [R1]
+   93 0000002C 4620            MOV              R0, R4
+   94 0000002E EBA2 0200       SUB              R2, R0      ;Verifica se houve 
                                                             mudança de sinal
-   81 00000032 2A00            CMP              R2, #0
-   82 00000034 DA05            BGE              skip_inverse_apolarity1
-   83 00000036         
-   84 00000036 4933            LDR              R1, =APOLARITY ;Transforma a po
+   95 00000032 2A00            CMP              R2, #0
+   96 00000034 DA05            BGE              skip_inverse_apolarity
+   97 00000036         
+   98 00000036 49D9            LDR              R1, =APOLARITY ;Transforma a po
                                                             laridade em negativ
                                                             a porque houve muda
                                                             nça de sinal
-   85 00000038 F04F 0301       MOV              R3, #1
-   86 0000003C 600B            STR              R3, [R1]
-   87 0000003E         
-   88 0000003E F1C2 0200       NEG              R2, R2      ;Inverte o sinal do
+   99 00000038 F04F 0301       MOV              R3, #1
+  100 0000003C 600B            STR              R3, [R1]
+  101 0000003E         
+  102 0000003E F1C2 0200       NEG              R2, R2      ;Inverte o sinal do
                                                              angulo para sempre
                                                              ser positivo
-   89 00000042         
-   90 00000042         skip_inverse_apolarity1
-   91 00000042 4931            LDR              R1, =ANGLE
-   92 00000044 600A            STR              R2, [R1]
-   93 00000046         
-   94 00000046 E04D            B                display_number
-   95 00000048         
-   96 00000048         negativeAngle
-   97 00000048 492F            LDR              R1, =ANGLE  ;Faz a soma do angu
-                                                            lo, porque o angulo
-                                                             é negativo e incr
-                                                            emento negativo
-   98 0000004A 680A            LDR              R2, [R1]
-   99 0000004C 4620            MOV              R0, R4
-  100 0000004E 4402            ADD              R2, R0
-  101 00000050         
-  102 00000050 F5B2 7FB4       CMP              R2, #360    ;Verifica se bateu 
-                                                            uma volta
-  103 00000054 D313            BLO              skip_add_turn
-  104 00000056         
-  105 00000056 492D            LDR              R1, =TPOLARITY ;Verifica polari
-                                                            dade: 0 = positivo,
-                                                             1 = negativo
-  106 00000058 680B            LDR              R3, [R1]    ;Se a polaridade fo
-                                                            r negativa, somar m
-                                                            ais um, se for posi
-                                                            tiva, subtrair um
-  107 0000005A 492D            LDR              R1, =TURN
-  108 0000005C 680D            LDR              R5, [R1]
-  109 0000005E 2B01            CMP              R3, #1
-  110 00000060 BF0C            ITE              EQ
-  111 00000062 3501            ADDEQ            R5, #1
-  112 00000064 3D01            SUBNE            R5, #1      ;Verificar se as vo
-                                                            ltas caíram para u
-                                                            m valor negativo
-  113 00000066         
-  114 00000066 2D00            CMP              R5, #0
-  115 00000068 4928            LDR              R1, =TPOLARITY
-  116 0000006A F04F 0601       MOV              R6, #1
-  117 0000006E BFBC            ITT              LT          ;Se caiu para valor
-                                                             negativo, coloco p
-                                                            ositivo a volta e m
-                                                            udo a polaridade
+  103 00000042         
+  104 00000042         skip_inverse_apolarity
+  105 00000042 49D7            LDR              R1, =ANGLE
+  106 00000044 600A            STR              R2, [R1]
+  107 00000046         
+  108 00000046 B41F            PUSH             {R0, R1, R2, R3, R4}
+  109 00000048 4620            MOV              R0, R4
 
 
 
 ARM Macro Assembler    Page 4 
 
 
-  118 00000070 426D            NEGLT            R5, R5
-  119 00000072 600E            STRLT            R6, [R1]
-  120 00000074         
-  121 00000074 4926            LDR              R1, =TURN
-  122 00000076 600D            STR              R5, [R1]
-  123 00000078         
-  124 00000078 F5A2 72B4       SUB              R2, #360
-  125 0000007C 4922            LDR              R1, =ANGLE
-  126 0000007E         
-  127 0000007E         skip_add_turn
-  128 0000007E 600A            STR              R2, [R1]
-  129 00000080         
-  130 00000080 E030            B                display_number
-  131 00000082         positive
-  132 00000082         
-  133 00000082 4920            LDR              R1, =APOLARITY ;Verifica polari
+  110 0000004A F04F 0101       MOV              R1, #1
+  111 0000004E 4AD5            LDR              R2, =MODE
+  112 00000050 6812            LDR              R2, [R2]
+  113 00000052 F000 F97D       BL               turn_motor
+  114 00000056 BC1F            POP              {R0, R1, R2, R3, R4}
+  115 00000058         
+  116 00000058 E068            B                display_number
+  117 0000005A         
+  118 0000005A         negativeAngle
+  119 0000005A 49D1            LDR              R1, =ANGLE  ;Faz a soma do angu
+                                                            lo, porque o angulo
+                                                             é negativo e incr
+                                                            emento negativo
+  120 0000005C 680A            LDR              R2, [R1]
+  121 0000005E 4620            MOV              R0, R4
+  122 00000060 4402            ADD              R2, R0
+  123 00000062         
+  124 00000062 F5B2 7FB4       CMP              R2, #360    ;Verifica se bateu 
+                                                            uma volta
+  125 00000066 D313            BLO              skip_add_turn
+  126 00000068         
+  127 00000068 49CF            LDR              R1, =TPOLARITY ;Verifica polari
                                                             dade: 0 = positivo,
                                                              1 = negativo
-  134 00000084 680A            LDR              R2, [R1]
-  135 00000086 2A00            CMP              R2, #0
-  136 00000088 D00F            BEQ              positiveAngle
-  137 0000008A         
-  138 0000008A 491F            LDR              R1, =ANGLE  ;Faz a subtração 
-                                                            do angulo, porque o
-                                                             angulo é negativo
-                                                             e incremento posit
-                                                            ivo
-  139 0000008C 680A            LDR              R2, [R1]
-  140 0000008E 4620            MOV              R0, R4
-  141 00000090 EBA2 0200       SUB              R2, R0      ;Verifica se houve 
-                                                            mudança de sinal
-  142 00000094 2A00            CMP              R2, #0
-  143 00000096 DA05            BGE              skip_inverse_apolarity2
-  144 00000098         
-  145 00000098 491A            LDR              R1, =APOLARITY ;Transforma a po
-                                                            laridade em positiv
-                                                            a porque houve muda
-                                                            nça de sinal
-  146 0000009A F04F 0300       MOV              R3, #0
-  147 0000009E 600B            STR              R3, [R1]
-  148 000000A0         
-  149 000000A0 F1C2 0200       NEG              R2, R2      ;Inverte o sinal do
-                                                             angulo para sempre
-                                                             ser positivo
-  150 000000A4         
-  151 000000A4         skip_inverse_apolarity2
-  152 000000A4 4918            LDR              R1, =ANGLE
-  153 000000A6 600A            STR              R2, [R1]
-  154 000000A8         
-  155 000000A8 E01C            B                display_number
-  156 000000AA         
-  157 000000AA         positiveAngle
-  158 000000AA 4917            LDR              R1, =ANGLE  ;Faz a soma do angu
-                                                            lo, porque o angulo
-                                                             é positivo e incr
-                                                            emento positivo
-  159 000000AC 680A            LDR              R2, [R1]
-  160 000000AE 4620            MOV              R0, R4
-  161 000000B0 4402            ADD              R2, R0
+  128 0000006A 680B            LDR              R3, [R1]    ;Se a polaridade fo
+                                                            r negativa, somar m
+                                                            ais um, se for posi
+                                                            tiva, subtrair um
+  129 0000006C 49CF            LDR              R1, =TURN
+  130 0000006E 680D            LDR              R5, [R1]
+  131 00000070 2B01            CMP              R3, #1
+  132 00000072 BF0C            ITE              EQ
+  133 00000074 3501            ADDEQ            R5, #1
+  134 00000076 3D01            SUBNE            R5, #1      ;Verificar se as vo
+                                                            ltas caíram para u
+                                                            m valor negativo
+  135 00000078         
+  136 00000078 2D00            CMP              R5, #0
+  137 0000007A 49CB            LDR              R1, =TPOLARITY
+  138 0000007C F04F 0601       MOV              R6, #1
+  139 00000080 BFBC            ITT              LT          ;Se caiu para valor
+                                                             negativo, coloco p
+                                                            ositivo a volta e m
+                                                            udo a polaridade
+  140 00000082 426D            NEGLT            R5, R5
+  141 00000084 600E            STRLT            R6, [R1]
+  142 00000086         
+  143 00000086 49C9            LDR              R1, =TURN
+  144 00000088 600D            STR              R5, [R1]
+  145 0000008A         
+  146 0000008A F5A2 72B4       SUB              R2, #360
+  147 0000008E 49C4            LDR              R1, =ANGLE
+  148 00000090         
+  149 00000090         skip_add_turn
+  150 00000090 600A            STR              R2, [R1]
+  151 00000092         
+  152 00000092 B41F            PUSH             {R0, R1, R2, R3, R4}
+  153 00000094 4620            MOV              R0, R4
+  154 00000096 F04F 0101       MOV              R1, #1
 
 
 
 ARM Macro Assembler    Page 5 
 
 
-  162 000000B2         
-  163 000000B2 F5B2 7FB4       CMP              R2, #360    ;Verifica se bateu 
-                                                            uma volta
-  164 000000B6 D313            BLO              skip_add_turn2
-  165 000000B8         
-  166 000000B8 4914            LDR              R1, =TPOLARITY ;Verifica polari
+  155 0000009A 4AC2            LDR              R2, =MODE
+  156 0000009C 6812            LDR              R2, [R2]
+  157 0000009E F000 F957       BL               turn_motor
+  158 000000A2 BC1F            POP              {R0, R1, R2, R3, R4}
+  159 000000A4         
+  160 000000A4 E042            B                display_number
+  161 000000A6         
+  162 000000A6         positive
+  163 000000A6         
+  164 000000A6 49BD            LDR              R1, =APOLARITY ;Verifica polari
                                                             dade: 0 = positivo,
                                                              1 = negativo
-  167 000000BA 680B            LDR              R3, [R1]    ;Se a polaridade fo
-                                                            r positiva, somar m
-                                                            ais um, se for nega
-                                                            tiva, subtrair um
-  168 000000BC 4914            LDR              R1, =TURN
-  169 000000BE 680D            LDR              R5, [R1]
-  170 000000C0 2B00            CMP              R3, #0
-  171 000000C2 BF0C            ITE              EQ
-  172 000000C4 3501            ADDEQ            R5, #1
-  173 000000C6 3D01            SUBNE            R5, #1      ;Verificar se as vo
-                                                            ltas subiram para u
-                                                            m valor positivo
-  174 000000C8         
-  175 000000C8 2D00            CMP              R5, #0
-  176 000000CA 4910            LDR              R1, =TPOLARITY
-  177 000000CC F04F 0600       MOV              R6, #0
-  178 000000D0 BFBC            ITT              LT          ;Se subiu para valo
-                                                            r positivo, coloco 
-                                                            positivo a volta e 
-                                                            mudo a polaridade
-  179 000000D2 426D            NEGLT            R5, R5
-  180 000000D4 600E            STRLT            R6, [R1]
-  181 000000D6         
-  182 000000D6 490E            LDR              R1, =TURN
-  183 000000D8 600D            STR              R5, [R1]
-  184 000000DA         
-  185 000000DA F5A2 72B4       SUB              R2, #360
-  186 000000DE 490A            LDR              R1, =ANGLE
-  187 000000E0         
-  188 000000E0         skip_add_turn2
-  189 000000E0 600A            STR              R2, [R1]
-  190 000000E2         
-  191 000000E2 E7FF            B                display_number
-  192 000000E4         
-  193 000000E4         display_number
-  194 000000E4         
-  195 000000E4 4620            MOV              R0, R4
-  196 000000E6 F7FF FFFE       BL               LCD_Display_Number 
-                                                            ; Chama função C
-  197 000000EA F04F 00DF       LDR              R0, =char_angle
-  198 000000EE F7FF FFFE       BL               LCD_Display_Character
-  199 000000F2         
-  200 000000F2 F44F 727A       MOV              R2, #1000
-  201 000000F6 F7FF FFFE       BL               SysTick_Wait1ms
-  202 000000FA         
-  203 000000FA F85D EB04       POP              {LR}
-  204 000000FE 4770            BX               LR
-  205 00000100         
-  206 00000100         ;-------------------------------------------------------
-                       ---------------
-  207 00000100         
+  165 000000A8 680A            LDR              R2, [R1]
+  166 000000AA 2A00            CMP              R2, #0
+  167 000000AC D018            BEQ              positiveAngle
+  168 000000AE         
+  169 000000AE 49BC            LDR              R1, =ANGLE  ;Faz a subtração 
+                                                            do angulo, porque o
+                                                             angulo é negativo
+                                                             e incremento posit
+                                                            ivo
+  170 000000B0 680A            LDR              R2, [R1]
+  171 000000B2 4620            MOV              R0, R4
+  172 000000B4 EBA2 0200       SUB              R2, R0      ;Verifica se houve 
+                                                            mudança de sinal
+  173 000000B8 2A00            CMP              R2, #0
+  174 000000BA DA05            BGE              skip_inverse_apolarity2
+  175 000000BC         
+  176 000000BC 49B7            LDR              R1, =APOLARITY ;Transforma a po
+                                                            laridade em positiv
+                                                            a porque houve muda
+                                                            nça de sinal
+  177 000000BE F04F 0300       MOV              R3, #0
+  178 000000C2 600B            STR              R3, [R1]
+  179 000000C4         
+  180 000000C4 F1C2 0200       NEG              R2, R2      ;Inverte o sinal do
+                                                             angulo para sempre
+                                                             ser positivo
+  181 000000C8         
+  182 000000C8         skip_inverse_apolarity2
+  183 000000C8 49B5            LDR              R1, =ANGLE
+  184 000000CA 600A            STR              R2, [R1]
+  185 000000CC         
+  186 000000CC B41F            PUSH             {R0, R1, R2, R3, R4}
+  187 000000CE 4620            MOV              R0, R4
+  188 000000D0 F04F 0100       MOV              R1, #0
+  189 000000D4 4AB3            LDR              R2, =MODE
+  190 000000D6 6812            LDR              R2, [R2]
+  191 000000D8 F000 F93A       BL               turn_motor
+  192 000000DC BC1F            POP              {R0, R1, R2, R3, R4}
+  193 000000DE         
+  194 000000DE E025            B                display_number
+  195 000000E0         
+  196 000000E0         positiveAngle
+  197 000000E0 49AF            LDR              R1, =ANGLE  ;Faz a soma do angu
+                                                            lo, porque o angulo
+                                                             é positivo e incr
+                                                            emento positivo
+  198 000000E2 680A            LDR              R2, [R1]
 
 
 
 ARM Macro Assembler    Page 6 
 
 
-  208 00000100                 ALIGN
-  209 00000100                 END
+  199 000000E4 4620            MOV              R0, R4
+  200 000000E6 4402            ADD              R2, R0
+  201 000000E8         
+  202 000000E8 F5B2 7FB4       CMP              R2, #360    ;Verifica se bateu 
+                                                            uma volta
+  203 000000EC D313            BLO              skip_add_turn2
+  204 000000EE         
+  205 000000EE 49AE            LDR              R1, =TPOLARITY ;Verifica polari
+                                                            dade: 0 = positivo,
+                                                             1 = negativo
+  206 000000F0 680B            LDR              R3, [R1]    ;Se a polaridade fo
+                                                            r positiva, somar m
+                                                            ais um, se for nega
+                                                            tiva, subtrair um
+  207 000000F2 49AE            LDR              R1, =TURN
+  208 000000F4 680D            LDR              R5, [R1]
+  209 000000F6 2B00            CMP              R3, #0
+  210 000000F8 BF0C            ITE              EQ
+  211 000000FA 3501            ADDEQ            R5, #1
+  212 000000FC 3D01            SUBNE            R5, #1      ;Verificar se as vo
+                                                            ltas subiram para u
+                                                            m valor positivo
+  213 000000FE         
+  214 000000FE 2D00            CMP              R5, #0
+  215 00000100 49A9            LDR              R1, =TPOLARITY
+  216 00000102 F04F 0600       MOV              R6, #0
+  217 00000106 BFBC            ITT              LT          ;Se subiu para valo
+                                                            r positivo, coloco 
+                                                            positivo a volta e 
+                                                            mudo a polaridade
+  218 00000108 426D            NEGLT            R5, R5
+  219 0000010A 600E            STRLT            R6, [R1]
+  220 0000010C         
+  221 0000010C 49A7            LDR              R1, =TURN
+  222 0000010E 600D            STR              R5, [R1]
+  223 00000110         
+  224 00000110 F5A2 72B4       SUB              R2, #360
+  225 00000114 49A2            LDR              R1, =ANGLE
+  226 00000116         
+  227 00000116         skip_add_turn2
+  228 00000116 600A            STR              R2, [R1]
+  229 00000118         
+  230 00000118 B41F            PUSH             {R0, R1, R2, R3, R4}
+  231 0000011A 4620            MOV              R0, R4
+  232 0000011C F04F 0100       MOV              R1, #0
+  233 00000120 4AA0            LDR              R2, =MODE
+  234 00000122 6812            LDR              R2, [R2]
+  235 00000124 F000 F914       BL               turn_motor
+  236 00000128 BC1F            POP              {R0, R1, R2, R3, R4}
+  237 0000012A         
+  238 0000012A E7FF            B                display_number
+  239 0000012C         
+  240 0000012C         display_number
+  241 0000012C         
+  242 0000012C 4620            MOV              R0, R4
+  243 0000012E F7FF FFFE       BL               LCD_Display_Number 
+                                                            ; Chama função C
+  244 00000132 F04F 00DF       LDR              R0, =char_angle
+  245 00000136 F7FF FFFE       BL               LCD_Display_Character
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+  246 0000013A         
+  247 0000013A F44F 727A       MOV              R2, #1000
+  248 0000013E F7FF FFFE       BL               SysTick_Wait1ms
+  249 00000142         
+  250 00000142 F85D EB04       POP              {LR}
+  251 00000146 4770            BX               LR
+  252 00000148         ;-------------------------------------------------------
+                       ---------------
+  253 00000148         
+  254 00000148         ; Funcao full_step_clockwise
+  255 00000148         ; Input: nenhum
+  256 00000148         ; Output: nenhum
+  257 00000148         
+  258 00000148         full_step_clockwise
+  259 00000148 F04F 0108       MOV              R1, #2_00001000
+  260 0000014C 4898            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 1 de 
+                                                            8 
+  261 0000014E 6001            STR              R1, [R0]
+  262 00000150 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  263 00000154 F7FF FFFE       BL               SysTick_Wait1ms
+  264 00000158         
+  265 00000158 F04F 0204       MOV              R2, #2_00000100
+  266 0000015C 4894            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 2 de 
+                                                            8 
+  267 0000015E 6002            STR              R2, [R0]
+  268 00000160 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  269 00000164 F7FF FFFE       BL               SysTick_Wait1ms
+  270 00000168         
+  271 00000168 F04F 0302       MOV              R3, #2_00000010
+  272 0000016C 4890            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 3 de 
+                                                            8 
+  273 0000016E 6003            STR              R3, [R0]
+  274 00000170 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  275 00000174 F7FF FFFE       BL               SysTick_Wait1ms
+  276 00000178         
+  277 00000178 F04F 0401       MOV              R4, #2_00000001
+  278 0000017C 488C            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 4 de 
+                                                            8 
+  279 0000017E 6004            STR              R4, [R0]
+  280 00000180 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  281 00000184 F7FF FFFE       BL               SysTick_Wait1ms
+  282 00000188         
+  283 00000188 F04F 0108       MOV              R1, #2_00001000
+  284 0000018C 4888            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 5 de 
+                                                            8 
+  285 0000018E 6001            STR              R1, [R0]
+  286 00000190 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  287 00000194 F7FF FFFE       BL               SysTick_Wait1ms
+  288 00000198         
+  289 00000198 F04F 0204       MOV              R2, #2_00000100
+  290 0000019C 4884            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 6 de 
+                                                            8 
+  291 0000019E 6002            STR              R2, [R0]
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+  292 000001A0 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  293 000001A4 F7FF FFFE       BL               SysTick_Wait1ms
+  294 000001A8         
+  295 000001A8 F04F 0302       MOV              R3, #2_00000010
+  296 000001AC 4880            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 7 de 
+                                                            8 
+  297 000001AE 6003            STR              R3, [R0]
+  298 000001B0 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  299 000001B4 F7FF FFFE       BL               SysTick_Wait1ms
+  300 000001B8         
+  301 000001B8 F04F 0401       MOV              R4, #2_00000001
+  302 000001BC 487C            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 8 de 
+                                                            8 
+  303 000001BE 6004            STR              R4, [R0]
+  304 000001C0 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  305 000001C4 F7FF FFFE       BL               SysTick_Wait1ms
+  306 000001C8         
+  307 000001C8 E0DE            B                continue_cycle
+  308 000001CA         ; ------------------------------------------------------
+                       ----------------
+  309 000001CA         
+  310 000001CA         ; Funcao full_step_counter_clockwise
+  311 000001CA         ; Input: nenhum
+  312 000001CA         ; Output: nenhum
+  313 000001CA         
+  314 000001CA         full_step_counter_clockwise
+  315 000001CA F04F 0401       MOV              R4, #2_00000001
+  316 000001CE 4878            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 8 de 
+                                                            8 
+  317 000001D0 6004            STR              R4, [R0]
+  318 000001D2 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  319 000001D6 F7FF FFFE       BL               SysTick_Wait1ms
+  320 000001DA         
+  321 000001DA F04F 0302       MOV              R3, #2_00000010
+  322 000001DE 4874            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 7 de 
+                                                            8 
+  323 000001E0 6003            STR              R3, [R0]
+  324 000001E2 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  325 000001E6 F7FF FFFE       BL               SysTick_Wait1ms
+  326 000001EA         
+  327 000001EA F04F 0204       MOV              R2, #2_00000100
+  328 000001EE 4870            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 6 de 
+                                                            8 
+  329 000001F0 6002            STR              R2, [R0]
+  330 000001F2 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  331 000001F6 F7FF FFFE       BL               SysTick_Wait1ms
+  332 000001FA         
+  333 000001FA F04F 0108       MOV              R1, #2_00001000
+  334 000001FE 486C            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 5 de 
+                                                            8 
+  335 00000200 6001            STR              R1, [R0]
+  336 00000202 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  337 00000206 F7FF FFFE       BL               SysTick_Wait1ms
+
+
+
+ARM Macro Assembler    Page 9 
+
+
+  338 0000020A         
+  339 0000020A         
+  340 0000020A F04F 0401       MOV              R4, #2_00000001
+  341 0000020E 4868            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 4 de 
+                                                            8 
+  342 00000210 6004            STR              R4, [R0]
+  343 00000212 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  344 00000216 F7FF FFFE       BL               SysTick_Wait1ms
+  345 0000021A         
+  346 0000021A F04F 0302       MOV              R3, #2_00000010
+  347 0000021E 4864            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 3 de 
+                                                            8 
+  348 00000220 6003            STR              R3, [R0]
+  349 00000222 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  350 00000226 F7FF FFFE       BL               SysTick_Wait1ms
+  351 0000022A         
+  352 0000022A F04F 0204       MOV              R2, #2_00000100
+  353 0000022E 4860            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 2 de 
+                                                            8 
+  354 00000230 6002            STR              R2, [R0]
+  355 00000232 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  356 00000236 F7FF FFFE       BL               SysTick_Wait1ms
+  357 0000023A         
+  358 0000023A F04F 0108       MOV              R1, #2_00001000
+  359 0000023E 485C            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 1 de 
+                                                            8 
+  360 00000240 6001            STR              R1, [R0]
+  361 00000242 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  362 00000246 F7FF FFFE       BL               SysTick_Wait1ms
+  363 0000024A         
+  364 0000024A E09D            B                continue_cycle
+  365 0000024C         ;-------------------------------------------------------
+                       ---------------
+  366 0000024C         
+  367 0000024C         ; Funcao half_step_clockwise
+  368 0000024C         ; Input: nenhum
+  369 0000024C         ; Output: nenhum
+  370 0000024C         
+  371 0000024C         half_step_clockwise
+  372 0000024C F04F 0108       MOV              R1, #2_00001000
+  373 00000250 4857            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 1 de 
+                                                            8 
+  374 00000252 6001            STR              R1, [R0]
+  375 00000254 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  376 00000258 F7FF FFFE       BL               SysTick_Wait1ms
+  377 0000025C         
+  378 0000025C F04F 020C       MOV              R2, #2_00001100
+  379 00000260 4853            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 2 de 
+                                                            8 
+  380 00000262 6002            STR              R2, [R0]
+  381 00000264 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  382 00000268 F7FF FFFE       BL               SysTick_Wait1ms
+  383 0000026C         
+
+
+
+ARM Macro Assembler    Page 10 
+
+
+  384 0000026C F04F 0304       MOV              R3, #2_00000100
+  385 00000270 484F            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 3 de 
+                                                            8 
+  386 00000272 6003            STR              R3, [R0]
+  387 00000274 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  388 00000278 F7FF FFFE       BL               SysTick_Wait1ms
+  389 0000027C         
+  390 0000027C F04F 0406       MOV              R4, #2_00000110
+  391 00000280 484B            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 4 de 
+                                                            8 
+  392 00000282 6004            STR              R4, [R0]
+  393 00000284 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  394 00000288 F7FF FFFE       BL               SysTick_Wait1ms
+  395 0000028C         
+  396 0000028C F04F 0102       MOV              R1, #2_00000010
+  397 00000290 4847            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 5 de 
+                                                            8 
+  398 00000292 6001            STR              R1, [R0]
+  399 00000294 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  400 00000298 F7FF FFFE       BL               SysTick_Wait1ms
+  401 0000029C         
+  402 0000029C F04F 0203       MOV              R2, #2_00000011
+  403 000002A0 4843            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 6 de 
+                                                            8 
+  404 000002A2 6002            STR              R2, [R0]
+  405 000002A4 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  406 000002A8 F7FF FFFE       BL               SysTick_Wait1ms
+  407 000002AC         
+  408 000002AC F04F 0301       MOV              R3, #2_00000001
+  409 000002B0 483F            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 7 de 
+                                                            8 
+  410 000002B2 6003            STR              R3, [R0]
+  411 000002B4 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  412 000002B8 F7FF FFFE       BL               SysTick_Wait1ms
+  413 000002BC         
+  414 000002BC F04F 0409       MOV              R4, #2_00001001
+  415 000002C0 483B            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 8 de 
+                                                            8 
+  416 000002C2 6004            STR              R4, [R0]
+  417 000002C4 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  418 000002C8 F7FF FFFE       BL               SysTick_Wait1ms
+  419 000002CC         
+  420 000002CC E05C            B                continue_cycle
+  421 000002CE         ;-------------------------------------------------------
+                       ---------------
+  422 000002CE         
+  423 000002CE         ; Funcao half_step_counter_clockwise
+  424 000002CE         ; Input: nenhum
+  425 000002CE         ; Output: nenhum
+  426 000002CE         
+  427 000002CE         half_step_counter_clockwise
+  428 000002CE F04F 0409       MOV              R4, #2_00001001
+  429 000002D2 4837            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+
+
+
+ARM Macro Assembler    Page 11 
+
+
+                                                            aliza o passo 8 de 
+                                                            8 
+  430 000002D4 6004            STR              R4, [R0]
+  431 000002D6 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  432 000002DA F7FF FFFE       BL               SysTick_Wait1ms
+  433 000002DE         
+  434 000002DE F04F 0301       MOV              R3, #2_00000001
+  435 000002E2 4833            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 7 de 
+                                                            8 
+  436 000002E4 6003            STR              R3, [R0]
+  437 000002E6 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  438 000002EA F7FF FFFE       BL               SysTick_Wait1ms
+  439 000002EE         
+  440 000002EE F04F 0203       MOV              R2, #2_00000011
+  441 000002F2 482F            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 6 de 
+                                                            8 
+  442 000002F4 6002            STR              R2, [R0]
+  443 000002F6 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  444 000002FA F7FF FFFE       BL               SysTick_Wait1ms
+  445 000002FE         
+  446 000002FE F04F 0102       MOV              R1, #2_00000010
+  447 00000302 482B            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 5 de 
+                                                            8 
+  448 00000304 6001            STR              R1, [R0]
+  449 00000306 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  450 0000030A F7FF FFFE       BL               SysTick_Wait1ms
+  451 0000030E         
+  452 0000030E F04F 0406       MOV              R4, #2_00000110
+  453 00000312 4827            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 4 de 
+                                                            8 
+  454 00000314 6004            STR              R4, [R0]
+  455 00000316 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  456 0000031A F7FF FFFE       BL               SysTick_Wait1ms
+  457 0000031E         
+  458 0000031E F04F 0304       MOV              R3, #2_00000100
+  459 00000322 4823            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 3 de 
+                                                            8 
+  460 00000324 6003            STR              R3, [R0]
+  461 00000326 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  462 0000032A F7FF FFFE       BL               SysTick_Wait1ms
+  463 0000032E         
+  464 0000032E F04F 020C       MOV              R2, #2_00001100
+  465 00000332 481F            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 2 de 
+                                                            8 
+  466 00000334 6002            STR              R2, [R0]
+  467 00000336 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  468 0000033A F7FF FFFE       BL               SysTick_Wait1ms
+  469 0000033E         
+  470 0000033E F04F 0108       MOV              R1, #2_00001000
+  471 00000342 481B            LDR              R0, =GPIO_PORTH_AHB_DATA_R ; Re
+                                                            aliza o passo 1 de 
+                                                            8 
+  472 00000344 6001            STR              R1, [R0]
+
+
+
+ARM Macro Assembler    Page 12 
+
+
+  473 00000346 F04F 0202       LDR              R2, =MOTOR_PERIOD
+  474 0000034A F7FF FFFE       BL               SysTick_Wait1ms
+  475 0000034E         
+  476 0000034E E01B            B                continue_cycle
+  477 00000350         ;-------------------------------------------------------
+                       ---------------
+  478 00000350         
+  479 00000350         ; Funcao turn_motor
+  480 00000350         ; Input: R0: angulo, R1: direcao, R2: modo
+  481 00000350         ; Output: nenhum
+  482 00000350         
+  483 00000350         turn_motor
+  484 00000350 B500            PUSH             {LR}
+  485 00000352         
+  486 00000352 F04F 0502       MOV              R5, #2
+  487 00000356 F44F 7380       MOV              R3, #256
+  488 0000035A         
+  489 0000035A 2A01            CMP              R2, #1      ; Verifica se o mod
+                                                            o é full-step (0) 
+                                                            ou half-step (1) e 
+                                                            atualiza o número 
+                                                            de ciclos
+  490 0000035C D101            BNE              skip_double_cycle
+  491 0000035E FB03 F305       MUL              R3, R3, R5  ;é os mulek
+  492 00000362         
+  493 00000362         skip_double_cycle
+  494 00000362 FB00 F003       MUL              R0, R0, R3
+  495 00000366         
+  496 00000366 F44F 73B4       MOV              R3, #360
+  497 0000036A FBB0 F0F3       UDIV             R0, R0, R3
+  498 0000036E         
+  499 0000036E F04F 0300       MOV              R3, #0
+  500 00000372         
+  501 00000372         cycle
+  502 00000372 B40F            PUSH             {R0, R1, R2, R3}
+  503 00000374         
+  504 00000374 2901            CMP              R1, #1      ; Verifica se a dir
+                                                            eção é horária 
+                                                            (0) ou anti-horári
+                                                            a (1)
+  505 00000376 D003            BEQ              counter_clockwise
+  506 00000378         
+  507 00000378         clockwise
+  508 00000378 2A00            CMP              R2, #0      ; Verifica se o mod
+                                                            o é full-step (0) 
+                                                            ou half-step (1)
+  509 0000037A F43F AEE5       BEQ              full_step_clockwise
+  510 0000037E E765            B                half_step_clockwise
+  511 00000380         
+  512 00000380         counter_clockwise
+  513 00000380 2A00            CMP              R2, #0      ; Verifica se o mod
+                                                            o é full-step (0) 
+                                                            ou half-step (1)
+  514 00000382 F43F AF22       BEQ              full_step_counter_clockwise
+  515 00000386 E7A2            B                half_step_counter_clockwise
+  516 00000388         
+  517 00000388         continue_cycle
+  518 00000388 BC0F            POP              {R0, R1, R2, R3}
+  519 0000038A F103 0301       ADD              R3, R3, #1
+
+
+
+ARM Macro Assembler    Page 13 
+
+
+  520 0000038E 4283            CMP              R3, R0
+  521 00000390 D1EF            BNE              cycle
+  522 00000392         
+  523 00000392 F85D EB04       POP              {LR}
+  524 00000396 4770            BX               LR
+  525 00000398         
+  526 00000398                 ALIGN
+  527 00000398                 END
               20020004 
               2003000C 
               20030000 
+              20030008 
               20030010 
               20030004 
+              4005F3FC 
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
---depend=.\objects\motor.d -o.\objects\motor.o -IC:\Users\Ricar\AppData\Local\A
+--depend=.\objects\motor.d -o.\objects\motor.o -IC:\Users\jhony\AppData\Local\A
 rm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 1"
  --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1" --
 list=.\listings\motor.lst motor.s
@@ -351,7 +814,7 @@ DATA 00000000
 
 Symbol: DATA
    Definitions
-      At line 27 in file motor.s
+      At line 41 in file motor.s
    Uses
       None
 Comment: DATA unused
@@ -366,7 +829,7 @@ Relocatable symbols
 
 Symbol: .text
    Definitions
-      At line 38 in file motor.s
+      At line 52 in file motor.s
    Uses
       None
 Comment: .text unused
@@ -374,84 +837,176 @@ calculate_angle_turn 00000000
 
 Symbol: calculate_angle_turn
    Definitions
-      At line 54 in file motor.s
+      At line 68 in file motor.s
    Uses
-      At line 40 in file motor.s
+      At line 54 in file motor.s
 Comment: calculate_angle_turn used once
-display_number 000000E4
+clockwise 00000378
+
+Symbol: clockwise
+   Definitions
+      At line 507 in file motor.s
+   Uses
+      None
+Comment: clockwise unused
+continue_cycle 00000388
+
+Symbol: continue_cycle
+   Definitions
+      At line 517 in file motor.s
+   Uses
+      At line 307 in file motor.s
+      At line 364 in file motor.s
+      At line 420 in file motor.s
+      At line 476 in file motor.s
+
+counter_clockwise 00000380
+
+Symbol: counter_clockwise
+   Definitions
+      At line 512 in file motor.s
+   Uses
+      At line 505 in file motor.s
+Comment: counter_clockwise used once
+cycle 00000372
+
+Symbol: cycle
+   Definitions
+      At line 501 in file motor.s
+   Uses
+      At line 521 in file motor.s
+Comment: cycle used once
+display_number 0000012C
 
 Symbol: display_number
    Definitions
-      At line 193 in file motor.s
+      At line 240 in file motor.s
    Uses
-      At line 94 in file motor.s
-      At line 130 in file motor.s
-      At line 155 in file motor.s
-      At line 191 in file motor.s
-
-negativeAngle 00000048
-
-Symbol: negativeAngle
-   Definitions
-      At line 96 in file motor.s
-   Uses
-      At line 75 in file motor.s
-Comment: negativeAngle used once
-positive 00000082
-
-Symbol: positive
-   Definitions
-      At line 131 in file motor.s
-   Uses
-      At line 67 in file motor.s
-Comment: positive used once
-positiveAngle 000000AA
-
-Symbol: positiveAngle
-   Definitions
-      At line 157 in file motor.s
-   Uses
-      At line 136 in file motor.s
-Comment: positiveAngle used once
-skip_add_turn 0000007E
-
-Symbol: skip_add_turn
-   Definitions
-      At line 127 in file motor.s
-   Uses
-      At line 103 in file motor.s
-Comment: skip_add_turn used once
+      At line 116 in file motor.s
+      At line 160 in file motor.s
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Relocatable symbols
 
-skip_add_turn2 000000E0
+      At line 194 in file motor.s
+      At line 238 in file motor.s
+
+full_step_clockwise 00000148
+
+Symbol: full_step_clockwise
+   Definitions
+      At line 258 in file motor.s
+   Uses
+      At line 509 in file motor.s
+Comment: full_step_clockwise used once
+full_step_counter_clockwise 000001CA
+
+Symbol: full_step_counter_clockwise
+   Definitions
+      At line 314 in file motor.s
+   Uses
+      At line 514 in file motor.s
+Comment: full_step_counter_clockwise used once
+half_step_clockwise 0000024C
+
+Symbol: half_step_clockwise
+   Definitions
+      At line 371 in file motor.s
+   Uses
+      At line 510 in file motor.s
+Comment: half_step_clockwise used once
+half_step_counter_clockwise 000002CE
+
+Symbol: half_step_counter_clockwise
+   Definitions
+      At line 427 in file motor.s
+   Uses
+      At line 515 in file motor.s
+Comment: half_step_counter_clockwise used once
+negativeAngle 0000005A
+
+Symbol: negativeAngle
+   Definitions
+      At line 118 in file motor.s
+   Uses
+      At line 89 in file motor.s
+Comment: negativeAngle used once
+positive 000000A6
+
+Symbol: positive
+   Definitions
+      At line 162 in file motor.s
+   Uses
+      At line 81 in file motor.s
+Comment: positive used once
+positiveAngle 000000E0
+
+Symbol: positiveAngle
+   Definitions
+      At line 196 in file motor.s
+   Uses
+      At line 167 in file motor.s
+Comment: positiveAngle used once
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+skip_add_turn 00000090
+
+Symbol: skip_add_turn
+   Definitions
+      At line 149 in file motor.s
+   Uses
+      At line 125 in file motor.s
+Comment: skip_add_turn used once
+skip_add_turn2 00000116
 
 Symbol: skip_add_turn2
    Definitions
-      At line 188 in file motor.s
+      At line 227 in file motor.s
    Uses
-      At line 164 in file motor.s
+      At line 203 in file motor.s
 Comment: skip_add_turn2 used once
-skip_inverse_apolarity1 00000042
+skip_double_cycle 00000362
 
-Symbol: skip_inverse_apolarity1
+Symbol: skip_double_cycle
    Definitions
-      At line 90 in file motor.s
+      At line 493 in file motor.s
    Uses
-      At line 82 in file motor.s
-Comment: skip_inverse_apolarity1 used once
-skip_inverse_apolarity2 000000A4
+      At line 490 in file motor.s
+Comment: skip_double_cycle used once
+skip_inverse_apolarity 00000042
+
+Symbol: skip_inverse_apolarity
+   Definitions
+      At line 104 in file motor.s
+   Uses
+      At line 96 in file motor.s
+Comment: skip_inverse_apolarity used once
+skip_inverse_apolarity2 000000C8
 
 Symbol: skip_inverse_apolarity2
    Definitions
-      At line 151 in file motor.s
+      At line 182 in file motor.s
    Uses
-      At line 143 in file motor.s
+      At line 174 in file motor.s
 Comment: skip_inverse_apolarity2 used once
-10 symbols
+turn_motor 00000350
+
+Symbol: turn_motor
+   Definitions
+      At line 483 in file motor.s
+   Uses
+      At line 113 in file motor.s
+      At line 157 in file motor.s
+      At line 191 in file motor.s
+      At line 235 in file motor.s
+
+20 symbols
 
 
 
@@ -464,14 +1019,14 @@ Symbol: ANGLE
    Definitions
       At line 17 in file motor.s
    Uses
-      At line 77 in file motor.s
       At line 91 in file motor.s
-      At line 97 in file motor.s
-      At line 125 in file motor.s
-      At line 138 in file motor.s
-      At line 152 in file motor.s
-      At line 158 in file motor.s
-      At line 186 in file motor.s
+      At line 105 in file motor.s
+      At line 119 in file motor.s
+      At line 147 in file motor.s
+      At line 169 in file motor.s
+      At line 183 in file motor.s
+      At line 197 in file motor.s
+      At line 225 in file motor.s
 
 APOLARITY 2003000C
 
@@ -479,10 +1034,10 @@ Symbol: APOLARITY
    Definitions
       At line 20 in file motor.s
    Uses
-      At line 72 in file motor.s
-      At line 84 in file motor.s
-      At line 133 in file motor.s
-      At line 145 in file motor.s
+      At line 86 in file motor.s
+      At line 98 in file motor.s
+      At line 164 in file motor.s
+      At line 176 in file motor.s
 
 CURR_KEY 20020004
 
@@ -490,44 +1045,209 @@ Symbol: CURR_KEY
    Definitions
       At line 16 in file motor.s
    Uses
-      At line 57 in file motor.s
-      At line 64 in file motor.s
+      At line 71 in file motor.s
+      At line 78 in file motor.s
 
-MODE 20030008
+GPIO_PORTH 00000080
 
-Symbol: MODE
+Symbol: GPIO_PORTH
    Definitions
-      At line 19 in file motor.s
+      At line 37 in file motor.s
    Uses
       None
-Comment: MODE unused
-TPOLARITY 20030010
+Comment: GPIO_PORTH unused
+GPIO_PORTH_AHB_AFSEL_R 4005F420
 
-Symbol: TPOLARITY
+Symbol: GPIO_PORTH_AHB_AFSEL_R
    Definitions
-      At line 21 in file motor.s
+      At line 30 in file motor.s
    Uses
-      At line 105 in file motor.s
-      At line 115 in file motor.s
-      At line 166 in file motor.s
-      At line 176 in file motor.s
+      None
+Comment: GPIO_PORTH_AHB_AFSEL_R unused
+GPIO_PORTH_AHB_AMSEL_R 4005F528
 
-TURN 20030004
-
-Symbol: TURN
+Symbol: GPIO_PORTH_AHB_AMSEL_R
    Definitions
-      At line 18 in file motor.s
+      At line 35 in file motor.s
+   Uses
+      None
+Comment: GPIO_PORTH_AHB_AMSEL_R unused
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Absolute symbols
 
+GPIO_PORTH_AHB_CR_R 4005F524
+
+Symbol: GPIO_PORTH_AHB_CR_R
+   Definitions
+      At line 34 in file motor.s
    Uses
-      At line 107 in file motor.s
-      At line 121 in file motor.s
-      At line 168 in file motor.s
-      At line 182 in file motor.s
+      None
+Comment: GPIO_PORTH_AHB_CR_R unused
+GPIO_PORTH_AHB_DATA_R 4005F3FC
+
+Symbol: GPIO_PORTH_AHB_DATA_R
+   Definitions
+      At line 28 in file motor.s
+   Uses
+      At line 260 in file motor.s
+      At line 266 in file motor.s
+      At line 272 in file motor.s
+      At line 278 in file motor.s
+      At line 284 in file motor.s
+      At line 290 in file motor.s
+      At line 296 in file motor.s
+      At line 302 in file motor.s
+      At line 316 in file motor.s
+      At line 322 in file motor.s
+      At line 328 in file motor.s
+      At line 334 in file motor.s
+      At line 341 in file motor.s
+      At line 347 in file motor.s
+      At line 353 in file motor.s
+      At line 359 in file motor.s
+      At line 373 in file motor.s
+      At line 379 in file motor.s
+      At line 385 in file motor.s
+      At line 391 in file motor.s
+      At line 397 in file motor.s
+      At line 403 in file motor.s
+      At line 409 in file motor.s
+      At line 415 in file motor.s
+      At line 429 in file motor.s
+      At line 435 in file motor.s
+      At line 441 in file motor.s
+      At line 447 in file motor.s
+      At line 453 in file motor.s
+      At line 459 in file motor.s
+      At line 465 in file motor.s
+      At line 471 in file motor.s
+
+GPIO_PORTH_AHB_DEN_R 4005F51C
+
+Symbol: GPIO_PORTH_AHB_DEN_R
+   Definitions
+      At line 32 in file motor.s
+   Uses
+      None
+Comment: GPIO_PORTH_AHB_DEN_R unused
+GPIO_PORTH_AHB_DIR_R 4005F400
+
+Symbol: GPIO_PORTH_AHB_DIR_R
+   Definitions
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 29 in file motor.s
+   Uses
+      None
+Comment: GPIO_PORTH_AHB_DIR_R unused
+GPIO_PORTH_AHB_LOCK_R 4005F520
+
+Symbol: GPIO_PORTH_AHB_LOCK_R
+   Definitions
+      At line 33 in file motor.s
+   Uses
+      None
+Comment: GPIO_PORTH_AHB_LOCK_R unused
+GPIO_PORTH_AHB_PCTL_R 4005F52C
+
+Symbol: GPIO_PORTH_AHB_PCTL_R
+   Definitions
+      At line 36 in file motor.s
+   Uses
+      None
+Comment: GPIO_PORTH_AHB_PCTL_R unused
+GPIO_PORTH_AHB_PUR_R 4005F510
+
+Symbol: GPIO_PORTH_AHB_PUR_R
+   Definitions
+      At line 31 in file motor.s
+   Uses
+      None
+Comment: GPIO_PORTH_AHB_PUR_R unused
+MODE 20030008
+
+Symbol: MODE
+   Definitions
+      At line 19 in file motor.s
+   Uses
+      At line 111 in file motor.s
+      At line 155 in file motor.s
+      At line 189 in file motor.s
+      At line 233 in file motor.s
+
+MOTOR_PERIOD 00000002
+
+Symbol: MOTOR_PERIOD
+   Definitions
+      At line 24 in file motor.s
+   Uses
+      At line 262 in file motor.s
+      At line 268 in file motor.s
+      At line 274 in file motor.s
+      At line 280 in file motor.s
+      At line 286 in file motor.s
+      At line 292 in file motor.s
+      At line 298 in file motor.s
+      At line 304 in file motor.s
+      At line 318 in file motor.s
+      At line 324 in file motor.s
+      At line 330 in file motor.s
+      At line 336 in file motor.s
+      At line 343 in file motor.s
+      At line 349 in file motor.s
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 355 in file motor.s
+      At line 361 in file motor.s
+      At line 375 in file motor.s
+      At line 381 in file motor.s
+      At line 387 in file motor.s
+      At line 393 in file motor.s
+      At line 399 in file motor.s
+      At line 405 in file motor.s
+      At line 411 in file motor.s
+      At line 417 in file motor.s
+      At line 431 in file motor.s
+      At line 437 in file motor.s
+      At line 443 in file motor.s
+      At line 449 in file motor.s
+      At line 455 in file motor.s
+      At line 461 in file motor.s
+      At line 467 in file motor.s
+      At line 473 in file motor.s
+
+TPOLARITY 20030010
+
+Symbol: TPOLARITY
+   Definitions
+      At line 21 in file motor.s
+   Uses
+      At line 127 in file motor.s
+      At line 137 in file motor.s
+      At line 205 in file motor.s
+      At line 215 in file motor.s
+
+TURN 20030004
+
+Symbol: TURN
+   Definitions
+      At line 18 in file motor.s
+   Uses
+      At line 129 in file motor.s
+      At line 143 in file motor.s
+      At line 207 in file motor.s
+      At line 221 in file motor.s
 
 char_angle 000000DF
 
@@ -535,7 +1255,7 @@ Symbol: char_angle
    Definitions
       At line 23 in file motor.s
    Uses
-      At line 197 in file motor.s
+      At line 244 in file motor.s
 Comment: char_angle used once
 char_minus 0000002D
 
@@ -543,9 +1263,9 @@ Symbol: char_minus
    Definitions
       At line 22 in file motor.s
    Uses
-      At line 69 in file motor.s
+      At line 83 in file motor.s
 Comment: char_minus used once
-8 symbols
+19 symbols
 
 
 
@@ -556,40 +1276,78 @@ LCD_Display_Character 00000000
 
 Symbol: LCD_Display_Character
    Definitions
-      At line 46 in file motor.s
+      At line 60 in file motor.s
    Uses
-      At line 70 in file motor.s
-      At line 198 in file motor.s
+      At line 84 in file motor.s
+      At line 245 in file motor.s
 
 LCD_Display_Number 00000000
 
 Symbol: LCD_Display_Number
    Definitions
-      At line 45 in file motor.s
+      At line 59 in file motor.s
    Uses
-      At line 196 in file motor.s
+      At line 243 in file motor.s
 Comment: LCD_Display_Number used once
 SysTick_Wait1ms 00000000
 
 Symbol: SysTick_Wait1ms
    Definitions
-      At line 42 in file motor.s
+      At line 56 in file motor.s
    Uses
-      At line 201 in file motor.s
-Comment: SysTick_Wait1ms used once
+      At line 248 in file motor.s
+      At line 263 in file motor.s
+      At line 269 in file motor.s
+      At line 275 in file motor.s
+      At line 281 in file motor.s
+      At line 287 in file motor.s
+      At line 293 in file motor.s
+      At line 299 in file motor.s
+      At line 305 in file motor.s
+      At line 319 in file motor.s
+      At line 325 in file motor.s
+      At line 331 in file motor.s
+      At line 337 in file motor.s
+      At line 344 in file motor.s
+      At line 350 in file motor.s
+      At line 356 in file motor.s
+      At line 362 in file motor.s
+      At line 376 in file motor.s
+      At line 382 in file motor.s
+      At line 388 in file motor.s
+      At line 394 in file motor.s
+      At line 400 in file motor.s
+      At line 406 in file motor.s
+      At line 412 in file motor.s
+      At line 418 in file motor.s
+      At line 432 in file motor.s
+      At line 438 in file motor.s
+      At line 444 in file motor.s
+      At line 450 in file motor.s
+      At line 456 in file motor.s
+      At line 462 in file motor.s
+      At line 468 in file motor.s
+      At line 474 in file motor.s
+
 angle_decoder 00000000
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
 
 Symbol: angle_decoder
    Definitions
-      At line 47 in file motor.s
+      At line 61 in file motor.s
    Uses
-      At line 59 in file motor.s
+      At line 73 in file motor.s
 Comment: angle_decoder used once
 create_data_row 00000000
 
 Symbol: create_data_row
    Definitions
-      At line 43 in file motor.s
+      At line 57 in file motor.s
    Uses
       None
 Comment: create_data_row unused
@@ -597,9 +1355,9 @@ create_increment_row 00000000
 
 Symbol: create_increment_row
    Definitions
-      At line 44 in file motor.s
+      At line 58 in file motor.s
    Uses
-      At line 62 in file motor.s
+      At line 76 in file motor.s
 Comment: create_increment_row used once
 6 symbols
-361 symbols in table
+382 symbols in table
