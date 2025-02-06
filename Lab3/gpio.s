@@ -335,14 +335,14 @@ LCD_Init
             MOV     R1, #0x04
             STR     R1, [R0]
 
-            LDR     R0, =10
+            LDR     R0, =15
             BL      SysTick_Wait1us
             
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]
 
-            LDR     R0, =40
+            LDR     R0, =45
             BL      SysTick_Wait1us
 
             ; 
@@ -354,14 +354,14 @@ LCD_Init
             MOV     R1, #0x04
             STR     R1, [R0]
 
-            LDR     R0, =10
+            LDR     R0, =15
             BL      SysTick_Wait1us
             
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]
 
-            LDR     R0, =40
+            LDR     R0, =45
             BL      SysTick_Wait1us
 
             ; 
@@ -373,14 +373,14 @@ LCD_Init
             MOV     R1, #0x04
             STR     R1, [R0]
 
-            LDR     R0, =10
+            LDR     R0, =15
             BL      SysTick_Wait1us
 
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]
 
-            LDR     R0, =40
+            LDR     R0, =45
             BL      SysTick_Wait1us
 
             ; 
@@ -392,14 +392,14 @@ LCD_Init
             MOV     R1, #0x04
             STR     R1, [R0]
 
-            LDR     R0, =10
+            LDR     R0, =15
             BL      SysTick_Wait1us
             
             LDR     R0, =GPIO_PORTM_DATA_R
             MOV     R1, #0x00
             STR     R1, [R0]
 
-            LDR     R0, =2
+            LDR     R0, =5
             BL      SysTick_Wait1us
             
             POP     {LR}
