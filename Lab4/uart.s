@@ -99,130 +99,60 @@ EsperaUART
             MOV     R1, #0x34                                       ;FBRD = round(0.8055 * 64) = 52
             STR     R1, [R0]                                        ;Guarda no registrador da memoria
 
+; 4. Configurar o LCRH para 8 bits, 1 stop bit, sem paridade
+            LDR     R0, =UART0_LCRH_R		                        ;Carrega o endereco do LCRH para a UART 0
+            MOV     R1, #2_010100000                                ;Tamanho de palavra = 8 bits, 1 stop bit, sem paridade
+            STR     R1, [R0]                                        ;Guarda no registrador da memoria
 
+; 5. Garantir que a fonte do clock seja o system clock
+            LDR     R0, =UART0_CC_R		                            ;Carrega o endereco do CC para a UART 0
+            MOV     R1, #0                                          ;Coloca 0 no registrador para selecionar o system clock
+            STR     R1, [R0]                                        ;Guarda no registrador da memoria
 
+; 6. Habilitar as flags RXE, TXE e UARTEN no registrador CTL
+            LDR     R0, =UART0_CTL_R		                        ;Carrega o endereco do CTL para a UART 0
+            MOV     R1, #0x0301                                     ;Habilita RXE, TXE e UARTEN
+            STR     R1, [R0]                                        ;Guarda no registrador da memoria
 ;================================================================================
 ; Inicialização do GPIO
 ; 1. Ativar o clock para a porta setando o bit correspondente no registrador RCGCGPIO,
 ; apos isso verificar no PRGPIO se a porta esta pronta para uso.
-; enable clock to GPIOF at clock gating register
             LDR     R0, =SYSCTL_RCGCGPIO_R  		                ;Carrega o endereco do registrador RCGCGPIO
-			MOV		R1, #GPIO_PORTM                                 ;Seta o bit da porta generica 
-			ORR     R1, #GPIO_PORTK				                    ;Seta o bit da porta generica, fazendo com OR
-			ORR 	R1, #GPIO_PORTJ 			                    ;Seta o bit da porta generica, fazendo com OR
-			ORR 	R1, #GPIO_PORTL 			                    ;Seta o bit da porta generica, fazendo com OR
-			ORR 	R1, #GPIO_PORTH 			                    ;Seta o bit da porta generica, fazendo com OR
+			MOV		R1, #GPIO_PORTA                                 ;Seta o bit da porta A
             STR     R1, [R0]					                	;Move para a memoria os bits das portas no endereco do RCGCGPIO
  
             LDR     R0, =SYSCTL_PRGPIO_R			                ;Carrega o endereco do PRGPIO para esperar os GPIO ficarem prontos
 EsperaGPIO  
             LDR     R1, [R0]						                ;Le da memoria o conteudo do endereco do registrador
-            MOV     R2, #GPIO_PORTM                                 ;Seta os bits correspondentes das portas para fazer a comparacao
-            ORR     R2, #GPIO_PORTK                                 ;Seta o bit da porta generica, fazendo com OR
-            ORR     R2, #GPIO_PORTJ                                 ;Seta o bit da porta generica, fazendo com OR
-            ORR     R2, #GPIO_PORTL                                 ;Seta o bit da porta generica, fazendo com OR
-            ORR     R2, #GPIO_PORTH                                 ;Seta o bit da porta generica, fazendo com OR
+            MOV     R2, #GPIO_PORTA                                 ;Seta os bits correspondentes das portas para fazer a comparacao
             TST     R1, R2						                    ;ANDS de R1 com R2
-            BEQ     EsperaGPIO					                    ;Se o flag Z=1, volta para o laco. Senao continua executando
+            BEQ     EsperaGPIO		    			                    ;Se o flag Z=1, volta para o laco. Senao continua executando
  
 ; 2. Limpar o AMSEL para desabilitar a analogica
             MOV     R1, #0x00						                ;Colocar 0 no registrador para desabilitar a funcao analogica
-            LDR     R0, =GPIO_PORTM_AMSEL_R                         ;Carrega o R0 com o endereco do AMSEL para a porta generica
+            LDR     R0, =GPIO_PORTA_AHB_AMSEL_R                         ;Carrega o R0 com o endereco do AMSEL para a porta A
             STR     R1, [R0]						                ;Guarda no registrador AMSEL da porta generica da memoria
-            LDR     R0, =GPIO_PORTK_AMSEL_R    		                ;Carrega o R0 com o endereco do AMSEL para a porta generica
-            STR     R1, [R0]					                    ;Guarda no registrador AMSEL da porta generica da memoria
-            LDR     R0, =GPIO_PORTJ_AHB_AMSEL_R    		            ;Carrega o R0 com o endereco do AMSEL para a porta generica
-            STR     R1, [R0]					                    ;Guarda no registrador AMSEL da porta generica da memoria
-            LDR     R0, =GPIO_PORTL_AMSEL_R    		                ;Carrega o R0 com o endereco do AMSEL para a porta generica
-            STR     R1, [R0]					                    ;Guarda no registrador AMSEL da porta generica da memoria
-            LDR     R0, =GPIO_PORTH_AHB_AMSEL_R		                ;Carrega o R0 com o endereco do AMSEL para a porta generica
-            STR     R1, [R0]					                    ;Guarda no registrador AMSEL da porta generica da memoria
  
-; 3. Limpar PCTL para selecionar o GPIO
-            MOV     R1, #0x00					                    ;Colocar 0 no registrador para selecionar o modo GPIO
-            LDR     R0, =GPIO_PORTM_PCTL_R		                    ;Carrega o R0 com o endereco do PCTL para a porta generica
-            STR     R1, [R0]                                        ;Guarda no registrador PCTL da porta generica da memoria
-            LDR     R0, =GPIO_PORTK_PCTL_R                          ;Carrega o R0 com o endereco do PCTL para a porta generica
-            STR     R1, [R0]                                        ;Guarda no registrador PCTL da porta generica da memoria
-            LDR     R0, =GPIO_PORTJ_AHB_PCTL_R		                ;Carrega o R0 com o endereco do PCTL para a porta generica
-            STR     R1, [R0]                                        ;Guarda no registrador PCTL da porta generica da memoria
-            LDR     R0, =GPIO_PORTL_PCTL_R		                    ;Carrega o R0 com o endereco do PCTL para a porta generica
-            STR     R1, [R0]                                        ;Guarda no registrador PCTL da porta generica da memoria
-            LDR     R0, =GPIO_PORTH_AHB_PCTL_R                      ;Carrega o R0 com o endereco do PCTL para a porta generica
-            STR     R1, [R0]                                        ;Guarda no registrador PCTL da porta generica da memoria
+; 3. Setar função alternativa nos pinos RX e TX no PCTL
+            MOV     R1, #0x11					                    ;Colocar 0 no registrador para selecionar o modo GPIO
+            LDR     R0, =GPIO_PORTA_AHB_PCTL_R		                ;Carrega o R0 com o endereco do PCTL para a porta generica
 
-; 4. DIR para 0 se for entrada, 1 se for saida
-            LDR     R0, =GPIO_PORTK_DIR_R	    	                ;Carrega o R0 com o endereco do DIR para a porta generica
-			MOV     R1, #2_11111111					                ;PK0-PK7 para Dados do LCD
-            STR     R1, [R0]						                ;Guarda no registrador
-            
-            LDR     R0, =GPIO_PORTM_DIR_R		                    ;Carrega o R0 com o endereco do DIR para a porta generica
-            MOV     R1, #2_11110111            		                ;PM0-PM2 para saida de controle do LCD e PM4-PM7 para entrada do teclado
-            STR     R1, [R0]						                ;Guarda no registrador PCTL da porta generica da memoria
-
-            LDR     R0, =GPIO_PORTL_DIR_R                           ;Carrega o R0 com o endereco do DIR para a porta generica
-            MOV     R1, #2_00000000                                 ;PL0-PL3 para entrada do teclado
-            STR     R1, [R0]                                        ;Guarda no registrador
-
-            LDR     R0, =GPIO_PORTJ_AHB_DIR_R                       ;Carrega o R0 com o endereco do DIR para a porta generica
-            MOV     R1, #2_00000000            		                ;PJ0 e PJ1 para entrada USR_SW1, USR_SW2
-            STR     R1, [R0]						                ;Guarda no registrador PCTL da porta generica da memoria
-
-            LDR     R0, =GPIO_PORTH_AHB_DIR_R                       ;Carrega o R0 com o endereco do DIR para a porta generica
-            MOV     R1, #2_00001111            		                ;PH0-PH3 para saída do motor
-            STR     R1, [R0]						                ;Guarda no registrador PCTL da porta generica da memoria
-
-; 5. Limpar os bits AFSEL para 0 para selecionar GPIO 
-;    Sem funcao alternativa
-            MOV     R1, #0x00						                ;Colocar o valor 0 para nao setar funcao alternativa
-            LDR     R0, =GPIO_PORTK_AFSEL_R		                    ;Carrega o endereco do AFSEL da porta generica
-            STR     R1, [R0]						                ;Escreve na porta
-            LDR     R0, =GPIO_PORTM_AFSEL_R                         ;Carrega o endereco do AFSEL da porta generica
-            STR     R1, [R0]                                        ;Escreve na porta
-            LDR     R0, =GPIO_PORTJ_AHB_AFSEL_R                     ;Carrega o endereco do AFSEL da porta generica
-            STR     R1, [R0]                                        ;Escreve na porta
-            LDR     R0, =GPIO_PORTL_AFSEL_R                         ;Carrega o endereco do AFSEL da porta generica
-            STR     R1, [R0]                                        ;Escreve na porta
-            LDR     R0, =GPIO_PORTH_AHB_AFSEL_R                     ;Carrega o endereco do AFSEL da porta generica
+; 5. Setar os bits AFSEL para 1 para selecionar função alternativa 
+;    Com funcao alternativa
+            MOV     R1, #0x1						                ;Colocar o valor 1 para  setar funcao alternativa
+            LDR     R0, =GPIO_PORTA_AHB_AFSEL_R                     ;Carrega o endereco do AFSEL da porta generica
             STR     R1, [R0]                                        ;Escreve na porta
 
 ; 6. Setar os bits de DEN para habilitar I/O digital
-            LDR     R0, =GPIO_PORTK_DEN_R			                ;Carrega o endereco do DEN
-            MOV     R1, #2_11111111                                 ;Ativa os pinos PK0-PK7 como I/O Digital
-            STR     R1, [R0]					                    ;Escreve no registrador da memoria funcionalidade digital 
- 
-            LDR     R0, =GPIO_PORTM_DEN_R			                ;Carrega o endereco do DEN
-			MOV     R1, #2_11110111                                 ;Ativa os pinos PM0-PM2 como I/O Digital e PM4-PM7 como I/O Digital  
-            STR     R1, [R0]                                        ;Escreve no registrador da memoria funcionalidade digital
-
-            LDR     R0, =GPIO_PORTL_DEN_R                           ;Carrega o endereco do DEN
-            MOV     R1, #2_00001111                                 ;Ativa os pinos PL0-PL3 como I/O Digital
-            STR     R1, [R0]                                        ;Escreve no registrador da memoria funcionalidade digital
-
-            LDR 	R0, =GPIO_PORTJ_AHB_DEN_R			            ; Carrega o endereco do DEN para a porta J
-			MOV 	R1, #2_00000011						            ; Ativa a PJ0 e PJ1 para ser digital
+            LDR 	R0, =GPIO_PORTA_AHB_DEN_R			            ; Carrega o endereco do DEN para a porta J
+			MOV 	R1, #2_00000011						            ; Ativa a PA0 e PA1 para ser digital
             STR		R1, [R0]							            ; Seta o bit digital para PJ0 e PJ1
 
-            LDR 	R0, =GPIO_PORTH_AHB_DEN_R			            ; Carrega o endereco do DEN para a porta J
-			MOV 	R1, #2_00001111						            ; Ativa a PH0-PH3 para ser digital
-            STR		R1, [R0]							            ; Seta o bit digital para PH0-PH3
-
-; 7. Para habilitar resistor de pull-down/pull-up interno, setar PDR para 1
-			LDR     R0, =GPIO_PORTL_PDR_R			                ;Carrega o endereco do PDR para a porta generica
-			MOV     R1, #2_00001111					                ;Habilitar funcionalidade digital de resistor de pull-down nos bits 0 e 1
-            STR     R1, [R0]						                ;Escreve no registrador da memoria do resistor de pull-down
-
-            LDR 	R0, =GPIO_PORTJ_AHB_PUR_R 			            ; Carrega o endereco do PUR para a porta J
-			MOV 	R1, #2_00000011				     	            ; Seta o bit do PJ0 e PJ1 para utilizar o PUR
-			STR 	R1, [R0]							            ; Salva o bit setado no PUR da porta J 
-
-            LDR 	R0, =GPIO_PORTJ_AHB_PUR_R 			            ; Carrega o endereco do PUR para a porta J
-			MOV 	R1, #2_00001111				     	            ; Seta o bit de PH0-PH3 para utilizar o PDR
-			STR 	R1, [R0]							            ; Salva o bit setado no PDR da porta H
-            
 ;retorno            
 			BX      LR
 
+
+;--------------------------------------------------------------------------------
 ;---------------------------------------------------------------------------------------------
             ALIGN                           			; garante que o fim da secaoo esta alinhada 
             END                             			; fim do arquivo
