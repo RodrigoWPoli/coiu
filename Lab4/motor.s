@@ -6,22 +6,13 @@
 
 
 ; -------------------------------------------------------------------------------
-		PRESERVE8 {TRUE}
 		THUMB                        ; Instrucoes do tipo Thumb-2
 ; -------------------------------------------------------------------------------
 ; Declaracoes EQU - Defines
 ;<NOME>         EQU <VALOR>
 ; ========================
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~F
-CURR_KEY	    		 EQU	 0x20020004
-ANGLE            		 EQU     0x20030000
-TURN				 	 EQU	 0x20030004
-MODE         			 EQU     0x20030008
-APOLARITY         	     EQU     0x2003000C
-TPOLARITY         	     EQU     0x20030010
-char_minus          	 EQU     2_00101101
-char_angle          	 EQU     2_11011111
-MOTOR_PERIOD			 EQU 	 0x2
+MOTOR_PERIOD			 	EQU 	0x2
 
 
 ; ~~~~~~~~~~~~~~~~ PORT H ~~~~~~~~~~~~~~~~~~
@@ -50,22 +41,15 @@ GPIO_PORTH 					EQU     2_000000010000000
 ; Area de Codigo - Tudo abaixo da diretiva a seguir sera armazenado na memoria de 
 ;                  codigo
         AREA    |.text|, CODE, READONLY, ALIGN=2
-
-        EXPORT calculate_angle_turn
 		
         IMPORT	SysTick_Wait1ms
-		IMPORT  create_data_row
-		IMPORT 	create_increment_row
-		IMPORT  LCD_Display_Number
-		IMPORT  LCD_Display_Character
-		IMPORT  angle_decoder
 
 ; -------------------------------------------------------------------------------
 ; Funcao motor_acceleration
 ; Input: nenhum
 ; Output: nenhum
 
-
+	
 
     ALIGN
     END

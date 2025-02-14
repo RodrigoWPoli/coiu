@@ -12,17 +12,10 @@
 ;<NOME>         EQU <VALOR>
 ; ========================
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~F
-Timer0A_Addr             EQU     0x20010000
+PWM_State                EQU     0x20010000
+Duty_cycle               EQU     0x20010008
 Timer1A_Addr             EQU     0x20010004
-PREV_KEYPRESS			 EQU     0x20020000
-CURR_KEY	    		 EQU	 0x20020004
-ANGLE            		 EQU     0x20030000
-TURN				 	 EQU	 0x20030004
-MODE         			 EQU     0x20030008
-APOLARITY         	     EQU     0x2003000C
-TPOLARITY         	     EQU     0x20030010
-char_minus          	 EQU     2_00101101
-char_angle          	 EQU     2_11011111
+
 
 ; -------------------------------------------------------------------------------
 ; Area de Dados - Declaracoes de variaveis
@@ -51,95 +44,63 @@ char_angle          	 EQU     2_11011111
         IMPORT	SysTick_Wait1us
         IMPORT	SysTick_Wait1ms
 		IMPORT	GPIO_Init
-		IMPORT	LCD_Init
+		IMPORT  UART_Init
 		IMPORT  Timers_Init
 		IMPORT	Interrupt_Init
 		
-		IMPORT	TecladoM_Poll
         IMPORT 	Timer0A_Handler
-		IMPORT  create_data_row
-		IMPORT 	calculate_angle_turn
+		IMPORT  Timer1A_Handler
+
+		IMPORT 	Uart_Receive
+		IMPORT 	Uart_Send
 
 ; -------------------------------------------------------------------------------
 ; Funcao main()
 Start  			
 	BL 	PLL_Init					 ;Subrotina para alterar o clock do microcontrolador para 80MHz
-	BL 	SysTick_Init				 ;
+	BL 	SysTick_Init				 ;Subrotina para inicializar o SysTick
 	BL 	GPIO_Init                 	 ;Subrotina que inicializa os GPIO
-	BL 	LCD_Init                  	 ;Subrotina que inicializa o LCD
-	BL 	Timers_Init              	 ;Subrotina que inicializa o Timer0A
-	BL	Interrupt_Init				 ;Subrotina que inicializa os Interrupts de GPIO
-
-	MOV R1, #0						 ;Inicialização do angulo, das voltas, do modo e das polaridades
-	LDR R0, =ANGLE
-	STR R1, [R0]
-	LDR R0, =TURN
-	STR R1, [R0]
-	LDR R0, =MODE
-	STR R1, [R0]
-	LDR	R0, =APOLARITY
-	STR R1, [R0]
-	LDR	R0, =TPOLARITY
-	STR R1, [R0]
-
-	BL  create_data_row
-	
-	LDR	R0, =PREV_KEYPRESS
-	MOV R1, #0x10
-	STR R1, [R0]
-	
-	LDR	R0, =CURR_KEY
-	MOV R1, #0
-	STR R1, [R0]
+	BL 	UART_Init                  	 ;Subrotina que inicializa o UART
+	BL 	Timers_Init              	 ;Subrotina que inicializa o Timer0A e o Timer1A
+;	BL	Interrupt_Init				 ;Subrotina que inicializa os Interrupts de GPIO
 	
 ; -------------------------------------------------------------------------------
 ; Laco principal
-; R1 = valor da tecla pressionada
-
+; R8 -> Byte a ser enviado
+; R9 -> Byte recebido
+	MOV 	R8, #1
 
 MainLoop
-	LDR     R0, =Timer0A_Addr
+	LDR     R0, =PWM_State
 	LDR     R1, [R0]
 	CMP     R1, #1
-	BEQ 	update_data_timer0
+	BEQ 	update_PWM_State
+
+	LDR     R0, =Timer1A_Addr
+	LDR     R1, [R0]
+	CMP     R1, #1
+	BEQ 	update_data_timer1
 
 	B MainLoop                   	;Volta para o laco principal
 
 
-update_data_timer0
-	LDR     R0, =Timer0A_Addr
+update_PWM_State
+	LDR     R0, =PWM_State
 	MOV 	R1, #0
 	STR 	R1, [R0]
 
-	BL		TecladoM_Poll
-
-	LDR		R0, =PREV_KEYPRESS		; Recupera o último click e armazena o atual
-	LDR 	R2, [R0]
-	STR		R1, [R0]
-	
-	CMP 	R2, #0x10				; Pula se a última tecla for 0x10
-	BEQ 	skip  
-	
-	CMP 	R1, #0x10				; Detecta falling-edge da tecla
-	BNE 	skip  
-
-	AND 	R1, R2, #0xFF		 	; Filtra os 8 LSB de R2
-	CMP 	R1, #0x31			 	; Verifica se a tecla pressionada esta entre 1 e C
-	BLO		skip
-	
-	CMP 	R1, #0x43
-	BHI		skip
-	
-	LDR		R0, =CURR_KEY			; Atualiza a tecla atual
-	STR		R1, [R0]
-	
-	BL 		calculate_angle_turn	
-	
-
-	BL		create_data_row
 
 	B 		skip
 
+update_data_timer1
+	LDR     R0, =Timer1A_Addr       ; Zera o bit do endereço do interrupt do timer 1
+	MOV     R1, #0
+	STR     R1, [R0]
+
+	BL 		Uart_Send
+
+	ADD  	R8, R8, #1
+	B 		skip
 skip
 	B MainLoop
 	

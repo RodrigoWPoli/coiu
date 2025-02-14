@@ -60,7 +60,9 @@ UART0_CC_R                  EQU     0x4000CFC8
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
 		; Se alguma funcao do arquivo for chamada em outro arquivo	
-        EXPORT UART_Init           
+        EXPORT UART_Init  
+        EXPORT Uart_Receive
+        EXPORT Uart_Send         
         
         IMPORT SysTick_Wait1us
 ;--------------------------------------------------------------------------------
@@ -92,16 +94,16 @@ EsperaUART
 
 ; 3. Configurar o Baud Rate
             LDR     R0, =UART0_IBRD_R		                        ;Carrega o endereco do IBRD para a UART 0
-            MOV     R1, #0x56                                       ;IBRD = int(80,000,000 / (16 * 57,600)) = int(86.8055)
+            MOV     R1, #260                                        ;IBRD = int(80,000,000 / (16 * 19,200)) = int(260.4166)
             STR     R1, [R0]                                        ;Guarda no registrador da memoria
 
             LDR     R0, =UART0_FBRD_R		                        ;Carrega o endereco do FBRD para a UART 0
-            MOV     R1, #0x34                                       ;FBRD = round(0.8055 * 64) = 52
+            MOV     R1, #27                                         ;FBRD = round(0.4166 * 64) = 27
             STR     R1, [R0]                                        ;Guarda no registrador da memoria
 
 ; 4. Configurar o LCRH para 8 bits, 1 stop bit, sem paridade
             LDR     R0, =UART0_LCRH_R		                        ;Carrega o endereco do LCRH para a UART 0
-            MOV     R1, #2_010100000                                ;Tamanho de palavra = 8 bits, 1 stop bit, sem paridade
+            MOV     R1, #2_010101000                                ;Tamanho de palavra = 8 bits, 1 stop bit, sem paridade
             STR     R1, [R0]                                        ;Guarda no registrador da memoria
 
 ; 5. Garantir que a fonte do clock seja o system clock
@@ -126,11 +128,11 @@ EsperaGPIO
             LDR     R1, [R0]						                ;Le da memoria o conteudo do endereco do registrador
             MOV     R2, #GPIO_PORTA                                 ;Seta os bits correspondentes das portas para fazer a comparacao
             TST     R1, R2						                    ;ANDS de R1 com R2
-            BEQ     EsperaGPIO		    			                    ;Se o flag Z=1, volta para o laco. Senao continua executando
+            BEQ     EsperaGPIO		    			                ;Se o flag Z=1, volta para o laco. Senao continua executando
  
 ; 2. Limpar o AMSEL para desabilitar a analogica
             MOV     R1, #0x00						                ;Colocar 0 no registrador para desabilitar a funcao analogica
-            LDR     R0, =GPIO_PORTA_AHB_AMSEL_R                         ;Carrega o R0 com o endereco do AMSEL para a porta A
+            LDR     R0, =GPIO_PORTA_AHB_AMSEL_R                     ;Carrega o R0 com o endereco do AMSEL para a porta A
             STR     R1, [R0]						                ;Guarda no registrador AMSEL da porta generica da memoria
  
 ; 3. Setar função alternativa nos pinos RX e TX no PCTL
@@ -144,15 +146,59 @@ EsperaGPIO
             STR     R1, [R0]                                        ;Escreve na porta
 
 ; 6. Setar os bits de DEN para habilitar I/O digital
-            LDR 	R0, =GPIO_PORTA_AHB_DEN_R			            ; Carrega o endereco do DEN para a porta J
-			MOV 	R1, #2_00000011						            ; Ativa a PA0 e PA1 para ser digital
-            STR		R1, [R0]							            ; Seta o bit digital para PJ0 e PJ1
+            LDR 	R0, =GPIO_PORTA_AHB_DEN_R			            ;Carrega o endereco do DEN para a porta J
+			MOV 	R1, #2_00000011						            ;Ativa a PA0 e PA1 para ser digital
+            STR		R1, [R0]							            ;Seta o bit digital para PJ0 e PJ1
 
 ;retorno            
 			BX      LR
 
 
-;--------------------------------------------------------------------------------
+;--------------------------------------------------------------------------------------------
+; Função Uart_Receive
+; Recebe um byte da UART0
+; Verifica caso exista dados recebidos checando o flag RXFE do registrador UARTFR
+; 1 - Não há dados para ler; 0 - Há dados para ler
+; Parâmetros de entrada: nenhum
+; Parâmetros de saída: R9 - byte recebido 
+Uart_Receive
+            PUSH    {LR}
+
+            LDR    R0, =UART0_FR_R
+            MOV    R1, #0x10
+            LDR    R2, [R0]
+            TST    R2, R1
+            BNE    empty
+
+            LDR    R0, =UART0_DR_R
+            LDRB   R9, [R1]
+
+empty
+
+            POP     {LR}						
+            BX      LR
+;--------------------------------------------------------------------------------------------
+; Função Uart_Send
+; Envia um byte pela UART0
+; Verifica caso a UART0 esteja pronta para enviar dados checando o flag TXFF do registrador UARTFR
+; 1 - Não está pronta para enviar; 0 - Está pronta para enviar
+; Parâmetros de entrada: R8 - byte a ser enviado
+; Parâmetros de saída: nenhum
+Uart_Send
+            PUSH    {LR}
+
+            LDR    R0, =UART0_FR_R
+            MOV    R1, #0x20
+            LDR    R2, [R0]
+            TST    R2, R1
+            BNE    full
+
+            LDR    R0, =UART0_DR_R
+            STRB   R8, [R0]
+full
+
+            POP     {LR}
+            BX      LR
 ;---------------------------------------------------------------------------------------------
             ALIGN                           			; garante que o fim da secaoo esta alinhada 
             END                             			; fim do arquivo

@@ -37,7 +37,8 @@ TIMER1_TAPR_R           EQU     0x40031038
 TIMER1 		            EQU     2_00000010
 
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
-Timer0A_Addr             EQU     0x20010000
+PWM_State                EQU     0x20010000
+Duty_cycle               EQU     0x20010008
 Timer1A_Addr             EQU     0x20010004
 
 
@@ -74,7 +75,7 @@ EsperaTIMERS
             BX LR
 
 Timer0A_Init
-            LDR     R0, =Timer0A_Addr
+            LDR     R0, =PWM_State
             MOV     R1, #0
             STR     R1, [R0]            
 
@@ -90,8 +91,8 @@ Timer0A_Init
             MOV     R1, #0x2
             STR     R1, [R0]
 
-            LDR     R0, =TIMER0_TAILR_R           ; Tempo calculado para 20ms
-            LDR     R1, =1600000                    
+            LDR     R0, =TIMER0_TAILR_R           ; Tempo calculado para undefined ms
+            LDR     R1, =8000000                    
             STR     R1, [R0]
 
             LDR     R0, =TIMER0_TAPR_R            ; Configura o Prescaler 
@@ -129,10 +130,30 @@ Timer0A_Handler
             MOV     R1, #1
             STR     R1, [R0]
 
-            LDR     R0, =Timer0A_Addr
-            MOV     R1, #1
+            LDR     R0, =PWM_State
+            LDR     R1, [R0]
+            EORS    R1, #1                      ; Inverte o estado do PWM e seta as flags de comparação
             STR     R1, [R0]
-            
+            BNE     duty_low
+
+duty_high
+            LDR     R0, =Duty_cycle
+            LDR     R1, [R0]                    
+            LDR     R2, =800
+            MUL     R1, R2, R1 
+            B       timer0_exit
+duty_low
+            LDR     R0, =Duty_cycle
+            LDR     R1, [R0]
+            MOV     R2, #100
+            SUB     R1, R2, R1               
+            MOV     R2, #800
+            MUL     R1, R2, R1 
+
+timer0_exit
+            LDR     R0, =TIMER0_TAILR_R
+            STR     R1, [R0]
+
             BX LR
 
 ;--------------------------------------------------------------------------------
