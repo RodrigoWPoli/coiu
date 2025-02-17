@@ -51,20 +51,37 @@ UART0_9BITAMASK_R           EQU     0x4000C0A8
 UART0_PP_R                  EQU     0x4000CFC0
 UART0_CC_R                  EQU     0x4000CFC8
 ;~~~~~~~~~~~~ OUTRAS CONSTANTES ~~~~~~~~~~~~~
+UART0_Received              EQU     0x20010010
+
+UI_Active                   EQU     0x20010100
+UI_1_Printed                EQU     0x20010104
+UI_2_Printed                EQU     0x20010108
+UI_3_Printed                EQU     0x2001010C
+UI_4_Printed                EQU     0x20010110
 
 
 
 ; -------------------------------------------------------------------------------
 ; Area de Codigo - Tudo abaixo da diretiva a seguir sera armazenado na memoria de 
 ;                  codigo
+		AREA    |.rodata|, DATA, READONLY, ALIGN=2
+
+UI_1_Message
+        DCB     "Motor parado, pressione '*' para iniciar.",0
+        
+      
+
+
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
 		; Se alguma funcao do arquivo for chamada em outro arquivo	
         EXPORT UART_Init  
         EXPORT Uart_Receive
         EXPORT Uart_Send         
+        EXPORT UI_Manager    
         
         IMPORT SysTick_Wait1us
+
 ;--------------------------------------------------------------------------------
 ; Funcao UART_Init
 ; Ports e Pinos utilizados:
@@ -152,6 +169,15 @@ EsperaGPIO
 			MOV 	R1, #2_00000011						            ;Ativa a PA0 e PA1 para ser digital
             STR		R1, [R0]							            ;Seta o bit digital para PJ0 e PJ1
 
+            LDR    R0, =UI_Active   ; Define a UI 1 como ativa
+            MOV    R1, #1
+            STR    R1, [R0]
+
+            LDR    R0, =UI_1_Printed  ; Inicializa variáveis das UIs
+            MOV    R1, #0
+            STRB   R1, [R0]
+
+
 ;retorno            
 			BX      LR
 
@@ -173,7 +199,9 @@ Uart_Receive
             BNE    empty
 
             LDR    R0, =UART0_DR_R
-            LDRB   R9, [R1]
+            LDRB   R9, [R0]
+            LDR    R0, =UART0_Received
+            STRB   R9, [R0]
 
 empty
 
@@ -187,7 +215,8 @@ empty
 ; Parâmetros de entrada: R8 - byte a ser enviado
 ; Parâmetros de saída: nenhum
 Uart_Send
-            PUSH    {LR}
+            ; Save LR and registers that will be used
+            PUSH    {R0-R2, LR}
 
             LDR    R0, =UART0_FR_R
             MOV    R1, #0x20
@@ -199,8 +228,77 @@ Uart_Send
             STRB   R8, [R0]
 full
 
-            POP     {LR}
+            ; Restore LR and registers
+            POP     {R0-R2, LR}
             BX      LR
 ;---------------------------------------------------------------------------------------------
+; Conjunto de funções para UIs
+; função UI_Manager
+;  Gerencia a troca de UIs
+UI_Manager
+            PUSH    {LR}
+            LDR     R0, =UI_Active
+            LDR     R1, [R0]
+            CMP     R1, #1
+            BEQ     UI_1
+            CMP     R1, #2
+            BEQ     UI_2
+            CMP     R1, #3
+            BEQ     UI_3
+            CMP     R1, #4
+            BEQ     UI_4
+
+; função UI_1
+;   Envia a mensagem "Motor parado, pressione '*' para iniciar." e aguarda a entrada do usuário
+
+UI_1
+            LDR     R0, =UI_1_Printed
+            LDRB    R1, [R0]
+            CMP     R1, #1
+            BEQ     UI_1_Input
+
+            MOV     R8, #0x0c       ; Limpa a tela
+            BL      Uart_Send
+            MOV     R8, #0x0d
+            BL      Uart_Send
+            
+            LDR     R2, =UI_1_Message   ; Get pointer to our string
+UI_1_Loop
+            LDRB    R8, [R2], #1        ; Load a byte and post-increment the pointer
+            CMP     R8, #0              ; Check for the null terminator
+            BEQ     UI_1_Print_End
+            BL      Uart_Send           ; Send the character
+            B       UI_1_Loop
+
+UI_1_Print_End
+            LDR     R0, =UI_1_Printed
+            MOV     R1, #1
+            STRB    R1, [R0]
+
+UI_1_Input
+			BL 		Uart_Receive
+            LDR     R0, =UART0_Received
+            LDRB    R1, [R0]
+            CMP     R1, #0x2A       ; Se '*' foi pressionado
+            BNE     UI_end
+
+            MOV     R8, #0x0c       ; Limpa a tela e ativa a próxima UI
+            BL      Uart_Send
+            MOV     R8, #0x0d
+            BL      Uart_Send
+            
+            LDR     R0, =UI_Active  ; Ativa a UI 2
+            MOV     R1, #2
+            STR     R1, [R0]
+
+UI_2
+UI_3
+UI_4
+
+UI_end
+            POP    {LR}
+            BX      LR
+
+; -------------------------------------------------------------------------------
             ALIGN                           			; garante que o fim da secaoo esta alinhada 
             END                             			; fim do arquivo

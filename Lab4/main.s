@@ -12,9 +12,9 @@
 ;<NOME>         EQU <VALOR>
 ; ========================
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~F
-PWM_State                EQU     0x20010000
-Duty_cycle               EQU     0x20010008
-Timer1A_Addr             EQU     0x20010004
+PWM_State               EQU     0x20010000
+Duty_cycle              EQU     0x20010008
+Timer1A_Addr            EQU     0x20010004
 
 
 ; -------------------------------------------------------------------------------
@@ -53,6 +53,7 @@ Timer1A_Addr             EQU     0x20010004
 
 		IMPORT 	Uart_Receive
 		IMPORT 	Uart_Send
+		IMPORT 	UI_Manager
 
 ; -------------------------------------------------------------------------------
 ; Funcao main()
@@ -68,7 +69,6 @@ Start
 ; Laco principal
 ; R8 -> Byte a ser enviado
 ; R9 -> Byte recebido
-	MOV 	R8, #0x35
 
 MainLoop
 	LDR     R0, =PWM_State
@@ -80,6 +80,8 @@ MainLoop
 	LDR     R1, [R0]
 	CMP     R1, #1
 	BEQ 	update_data_timer1
+
+	BL 		UI_Manager
 
 	B MainLoop                   	;Volta para o laco principal
 
@@ -97,9 +99,6 @@ update_data_timer1
 	MOV     R1, #0
 	STR     R1, [R0]
 
-	BL 		Uart_Send
-
-	ADD  	R8, R8, #1
 	B 		skip
 skip
 	B MainLoop
