@@ -68,7 +68,7 @@ Start
 ; Laco principal
 ; R8 -> Byte a ser enviado
 ; R9 -> Byte recebido
-	MOV 	R8, #1
+	MOV 	R8, #0x35
 
 MainLoop
 	LDR     R0, =PWM_State

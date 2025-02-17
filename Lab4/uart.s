@@ -103,7 +103,7 @@ EsperaUART
 
 ; 4. Configurar o LCRH para 8 bits, 1 stop bit, sem paridade
             LDR     R0, =UART0_LCRH_R		                        ;Carrega o endereco do LCRH para a UART 0
-            MOV     R1, #2_010101000                                ;Tamanho de palavra = 8 bits, 1 stop bit, sem paridade
+            MOV     R1, #2_01110000                                ;Tamanho de palavra = 8 bits, 1 stop bit, sem paridade
             STR     R1, [R0]                                        ;Guarda no registrador da memoria
 
 ; 5. Garantir que a fonte do clock seja o system clock
@@ -120,7 +120,8 @@ EsperaUART
 ; 1. Ativar o clock para a porta setando o bit correspondente no registrador RCGCGPIO,
 ; apos isso verificar no PRGPIO se a porta esta pronta para uso.
             LDR     R0, =SYSCTL_RCGCGPIO_R  		                ;Carrega o endereco do registrador RCGCGPIO
-			MOV		R1, #GPIO_PORTA                                 ;Seta o bit da porta A
+            LDR    R1, [R0]					                	;Le da memoria o conteudo do endereco do registrador
+			ORR    R1, R1, #GPIO_PORTA                             ;Seta o bit da porta A
             STR     R1, [R0]					                	;Move para a memoria os bits das portas no endereco do RCGCGPIO
  
             LDR     R0, =SYSCTL_PRGPIO_R			                ;Carrega o endereco do PRGPIO para esperar os GPIO ficarem prontos
@@ -138,10 +139,11 @@ EsperaGPIO
 ; 3. Setar função alternativa nos pinos RX e TX no PCTL
             MOV     R1, #0x11					                    ;Colocar 0 no registrador para selecionar o modo GPIO
             LDR     R0, =GPIO_PORTA_AHB_PCTL_R		                ;Carrega o R0 com o endereco do PCTL para a porta generica
+            STR     R1, [R0]						                ;Guarda no registrador PCTL da porta generica da memoria
 
 ; 5. Setar os bits AFSEL para 1 para selecionar função alternativa 
 ;    Com funcao alternativa
-            MOV     R1, #0x1						                ;Colocar o valor 1 para  setar funcao alternativa
+            MOV     R1, #2_00000011						                ;Colocar o valor 1 para  setar funcao alternativa
             LDR     R0, =GPIO_PORTA_AHB_AFSEL_R                     ;Carrega o endereco do AFSEL da porta generica
             STR     R1, [R0]                                        ;Escreve na porta
 
