@@ -68,6 +68,16 @@ UI_4_Printed                EQU     0x20010110
 
 UI_1_Message
         DCB     "Motor parado, pressione '*' para iniciar.",0
+
+UI_2_Message
+		DCB     "Controle do motor DC: potenciômetro (tecle 'p') ou teclado (tecle 't').",0
+		
+UI_3_Message
+		DCB     "Escolha o sentido de rotação: 'a' para anti-horário e 'h' para horário.\nEscolha a velocidade de rotação: '5' para 50%, '6' para 60%, '7' para 70%, '8' para 80%, '9' para 90% e '0' para 100% da Velocidade máxima.\n\n\tPressione 's' para voltar ao menu inicial.",0
+
+UI_4_Message
+		DCB     "Pressione 's' para voltar ao menu inicial.",0
+
         
       
 
@@ -173,10 +183,20 @@ EsperaGPIO
             MOV    R1, #1
             STR    R1, [R0]
 
-            LDR    R0, =UI_1_Printed  ; Inicializa variáveis das UIs
             MOV    R1, #0
+            LDR    R0, =UI_1_Printed  ; Inicializa variáveis das UIs
+            STRB   R1, [R0]
+            LDR    R0, =UI_2_Printed
+            STRB   R1, [R0]
+            LDR    R0, =UI_3_Printed
+            STRB   R1, [R0]
+            LDR    R0, =UI_4_Printed
             STRB   R1, [R0]
 
+
+            LDR    R0, =UART0_Received ; Inicializa variáveis das UIs
+            MOV    R1, #0
+            STRB   R1, [R0]
 
 ;retorno            
 			BX      LR
@@ -205,6 +225,7 @@ Uart_Receive
 
 empty
 
+
             POP     {LR}						
             BX      LR
 ;--------------------------------------------------------------------------------------------
@@ -227,40 +248,25 @@ Uart_Send
             LDR    R0, =UART0_DR_R
             STRB   R8, [R0]
 full
+            LDR     R0, =UART0_FR_R
+            LDR     R1, [R0]          ; Load the UARTFR register
+            TST     R1, #2_00100000   ; Check the TXFF bit
+            BNE     full             ; If the TXFF bit is set, the FIFO is full, so we need to wait
 
             ; Restore LR and registers
             POP     {R0-R2, LR}
             BX      LR
 ;---------------------------------------------------------------------------------------------
-; Conjunto de funções para UIs
-; função UI_Manager
-;  Gerencia a troca de UIs
-UI_Manager
-            PUSH    {LR}
-            LDR     R0, =UI_Active
-            LDR     R1, [R0]
-            CMP     R1, #1
-            BEQ     UI_1
-            CMP     R1, #2
-            BEQ     UI_2
-            CMP     R1, #3
-            BEQ     UI_3
-            CMP     R1, #4
-            BEQ     UI_4
 
 ; função UI_1
 ;   Envia a mensagem "Motor parado, pressione '*' para iniciar." e aguarda a entrada do usuário
 
 UI_1
+
             LDR     R0, =UI_1_Printed
             LDRB    R1, [R0]
             CMP     R1, #1
             BEQ     UI_1_Input
-
-            MOV     R8, #0x0c       ; Limpa a tela
-            BL      Uart_Send
-            MOV     R8, #0x0d
-            BL      Uart_Send
             
             LDR     R2, =UI_1_Message   ; Get pointer to our string
 UI_1_Loop
@@ -280,24 +286,215 @@ UI_1_Input
             LDR     R0, =UART0_Received
             LDRB    R1, [R0]
             CMP     R1, #0x2A       ; Se '*' foi pressionado
-            BNE     UI_end
+            BNE     UI_1_end
 
             MOV     R8, #0x0c       ; Limpa a tela e ativa a próxima UI
             BL      Uart_Send
             MOV     R8, #0x0d
             BL      Uart_Send
+
+            MOV    R1, #0
+            LDR    R0, =UI_1_Printed  ; Inicializa variáveis das UIs
+            STRB   R1, [R0]
             
             LDR     R0, =UI_Active  ; Ativa a UI 2
             MOV     R1, #2
             STR     R1, [R0]
-
-UI_2
-UI_3
-UI_4
-
-UI_end
+UI_1_end
             POP    {LR}
             BX      LR
+
+; função UI_2
+UI_2
+
+            LDR     R0, =UI_2_Printed
+            LDRB    R1, [R0]
+            CMP     R1, #1
+            BEQ     UI_2_Input
+            
+            LDR     R2, =UI_2_Message   ; Get pointer to our string
+UI_2_Loop
+            LDRB    R8, [R2], #1        ; Load a byte and post-increment the pointer
+            CMP     R8, #0              ; Check for the null terminator
+            BEQ     UI_2_Print_End
+            BL      Uart_Send           ; Send the character
+            B       UI_2_Loop
+
+UI_2_Print_End
+            LDR     R0, =UI_2_Printed
+            MOV     R1, #1
+            STRB    R1, [R0]
+
+UI_2_Input
+			BL 		Uart_Receive
+            LDR     R0, =UART0_Received
+            LDRB    R1, [R0]
+            CMP     R1, #0x74       ; Se 't' foi pressionado
+            BEQ     UI_2_T_set
+            CMP     R1, #0x70       ; Se 'p' foi pressionado
+            BEQ     UI_2_P_set
+            B       UI_2_end
+
+UI_2_T_set
+            MOV     R8, #0x0c       ; Limpa a tela e ativa a próxima UI
+            BL      Uart_Send
+            MOV     R8, #0x0d
+            BL      Uart_Send
+
+            MOV    R1, #0
+            LDR    R0, =UI_2_Printed  ; Reseta o estado da UI 2
+            STRB   R1, [R0]
+            
+            LDR     R0, =UI_Active  ; Ativa a UI 3T
+            MOV     R1, #3
+            STR     R1, [R0]
+            B       UI_2_end
+
+UI_2_P_set
+            MOV     R8, #0x0c       ; Limpa a tela e ativa a próxima UI
+            BL      Uart_Send
+            MOV     R8, #0x0d
+            BL      Uart_Send
+
+            MOV    R1, #0
+            LDR    R0, =UI_2_Printed  ; Reseta o estado da UI 2
+            STRB   R1, [R0]
+            
+            LDR     R0, =UI_Active  ; Ativa a UI 3P
+            MOV     R1, #4
+            STR     R1, [R0]
+
+UI_2_end
+            POP    {LR}
+            BX      LR
+
+
+; Conjunto de funções para UIs
+; função UI_Manager
+;  Gerencia a troca de UIs
+UI_Manager
+            PUSH    {LR}
+            LDR     R0, =UI_Active
+            LDR     R1, [R0]
+            CMP     R1, #1
+            BEQ     UI_1
+            CMP     R1, #2
+            BEQ     UI_2
+            CMP     R1, #3
+            BEQ     UI_3
+            CMP     R1, #4
+            BEQ     UI_4
+
+
+; função UI_3 (teclado)
+UI_3
+
+            LDR     R0, =UI_3_Printed
+            LDRB    R1, [R0]
+            CMP     R1, #1
+            BEQ     UI_3_Input
+            
+            LDR     R2, =UI_3_Message   ; Get pointer to our string
+UI_3_Loop
+            LDRB    R8, [R2], #1        ; Load a byte and post-increment the pointer
+            CMP     R8, #0              ; Check for the null terminator
+            BEQ     UI_3_Print_End
+            BL      Uart_Send           ; Send the character
+            B       UI_3_Loop
+
+UI_3_Print_End
+            LDR     R0, =UI_3_Printed
+            MOV     R1, #1
+            STRB    R1, [R0]
+
+UI_3_Input
+			BL 		Uart_Receive
+            LDR     R0, =UART0_Received
+            LDRB    R1, [R0]
+            CMP     R1, #0x68       ; Se 'h' foi pressionado
+            BEQ     UI_3_cw
+            CMP     R1, #0x61       ; Se 'a' foi pressionado
+            BEQ     UI_3_ccw
+            CMP     R1, #0x73       ; Se 's' foi pressionado
+            BEQ     UI_3_stop
+            ; 0-9 DEVE VIR POR ÚLTIMO
+            CMP     R1, #0x30       ; Se um dígito entre 0 e 9 foi pressionado
+            BLT     UI_3_end
+            CMP     R1, #0x39
+            BGT     UI_3_end
+            B       UI_3_speed
+
+UI_3_cw
+UI_3_ccw
+UI_3_speed
+            
+            
+UI_3_stop
+            MOV     R8, #0x0c       ; Limpa a tela e ativa a próxima UI
+            BL      Uart_Send
+            MOV     R8, #0x0d
+            BL      Uart_Send
+
+            MOV    R1, #0
+            LDR    R0, =UI_3_Printed  ; Reseta o estado da UI 3
+            STRB   R1, [R0]
+
+            LDR     R0, =UI_Active  ; Ativa a UI 1
+            MOV     R1, #1
+            STR     R1, [R0]
+
+UI_3_end
+            POP    {LR}
+            BX      LR
+
+; função UI_4 (potenciometro)
+UI_4
+
+            LDR     R0, =UI_4_Printed
+            LDRB    R1, [R0]
+            CMP     R1, #1
+            BEQ     UI_4_Input
+            
+            LDR     R2, =UI_4_Message   ; Get pointer to our string
+UI_4_Loop
+            LDRB    R8, [R2], #1        ; Load a byte and post-increment the pointer
+            CMP     R8, #0              ; Check for the null terminator
+            BEQ     UI_4_Print_End
+            BL      Uart_Send           ; Send the character
+            B       UI_4_Loop
+
+UI_4_Print_End
+            LDR     R0, =UI_4_Printed
+            MOV     R1, #1
+            STRB    R1, [R0]
+
+UI_4_Input
+			BL 		Uart_Receive
+            LDR     R0, =UART0_Received
+            LDRB    R1, [R0]
+            CMP     R1, #0x73       ; Se 's' foi pressionado
+            BEQ     UI_4_stop
+            B       UI_4_end
+
+UI_4_stop
+            MOV     R8, #0x0c       ; Limpa a tela e ativa a próxima UI
+            BL      Uart_Send
+            MOV     R8, #0x0d
+            BL      Uart_Send
+
+            MOV    R1, #0
+            LDR    R0, =UI_4_Printed  ; Reseta o estado da UI 4
+            STRB   R1, [R0]
+
+            LDR     R0, =UI_Active  ; Ativa a UI 1
+            MOV     R1, #1
+            STR     R1, [R0]
+
+UI_4_end
+            POP    {LR}
+            BX      LR
+
+
 
 ; -------------------------------------------------------------------------------
             ALIGN                           			; garante que o fim da secaoo esta alinhada 

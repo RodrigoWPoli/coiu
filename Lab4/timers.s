@@ -37,9 +37,11 @@ TIMER1_TAPR_R           EQU     0x40031038
 TIMER1 		            EQU     2_00000010
 
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~
+GPIO_PORTE_AHB_DATA_R    EQU     0x4005C3FC
 PWM_State                EQU     0x20010000
 Duty_cycle               EQU     0x20010008
 Timer1A_Addr             EQU     0x20010004
+MOTOR_DIRECTION          EQU 	 0x2001000C
 
 
 ; -------------------------------------------------------------------------------
@@ -91,8 +93,8 @@ Timer0A_Init
             MOV     R1, #0x2
             STR     R1, [R0]
 
-            LDR     R0, =TIMER0_TAILR_R           ; Tempo calculado para undefined ms
-            LDR     R1, =8000000                    
+            LDR     R0, =TIMER0_TAILR_R           ; Tempo calculado para 1 ms
+            LDR     R1, =80000                    
             STR     R1, [R0]
 
             LDR     R0, =TIMER0_TAPR_R            ; Configura o Prescaler 
@@ -136,24 +138,50 @@ Timer0A_Handler
             STR     R1, [R0]
             BNE     duty_low
 
-duty_high
+duty_low
             LDR     R0, =Duty_cycle
             LDR     R1, [R0]                    
-            LDR     R2, =800
+            LDR     R2, =100
             MUL     R1, R2, R1 
-            B       timer0_exit
-duty_low
+            B       timer0_exit0
+duty_high
             LDR     R0, =Duty_cycle
             LDR     R1, [R0]
             MOV     R2, #100
             SUB     R1, R2, R1               
-            MOV     R2, #800
+            MOV     R2, #100
             MUL     R1, R2, R1 
 
-timer0_exit
+timer0_exit0
             LDR     R0, =TIMER0_TAILR_R
             STR     R1, [R0]
+            
+            LDR     R0, =PWM_State
+            LDR     R2, [R0]
+            LDR     R0, =MOTOR_DIRECTION
+            LDR     R1, [R0]
+            CMP     R1, #0
+            BEQ     Clockwise
+            B       CounterClockwise
 
+Clockwise
+            LDR     R0, =GPIO_PORTE_AHB_DATA_R   ; Inverte o bit de PE0
+            LDR     R1, [R0]
+            EOR     R1, #1
+            ;  Seta o PE1 para 0
+            AND     R1, #2_11111101
+            STR     R1, [R0]
+            B       timer0_exit1
+
+CounterClockwise
+            LDR     R0, =GPIO_PORTE_AHB_DATA_R   ; Inverte o bit de PE1
+            LDR     R1, [R0]
+            EOR     R1, #2
+            ;  Seta o PE0 para 0
+            AND     R1, #2_11111110
+            STR     R1, [R0]
+
+timer0_exit1
             BX LR
 
 ;--------------------------------------------------------------------------------

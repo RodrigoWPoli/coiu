@@ -769,7 +769,7 @@ ARM Macro Assembler    Page 12
   326 0000009E 4814            LDR              R0, =GPIO_PORTJ_AHB_DATA_R
   327 000000A0 6801            LDR              R1, [R0]
   328 000000A2         
-  329 000000A2 F04F 0232       MOV              R2, #50
+  329 000000A2 F04F 0264       MOV              R2, #100
   330 000000A6 F7FF FFFE       BL               SysTick_Wait1ms
   331 000000AA         
   332 000000AA 4811            LDR              R0, =GPIO_PORTJ_AHB_DATA_R

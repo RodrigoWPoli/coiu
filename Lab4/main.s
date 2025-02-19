@@ -55,6 +55,7 @@ Timer1A_Addr            EQU     0x20010004
 		IMPORT 	Uart_Send
 		IMPORT 	UI_Manager
 
+		IMPORT	Invert_Motor_Direction
 ; -------------------------------------------------------------------------------
 ; Funcao main()
 Start  			
@@ -63,18 +64,22 @@ Start
 	BL 	GPIO_Init                 	 ;Subrotina que inicializa os GPIO
 	BL 	UART_Init                  	 ;Subrotina que inicializa o UART
 	BL 	Timers_Init              	 ;Subrotina que inicializa o Timer0A e o Timer1A
-;	BL	Interrupt_Init				 ;Subrotina que inicializa os Interrupts de GPIO
+	BL	Interrupt_Init				 ;Subrotina que inicializa os Interrupts de GPIO
 	
 ; -------------------------------------------------------------------------------
 ; Laco principal
 ; R8 -> Byte a ser enviado
 ; R9 -> Byte recebido
+	MOV     R8, #0x0c       ; Limpa a tela antes de começar
+	BL      Uart_Send
+	MOV     R8, #0x0d
+	BL      Uart_Send
+
+	LDR    	R0, =Duty_cycle
+	MOV     R1, #99       ; Duty cycle de 50%
+	STR     R1, [R0]
 
 MainLoop
-	LDR     R0, =PWM_State
-	LDR     R1, [R0]
-	CMP     R1, #1
-	BEQ 	update_PWM_State
 
 	LDR     R0, =Timer1A_Addr
 	LDR     R1, [R0]
@@ -85,14 +90,6 @@ MainLoop
 
 	B MainLoop                   	;Volta para o laco principal
 
-
-update_PWM_State
-	LDR     R0, =PWM_State
-	MOV 	R1, #0
-	STR 	R1, [R0]
-
-
-	B 		skip
 
 update_data_timer1
 	LDR     R0, =Timer1A_Addr       ; Zera o bit do endereço do interrupt do timer 1

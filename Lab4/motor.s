@@ -12,8 +12,8 @@
 ;<NOME>         EQU <VALOR>
 ; ========================
 ; ~~~~~~~~~~~~~ OTHER CONSTANTS ~~~~~~~~~~~~~~F
-MOTOR_PERIOD			 	EQU 	0x2
-
+MOTOR_DIRECTION			EQU     0x2001000C
+GPIO_PORTE_AHB_DATA_R           EQU     0x4005C3FC
 
 ; ~~~~~~~~~~~~~~~~ PORT H ~~~~~~~~~~~~~~~~~~
 GPIO_PORTH_AHB_DATA_R   	EQU     0x4005F3FC
@@ -42,14 +42,27 @@ GPIO_PORTH 					EQU     2_000000010000000
 ;                  codigo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 		
+        EXPORT Invert_Motor_Direction
+
         IMPORT	SysTick_Wait1ms
 
 ; -------------------------------------------------------------------------------
 ; Funcao motor_acceleration
 ; Input: nenhum
 ; Output: nenhum
+Invert_Motor_Direction
+        LDR     R0, =MOTOR_DIRECTION
+        LDR     R1, [R0]
+        EOR     R1, #0x01
+        STR     R1, [R0]
 
-	
+        LDR     R0, =GPIO_PORTE_AHB_DATA_R
+        LDR     R2, [R0]
+        ORR     R2, R1
+        STR     R2, [R0]
 
+        BX      LR
+
+; -------------------------------------------------------------------------------
     ALIGN
     END
