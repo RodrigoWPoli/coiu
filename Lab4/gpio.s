@@ -13,6 +13,31 @@
 SYSCTL_RCGCGPIO_R	 EQU	0x400FE608
 SYSCTL_PRGPIO_R		 EQU    0x400FEA08
 ; ========================
+; Definicoes dos registradores de ADC
+RCGCADC_R            EQU    0x400FE638
+PRADC_R              EQU    0x400FEA38
+ADCPC_R              EQU    0x40038FC4
+ADCSSPRI_R           EQU    0x40038020
+ADCACTSS_R           EQU    0x40038000
+ADCEMUX_R            EQU    0x40038014
+ADCSSMUX3_R          EQU    0x400380A0
+ADCSSMUX2_R          EQU    0x40038080
+ADCSSMUX1_R          EQU    0x40038060
+ADCSSMUX0_R          EQU    0x40038040
+ADCSSCTL3_R          EQU    0x400380A4
+ADCSSCTL2_R          EQU    0x40038084
+ADCSSCTL1_R          EQU    0x40038064
+ADCSSCTL0_R          EQU    0x40038044
+ADCIM_R              EQU    0x40038008
+ADCPSSI_R            EQU    0x40038028
+ADCRIS_R             EQU    0x40038004
+ADCSSFIFO3_R         EQU    0x400380A8
+ADCSSFIFO2_R         EQU    0x40038088
+ADCSSFIFO1_R         EQU    0x40038068
+ADCSSFIFO0_R         EQU    0x40038048
+ADCISC_R             EQU    0x4003800C
+; ========================
+
 ; Definicoes dos Ports
 ; ~~~~~~~~~~~~~~~~ PORT A ~~~~~~~~~~~~~~~~~~
 GPIO_PORTA_AHB_LOCK_R 		EQU     0x40058520
@@ -208,6 +233,7 @@ GPIO_PORTQ               	EQU     2_100000000000000
 		; Se alguma funcao do arquivo for chamada em outro arquivo	
         EXPORT GPIO_Init           
 		EXPORT LCD_Init
+		EXPORT ADC_Read
         
         IMPORT SysTick_Wait1us
 ;--------------------------------------------------------------------------------
@@ -258,9 +284,10 @@ EsperaGPIO
             STR     R1, [R0]					                    ;Guarda no registrador AMSEL da porta generica da memoria
             LDR     R0, =GPIO_PORTH_AHB_AMSEL_R		                ;Carrega o R0 com o endereco do AMSEL para a porta generica
             STR     R1, [R0]					                    ;Guarda no registrador AMSEL da porta generica da memoria
-            LDR     R0, =GPIO_PORTE_AHB_AMSEL_R		                ;Carrega o R0 com o endereco do AMSEL para a porta generica
-            STR     R1, [R0]					                    ;Guarda no registrador AMSEL da porta generica da memoria
             LDR     R0, =GPIO_PORTF_AHB_AMSEL_R		                ;Carrega o R0 com o endereco do AMSEL para a porta generica
+            STR     R1, [R0]					                    ;Guarda no registrador AMSEL da porta generica da memoria
+            MOV     R1, #2_00010000
+            LDR     R0, =GPIO_PORTE_AHB_AMSEL_R		                ;Carrega o R0 com o endereco do AMSEL para a porta generica
             STR     R1, [R0]					                    ;Guarda no registrador AMSEL da porta generica da memoria
  
 ; 3. Limpar PCTL para selecionar o GPIO
@@ -322,9 +349,11 @@ EsperaGPIO
             STR     R1, [R0]                                        ;Escreve na porta
             LDR     R0, =GPIO_PORTH_AHB_AFSEL_R                     ;Carrega o endereco do AFSEL da porta generica
             STR     R1, [R0]                                        ;Escreve na porta
-            LDR     R0, =GPIO_PORTE_AHB_AFSEL_R                     ;Carrega o endereco do AFSEL da porta generica
-            STR     R1, [R0]                                        ;Escreve na porta
             LDR     R0, =GPIO_PORTF_AHB_AFSEL_R                     ;Carrega o endereco do AFSEL da porta generica
+            STR     R1, [R0]                                        ;Escreve na porta
+            
+            MOV     R1, #2_00010000
+            LDR     R0, =GPIO_PORTE_AHB_AFSEL_R                     ;Carrega o endereco do AFSEL da porta generica
             STR     R1, [R0]                                        ;Escreve na porta
 
 ; 6. Setar os bits de DEN para habilitar I/O digital
@@ -356,7 +385,7 @@ EsperaGPIO
 			MOV 	R1, #2_00001100						            ; Ativa a PH0-PH3 para ser digital
             STR		R1, [R0]							            ; Seta o bit digital para PH0-PH3
 
-; 7. Para habilitar resistor de pull-down/pull-up interno, setar PDR para 1
+; 7. Para habilitar resistor de pull-down/pull-up interno, setar PDR/PUR para 1
 			LDR     R0, =GPIO_PORTL_PDR_R			                ;Carrega o endereco do PDR para a porta generica
 			MOV     R1, #2_00001111					                ;Habilitar funcionalidade digital de resistor de pull-down nos bits 0 e 1
             STR     R1, [R0]						                ;Escreve no registrador da memoria do resistor de pull-down
@@ -381,6 +410,45 @@ EsperaGPIO
             LDR    R0, =GPIO_PORTF_AHB_DATA_R		                ;Carrega o endereco do DATA para a porta generica
             MOV    R1, #2_110					                    ;Coloca 0 no registrador
             STR    R1, [R0]					                        ;Guarda no registrador da memoria funcionalidade digital
+
+; Configuração do ADC
+            LDR    R0, =RCGCADC_R  ; 6. Ativar o clock para o ADC
+            MOV    R1, #0x01
+            STR    R1, [R0]
+
+            LDR    R0, =PRADC_R  ; 6.2. Esperar o ADC ficar pronto
+EsperaADC1
+            LDR    R1, [R0]
+            TST    R1, #0x01
+            BEQ    EsperaADC1
+
+            LDR    R0, =ADCPC_R  ; 7. Escolher a taxa de amostragem máxima
+            MOV    R1, #0x7
+            STR    R1, [R0]
+
+            LDR    R0, =ADCSSPRI_R  ; 8. Configurar a prioridade das sequências
+            MOV    R1, #2_0000001000010011
+            STR    R1, [R0]
+
+            LDR    R0, =ADCACTSS_R  ; 9. Desabilitar todas as sequências
+            MOV    R1, #2_0000
+            STR    R1, [R0]
+
+            LDR    R0, =ADCEMUX_R ; 10. Configurar o trigger para a sequência 0
+            MOV    R1, #2_0000000000000000
+            STR    R1, [R0]
+
+            LDR    R0, =ADCSSMUX3_R  ; 11. Configurar entrada analógica do canal AIN9 para a sequência 3
+            MOV    R1, #0x9
+            STR    R1, [R0]
+
+            LDR    R0, =ADCSSCTL3_R  ; 12. Configurar a sequência 0 para amostrar o canal AIN9
+            MOV    R1, #2_0110
+            STR    R1, [R0]
+
+            LDR    R0, =ADCACTSS_R  ; 13. Habilitar a sequência 3
+            MOV    R1, #2_1000
+            STR    R1, [R0]
             
 ;retorno            
 			BX      LR
@@ -467,6 +535,31 @@ LCD_Init
             
             POP     {LR}
             BX      LR									;Retorno
+
+;---------------------------------------------------------------------------------------------
+; Funcao ADC_Read
+; Retorna o valor lido do ADC
+; Entradas: Nenhuma
+; Saida: Valor lido do ADC
+ADC_Read
+            LDR    R0, =ADCPSSI_R   ; 1. Habilitar a sequência 3
+            MOV    R1, #2_1000
+            STR    R1, [R0]
+
+            LDR    R0, =ADCRIS_R   ; 2. Esperar a conversão terminar
+EsperaADC2
+            LDR    R1, [R0]
+            CMP    R1, #0x8
+            BNE    EsperaADC2
+
+            LDR    R0, =ADCSSFIFO3_R   ; 3. Ler o valor do ADC
+            LDR    R2, [R0]
+
+            LDR    R0, =ADCISC_R   ; 4. Limpar a flag de interrupção
+            MOV    R1, #2_1000
+            STR    R1, [R0]
+
+            BX     LR
 
 ;---------------------------------------------------------------------------------------------
             ALIGN                           			; garante que o fim da secaoo esta alinhada 

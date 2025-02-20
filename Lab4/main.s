@@ -15,6 +15,7 @@
 PWM_State               EQU     0x20010000
 Duty_cycle              EQU     0x20010008
 Timer1A_Addr            EQU     0x20010004
+ADC_Value			   	EQU     0x20010014
 
 
 ; -------------------------------------------------------------------------------
@@ -56,6 +57,7 @@ Timer1A_Addr            EQU     0x20010004
 		IMPORT 	UI_Manager
 
 		IMPORT	Invert_Motor_Direction
+		IMPORT  ADC_Read
 ; -------------------------------------------------------------------------------
 ; Funcao main()
 Start  			
@@ -63,7 +65,7 @@ Start
 	BL 	SysTick_Init				 ;Subrotina para inicializar o SysTick
 	BL 	GPIO_Init                 	 ;Subrotina que inicializa os GPIO
 	BL 	UART_Init                  	 ;Subrotina que inicializa o UART
-	BL 	Timers_Init              	 ;Subrotina que inicializa o Timer0A e o Timer1A
+	BL 	Timers_Init              	 ;Subrotina que iniciali	za o Timer0A e o Timer1A
 	BL	Interrupt_Init				 ;Subrotina que inicializa os Interrupts de GPIO
 	
 ; -------------------------------------------------------------------------------
@@ -87,6 +89,10 @@ MainLoop
 	BEQ 	update_data_timer1
 
 	BL 		UI_Manager
+
+	BL 		ADC_Read
+	LDR		R0, =ADC_Value
+	STR 	R2, [R0]
 
 	B MainLoop                   	;Volta para o laco principal
 
