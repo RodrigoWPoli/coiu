@@ -493,6 +493,11 @@
               <FileType>2</FileType>
               <FilePath>.\uart.s</FilePath>
             </File>
+            <File>
+              <FileName>pot.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\pot.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -508,7 +513,7 @@
   <LayerInfo>
     <Layers>
       <Layer>
-        <LayName>&lt;Project Info&gt;</LayName>
+        <LayName>gpio</LayName>
         <LayTarg>0</LayTarg>
         <LayPrjMark>1</LayPrjMark>
       </Layer>

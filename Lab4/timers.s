@@ -41,7 +41,7 @@ GPIO_PORTE_AHB_DATA_R    EQU     0x4005C3FC
 PWM_State                EQU     0x20010000
 Duty_cycle               EQU     0x20010008
 Timer1A_Addr             EQU     0x20010004
-MOTOR_DIRECTION          EQU 	 0x2001000C
+MOTOR_DIRECTION          EQU     0x2001000C
 
 
 ; -------------------------------------------------------------------------------
@@ -53,6 +53,8 @@ MOTOR_DIRECTION          EQU 	 0x2001000C
         EXPORT Timers_Init
         EXPORT Timer0A_Handler
         EXPORT Timer1A_Handler
+
+        IMPORT SysTick_Wait1ms
 
 									
 ;--------------------------------------------------------------------------------
@@ -141,16 +143,16 @@ Timer0A_Handler
 duty_low
             LDR     R0, =Duty_cycle
             LDR     R1, [R0]                    
-            LDR     R2, =100
+            LDR     R2, =800
             MUL     R1, R2, R1 
             B       timer0_exit0
 duty_high
             LDR     R0, =Duty_cycle
             LDR     R1, [R0]
             MOV     R2, #100
-            SUB     R1, R2, R1               
-            MOV     R2, #100
-            MUL     R1, R2, R1 
+            SUB     R1, R2, R1
+            MOV     R2, #800
+            MUL     R1, R2, R1
 
 timer0_exit0
             LDR     R0, =TIMER0_TAILR_R
@@ -164,7 +166,7 @@ timer0_exit0
             BEQ     Clockwise
             B       CounterClockwise
 
-Clockwise
+Clockwise   
             LDR     R0, =GPIO_PORTE_AHB_DATA_R   ; Inverte o bit de PE0
             LDR     R1, [R0]
             EOR     R1, #1
@@ -202,8 +204,8 @@ Timer1A_Init
             MOV     R1, #0x2
             STR     R1, [R0]
 
-            LDR     R0, =TIMER1_TAILR_R           ; Tempo calculado para 100ms
-            LDR     R1, =8000000                    
+            LDR     R0, =TIMER1_TAILR_R           ; Tempo calculado para 1s
+            LDR     R1, =80000000                    
             STR     R1, [R0]
 
             LDR     R0, =TIMER1_TAPR_R            ; Configura o Prescaler 

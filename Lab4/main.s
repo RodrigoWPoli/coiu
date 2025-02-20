@@ -1,9 +1,5 @@
 ; main.s
 ; Desenvolvido para a placa EK-TM4C1294XL
-; Este programa espera o usuario apertar a chave USR_SW1 e/ou a chave USR_SW2.
-; Caso o usuario pressione a chave USR_SW1, acendera o LED3 (PF4). Caso o usuario pressione 
-; a chave USR_SW2, acendera o LED4 (PF0). Caso as duas chaves sejam pressionadas, os dois 
-; LEDs acendem.
 
 ; -------------------------------------------------------------------------------
         THUMB                        ; Instrucoes do tipo Thumb-2
@@ -16,6 +12,7 @@ PWM_State               EQU     0x20010000
 Duty_cycle              EQU     0x20010008
 Timer1A_Addr            EQU     0x20010004
 ADC_Value			   	EQU     0x20010014
+Stop_motor_flag		 	EQU     0x20010020
 
 
 ; -------------------------------------------------------------------------------
@@ -55,9 +52,13 @@ ADC_Value			   	EQU     0x20010014
 		IMPORT 	Uart_Receive
 		IMPORT 	Uart_Send
 		IMPORT 	UI_Manager
+		IMPORT  Stat_Update
 
 		IMPORT	Invert_Motor_Direction
 		IMPORT  ADC_Read
+		IMPORT	Disable_Motor
+		IMPORT	Enable_Motor
+
 ; -------------------------------------------------------------------------------
 ; Funcao main()
 Start  			
@@ -76,10 +77,6 @@ Start
 	BL      Uart_Send
 	MOV     R8, #0x0d
 	BL      Uart_Send
-
-	LDR    	R0, =Duty_cycle
-	MOV     R1, #99       ; Duty cycle de 50%
-	STR     R1, [R0]
 
 MainLoop
 
@@ -101,11 +98,13 @@ update_data_timer1
 	LDR     R0, =Timer1A_Addr       ; Zera o bit do endereço do interrupt do timer 1
 	MOV     R1, #0
 	STR     R1, [R0]
+	
+	BL 		Stat_Update
 
 	B 		skip
 skip
 	B MainLoop
-	
+
 
 ;--------------------------------------------------------------------------------------
     ALIGN                        	;Garante que o fim da secao esta alinhada 

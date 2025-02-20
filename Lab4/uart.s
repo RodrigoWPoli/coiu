@@ -51,7 +51,11 @@ UART0_9BITAMASK_R           EQU     0x4000C0A8
 UART0_PP_R                  EQU     0x4000CFC0
 UART0_CC_R                  EQU     0x4000CFC8
 ;~~~~~~~~~~~~ OUTRAS CONSTANTES ~~~~~~~~~~~~~
+Duty_cycle                  EQU     0x20010008
+MOTOR_DIRECTION			    EQU     0x2001000C
 UART0_Received              EQU     0x20010010
+ADC_Value			   	    EQU     0x20010014
+Motor_Speed                 EQU     0x20010018
 
 UI_Active                   EQU     0x20010100
 UI_1_Printed                EQU     0x20010104
@@ -73,14 +77,18 @@ UI_2_Message
 		DCB     "Controle do motor DC: potenciômetro (tecle 'p') ou teclado (tecle 't').",0
 		
 UI_3_Message
-		DCB     "Escolha o sentido de rotação: 'a' para anti-horário e 'h' para horário.\nEscolha a velocidade de rotação: '5' para 50%, '6' para 60%, '7' para 70%, '8' para 80%, '9' para 90% e '0' para 100% da Velocidade máxima.\n\n\tPressione 's' para voltar ao menu inicial.",0
+		DCB     "Escolha o sentido de rotação: 'a' para anti-horário e 'h' para horário.\n\n\rEscolha a velocidade de rotação: \n\r\t\t- '5' para 50% \n\r\t\t- '6' para 60% \n\r\t\t- '7' para 70% \n\r\t\t- '8' para 80% \n\r\t\t- '9' para 90% \n\r\t\t- '0' para 100% da Velocidade máxima.\n\n\r\tPressione 's' para voltar ao menu inicial.",0
 
 UI_4_Message
 		DCB     "Pressione 's' para voltar ao menu inicial.",0
 
-        
-      
+UI_Speed_Message
+        DCB     "Velocidade: ",0
 
+UI_Dir_Message
+        DCB     "Sentido de rotação: ",0
+
+; -------------------------------------------------------------------------------
 
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
@@ -90,7 +98,11 @@ UI_4_Message
         EXPORT Uart_Send         
         EXPORT UI_Manager    
         
+        IMPORT UI_4
         IMPORT SysTick_Wait1us
+        IMPORT Disable_Motor
+        IMPORT Enable_Motor
+        IMPORT Invert_Motor_Direction
 
 ;--------------------------------------------------------------------------------
 ; Funcao UART_Init
@@ -262,7 +274,7 @@ full
 ;   Envia a mensagem "Motor parado, pressione '*' para iniciar." e aguarda a entrada do usuário
 
 UI_1
-
+            BL      Disable_Motor
             LDR     R0, =UI_1_Printed
             LDRB    R1, [R0]
             CMP     R1, #1
@@ -306,7 +318,7 @@ UI_1_end
 
 ; função UI_2
 UI_2
-
+            BL      Disable_Motor
             LDR     R0, =UI_2_Printed
             LDRB    R1, [R0]
             CMP     R1, #1
@@ -388,7 +400,7 @@ UI_Manager
 
 ; função UI_3 (teclado)
 UI_3
-
+            BL      Enable_Motor
             LDR     R0, =UI_3_Printed
             LDRB    R1, [R0]
             CMP     R1, #1
@@ -403,11 +415,20 @@ UI_3_Loop
             B       UI_3_Loop
 
 UI_3_Print_End
+			; Print Speed and Direction
+            MOV     R8, #0x0a      ; New line
+            BL      Uart_Send
+            MOV     R8, #0x0a      ; New line
+            BL      Uart_Send
+            MOV     R8, #0x0d      ; Carriage return
+            BL      Uart_Send
+
             LDR     R0, =UI_3_Printed
             MOV     R1, #1
             STRB    R1, [R0]
 
 UI_3_Input
+
 			BL 		Uart_Receive
             LDR     R0, =UART0_Received
             LDRB    R1, [R0]
@@ -425,9 +446,31 @@ UI_3_Input
             B       UI_3_speed
 
 UI_3_cw
+            MOV     R1, #1
+            LDR     R0, =MOTOR_DIRECTION
+            STR     R1, [R0]
+            B       UI_3_end
 UI_3_ccw
+            MOV     R1, #0
+            LDR     R0, =MOTOR_DIRECTION
+            STR     R1, [R0]
+            B       UI_3_end
 UI_3_speed
-            
+            ; If '0', prevents 100% and overwrites with 99%
+            CMP     R1, #0x30
+            BNE     UI_3_speed_skip
+            MOV     R1, #99
+            B       UI_3_speed_set
+UI_3_speed_skip
+            ; Converts the ASCII value to the percentual value (e.g. '5' : '0x35' -> 50%)
+            AND     R1, R1, #0x0F
+            MOV     R2, #10
+            MUL     R1, R1, R2
+
+UI_3_speed_set
+            LDR    	R0, =Duty_cycle
+            STR     R1, [R0]
+            B       UI_3_end
             
 UI_3_stop
             MOV     R8, #0x0c       ; Limpa a tela e ativa a próxima UI
@@ -444,53 +487,6 @@ UI_3_stop
             STR     R1, [R0]
 
 UI_3_end
-            POP    {LR}
-            BX      LR
-
-; função UI_4 (potenciometro)
-UI_4
-
-            LDR     R0, =UI_4_Printed
-            LDRB    R1, [R0]
-            CMP     R1, #1
-            BEQ     UI_4_Input
-            
-            LDR     R2, =UI_4_Message   ; Get pointer to our string
-UI_4_Loop
-            LDRB    R8, [R2], #1        ; Load a byte and post-increment the pointer
-            CMP     R8, #0              ; Check for the null terminator
-            BEQ     UI_4_Print_End
-            BL      Uart_Send           ; Send the character
-            B       UI_4_Loop
-
-UI_4_Print_End
-            LDR     R0, =UI_4_Printed
-            MOV     R1, #1
-            STRB    R1, [R0]
-
-UI_4_Input
-			BL 		Uart_Receive
-            LDR     R0, =UART0_Received
-            LDRB    R1, [R0]
-            CMP     R1, #0x73       ; Se 's' foi pressionado
-            BEQ     UI_4_stop
-            B       UI_4_end
-
-UI_4_stop
-            MOV     R8, #0x0c       ; Limpa a tela e ativa a próxima UI
-            BL      Uart_Send
-            MOV     R8, #0x0d
-            BL      Uart_Send
-
-            MOV    R1, #0
-            LDR    R0, =UI_4_Printed  ; Reseta o estado da UI 4
-            STRB   R1, [R0]
-
-            LDR     R0, =UI_Active  ; Ativa a UI 1
-            MOV     R1, #1
-            STR     R1, [R0]
-
-UI_4_end
             POP    {LR}
             BX      LR
 

@@ -234,6 +234,8 @@ GPIO_PORTQ               	EQU     2_100000000000000
         EXPORT GPIO_Init           
 		EXPORT LCD_Init
 		EXPORT ADC_Read
+        EXPORT Disable_Motor
+        EXPORT Enable_Motor
         
         IMPORT SysTick_Wait1us
 ;--------------------------------------------------------------------------------
@@ -557,6 +559,26 @@ EsperaADC2
 
             LDR    R0, =ADCISC_R   ; 4. Limpar a flag de interrupção
             MOV    R1, #2_1000
+            STR    R1, [R0]
+
+            BX     LR
+
+;---------------------------------------------------------------------------------------------
+; Funcao Disable_Motor
+; Desabilita o motor
+Disable_Motor
+            LDR    R0, =GPIO_PORTF_AHB_DATA_R
+            MOV    R1, #0x00
+            STR    R1, [R0]
+
+            BX     LR
+
+;---------------------------------------------------------------------------------------------
+; Funcao Enable_Motor
+; Habilita o motor
+Enable_Motor
+            LDR    R0, =GPIO_PORTF_AHB_DATA_R
+            MOV    R1, #2_1100
             STR    R1, [R0]
 
             BX     LR
