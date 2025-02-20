@@ -69,7 +69,7 @@ UI_3_Input_speed_msg
 			BNE		UI_3_Input_speed_msg
 			
             BL      Uart_Send
-            LDR     R0, =Motor_Speed   ; Load the speed (0-100%)
+            LDR     R0, =Duty_cycle   ; Load the speed (0-100%)
             LDR     R1, [R0]
             AND     R2, R1, #0xF0
             LSR     R2, R2, #4
@@ -146,7 +146,42 @@ UI_4_Input
             LDRB    R1, [R0]
             CMP     R1, #0x73       ; Se 's' foi pressionado
             BEQ     UI_4_stop
-            B       UI_4_end
+
+	        LDR		R0, =ADC_Value
+	        LDR 	R2, [R0]
+
+            LSR     R1, R2, #11  ; R1 = 1 se o valor do potenciometro for >= 0x800
+            LDR     R0, =MOTOR_DIRECTION
+            STR     R1, [R0]
+
+            CMP     R2, #0x800
+            BGE     bigger_than_800
+            
+            MOV     R3, #100
+            MUL     R2, R3, R2
+            MOV     R3, #0x800
+            UDIV    R2, R2, R3
+            MOV     R3, #100
+            SUB     R0, R3, R2
+            B       save_adc_value
+            
+bigger_than_800
+            SUB     R2, R2, #0x800
+            MOV     R3, #100
+            MUL     R2, R3, R2
+            MOV     R3, #0x800
+            UDIV    R0, R2, R3
+
+save_adc_value
+            LDR     R2, =Duty_cycle
+            CMP     R0, #100
+            IT      EQ
+            MOVEQ   R0, #99
+            CMP     R0, #0
+            IT      EQ
+            MOVEQ   R0, #1
+            STR     R0, [R2]
+			B       UI_4_end
 
 UI_4_stop
             MOV     R8, #0x0c       ; Limpa a tela e ativa a próxima UI
